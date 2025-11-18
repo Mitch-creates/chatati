@@ -47,7 +47,10 @@ export function SignInForm() {
           router.push("/"); // TODO Direct to search Chatati page
         },
         onError: (ctx) => {
-          // TODO update UI when fail (probably when Email doesn't exist/Password is wrong etc)
+          // TODO update UI when fail (probably when Email doesn't exist/Password is wrong, email not verified etc)
+          if (ctx.error.status === 403) {
+            alert("Please verify your email address");
+          }
           alert(ctx.error.message);
           setIsPending(false);
         },

@@ -1,7 +1,8 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// TODO Determine if this will always be in English or if we should check user native language instead
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 const fromEmail = process.env.EMAIL_FROM || "noreply@chatati.de";
 
 export async function sendVerificationEmail(email: string, url: string) {

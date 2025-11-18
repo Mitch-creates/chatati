@@ -24,4 +24,6 @@ export const getSignInFormSchema = (t?: (key: string) => string) => {
   });
 };
 
-export type SignInFormData = z.infer<ReturnType<typeof getSignInFormSchema>>;
+export type SignInFormData = z.infer<
+  Awaited<ReturnType<typeof getSignInFormSchema>>
+>;

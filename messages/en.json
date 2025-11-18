@@ -28,7 +28,11 @@
     "submit": "Create Account",
     "signingIn": "Signing in...",
     "welcomeBack": "Welcome Back",
-    "welcomeBackMessage": "We're glad to see you again! Please sign in to continue practicing languages."
+    "welcomeBackMessage": "We're glad to see you again! Please sign in to continue practicing languages.",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "resetting": "Resetting...",
+    "resetPassword": "Reset Password"
   },
   "validation": {
     "emailRequired": "Email is required.",
