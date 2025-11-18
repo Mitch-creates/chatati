@@ -26,7 +26,13 @@
     "confirmPasswordPlaceholder": "Bitte bestätigen Sie Ihr Passwort",
     "submitting": "Konto wird erstellt...",
     "submit": "Konto erstellen",
-    "signingIn": "Anmeldung läuft..."
+    "signingIn": "Anmeldung läuft...",
+    "welcomeBack": "Willkommen zurück",
+    "welcomeBackMessage": "Wir freuen uns, Sie wiederzusehen! Bitte melden Sie sich an, um weiterhin Sprachen zu üben.",
+    "newPassword": "Neues Passwort",
+    "confirmNewPassword": "Neues Passwort bestätigen",
+    "resetting": "Zurücksetzen...",
+    "resetPassword": "Passwort zurücksetzen"
   },
   "validation": {
     "emailRequired": "E-Mail ist erforderlich.",

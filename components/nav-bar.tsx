@@ -74,12 +74,12 @@ export default function Navbar() {
       ) : (
         <ul className="flex space-x-4">
           <li>
-            <Link href="/account/signin">
+            <Link href="/signin">
               <RegularButton>{navigationMessages("signIn")}</RegularButton>
             </Link>
           </li>
           <li>
-            <Link href="/account/signup">
+            <Link href="/signup">
               <CtaButton accent="color2">
                 {navigationMessages("signUp")}
               </CtaButton>
