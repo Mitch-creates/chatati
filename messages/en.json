@@ -32,7 +32,12 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "resetting": "Resetting...",
-    "resetPassword": "Reset Password"
+    "resetPassword": "Reset Password",
+    "sendResetLink": "Send Reset Link",
+    "sendingResetLink": "Sending...",
+    "resetLinkSent": "Reset link sent!",
+    "checkEmail": "Check your email for instructions.",
+    "backToSignIn": "Back to Sign In"
   },
   "validation": {
     "emailRequired": "Email is required.",
