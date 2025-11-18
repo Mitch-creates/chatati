@@ -1,8 +1,8 @@
 import { SignUpForm } from "@/components/account/signUpForm";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export default function SignUp() {
-  const onboardingMessages = useTranslations("onboarding");
+export default async function SignUp() {
+  const onboardingMessages = await getTranslations("onboarding");
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left side or Top - Welcome text */}

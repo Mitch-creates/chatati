@@ -11,7 +11,7 @@ import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
 export function SignInForm() {
@@ -115,7 +115,7 @@ export function SignInForm() {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="pt-0 flex flex-col gap-4">
         <Field orientation="horizontal">
           <CtaButton
             type="submit"
@@ -128,6 +128,14 @@ export function SignInForm() {
               : onboardingMessages("signIn").toLocaleUpperCase()}
           </CtaButton>
         </Field>
+        <div className="text-center">
+          <Link
+            href="/account/forgot-password"
+            className="text-sm underline hover:text-gray-600"
+          >
+            {onboardingMessages("forgotPassword")}
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );

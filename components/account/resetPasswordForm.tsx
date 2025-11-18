@@ -47,7 +47,7 @@ export function ResetPasswordForm() {
         onRequest: () => setIsPending(true),
         onResponse: () => setIsPending(false),
         onSuccess: () => {
-          router.push("/account/signin");
+          router.push("/signin");
         },
         onError: (ctx) => {
           alert(ctx.error.message);

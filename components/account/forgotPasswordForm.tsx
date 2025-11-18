@@ -104,7 +104,7 @@ export function ForgotPasswordForm() {
         </form>
       </CardContent>
 
-      <CardFooter className="p-4 sm:p-6 pt-0 flex flex-col gap-4">
+      <CardFooter className="pt-0 flex flex-col gap-4">
         <CtaButton
           type="submit"
           form="forgotPasswordForm"
@@ -117,7 +117,7 @@ export function ForgotPasswordForm() {
         </CtaButton>
         <div className="text-center">
           <Link
-            href="/account/signin"
+            href="/signin"
             className="text-sm underline hover:text-gray-600"
           >
             {onboardingMessages("backToSignIn")}
