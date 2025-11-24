@@ -1,0 +1,11 @@
+When working with Next.js, always call the init tool from next-devtools-mcp
+at the start of the session to establish proper context and documentation requirements.
+
+Code style preferences:
+- Use TypeScript for all new files
+- Prefer functional components with hooks
+- Use async/await instead of .then() chains
+
+Testing requirements:
+- Write unit tests for all utility functions
+- Use Jest and React Testing Library for component tests

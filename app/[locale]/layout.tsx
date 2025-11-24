@@ -3,8 +3,6 @@ import "../globals.css";
 import Navbar from "@/components/nav-bar";
 import { NextIntlClientProvider } from "next-intl";
 import { Reem_Kufi } from "next/font/google";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
 const reem = Reem_Kufi({
   subsets: ["latin"],
@@ -26,14 +24,11 @@ export default async function RootLayout({
 }>) {
   const { locale } = await params;
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   return (
     <html lang={locale} className={`${reem.variable} font-sans`}>
       <body className={reem.className}>
         <NextIntlClientProvider>
-          <Navbar initialSession={session} />
+          <Navbar />
           {children}
         </NextIntlClientProvider>
       </body>

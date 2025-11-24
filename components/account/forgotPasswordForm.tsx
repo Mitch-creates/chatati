@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useState } from "react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
@@ -14,11 +14,11 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
-import RegularButton from "../regular-button";
 
 export function ForgotPasswordForm() {
   const validationMessages = useTranslations("validation");
   const onboardingMessages = useTranslations("onboarding");
+  const locale = useLocale();
   const [isPending, setIsPending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -35,7 +35,7 @@ export function ForgotPasswordForm() {
     await authClient.forgetPassword(
       {
         email: data.email,
-        redirectTo: "/account/reset-password",
+        redirectTo: `/${locale}/account/reset-password`,
       },
       {
         onRequest: () => setIsPending(true),
@@ -59,11 +59,6 @@ export function ForgotPasswordForm() {
           </h3>
           <p>{onboardingMessages("checkEmail")}</p>
         </CardContent>
-        <CardFooter className="p-4 sm:p-6 pt-0 flex justify-center">
-          <Link href="/account/signin">
-            <RegularButton>{onboardingMessages("backToSignIn")}</RegularButton>
-          </Link>
-        </CardFooter>
       </Card>
     );
   }
