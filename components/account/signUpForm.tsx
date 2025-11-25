@@ -60,14 +60,14 @@ export function SignUpForm() {
         onError: (ctx) => {
           setIsPending(false);
           // Handle email already taken error
-          if (ctx.error.status === 409) {
+          if (ctx.error.status === 422) {
             signUpForm.setError("email", {
               type: "emailTaken",
               message: onboardingMessages("emailAlreadyTaken"),
             });
           } else {
-            // Handle other errors
-            alert(ctx.error.message);
+            // TODO Implement better error handling
+            console.error(ctx.error.message);
           }
         },
       }
@@ -155,12 +155,14 @@ export function SignUpForm() {
                   />
                   {fieldState.invalid && (
                     <>
-                      <FieldError errors={[fieldState.error]} />
+                      {fieldState.error?.type !== "emailTaken" && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
                       {fieldState.error?.type === "emailTaken" && (
                         <div className="text-sm text-red-600 mt-1">
                           {onboardingMessages("emailAlreadyTaken")}{" "}
                           <Link
-                            href="/forgot-password"
+                            href="/account/forgot-password"
                             className="underline text-blue-700 hover:text-blue-900"
                           >
                             {onboardingMessages("forgotPasswordLink")}
