@@ -37,7 +37,7 @@ export async function requireAuth() {
 export async function requireAuthAPI() {
   const session = await getSessionHelper();
   if (!session) {
-    return new UnauthorizedError();
+    throw new UnauthorizedError("Unauthorized");
   }
   return session;
 }
@@ -58,10 +58,10 @@ export async function requireAuthAndEmailVerified() {
 export async function requireAuthAndEmailVerifiedAPI() {
   const session = await getSessionHelper();
   if (!session) {
-    return new UnauthorizedError();
+    throw new UnauthorizedError("Unauthorized");
   }
   if (!session.user?.emailVerified) {
-    return new EmailNotVerifiedError();
+    throw new EmailNotVerifiedError("Email not verified");
   }
   return session;
 }
