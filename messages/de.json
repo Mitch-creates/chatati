@@ -57,5 +57,15 @@
     "news": "Neuigkeiten",
     "signIn": "Anmelden",
     "signUp": "Registrieren"
+  },
+  "api": {
+    "errors": {
+      "unauthorized": "Nicht autorisiert",
+      "userNotFound": "Benutzer nicht gefunden",
+      "internalServerError": "Interner Serverfehler",
+      "emailNotVerified": "E-Mail nicht verifiziert",
+      "badRequest": "Ungültige Anfrage",
+      "forbidden": "Verboten"
+    }
   }
 }

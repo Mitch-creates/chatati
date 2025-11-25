@@ -57,5 +57,15 @@
     "news": "News",
     "signIn": "Sign in",
     "signUp": "Sign up"
+  },
+  "api": {
+    "errors": {
+      "unauthorized": "Unauthorized",
+      "userNotFound": "User not found",
+      "internalServerError": "Internal server error",
+      "emailNotVerified": "Email not verified",
+      "badRequest": "Bad request",
+      "forbidden": "Forbidden"
+    }
   }
 }

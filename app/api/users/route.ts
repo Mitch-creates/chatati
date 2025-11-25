@@ -11,19 +11,34 @@ export async function GET() {
 
     // Handle case where user doesn't exist
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        {
+          error: "userNotFound",
+          message: "User not found",
+        },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(user);
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: "unauthorized",
+          message: "Unauthorized",
+        },
+        { status: 401 }
+      );
     }
 
     // Handle unexpected errors
     console.error("Error in GET /api/users:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: "internalServerError",
+        message: "Internal server error",
+      },
       { status: 500 }
     );
   }
