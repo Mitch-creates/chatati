@@ -2,10 +2,21 @@ When working with Next.js, always call the init tool from next-devtools-mcp
 at the start of the session to establish proper context and documentation requirements.
 
 Code style preferences:
+
 - Use TypeScript for all new files
 - Prefer functional components with hooks
 - Use async/await instead of .then() chains
 
 Testing requirements:
+
 - Write unit tests for all utility functions
 - Use Jest and React Testing Library for component tests
+
+Branch naming convention:
+
+- Format: `feature/CHA-{issue-number}-{issue-title-slug}`
+- Where CHA stands for chatati, followed by the GitHub issue number, then a slugified version of the issue title
+- Example: `feature/CHA-1-finish-login-flow`
+- Always create branches based on GitHub issues and use this naming convention
+
+Referring to documentation: use context7
