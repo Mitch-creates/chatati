@@ -2,6 +2,20 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+export class UnauthorizedError extends Error {
+  constructor(message = "Unauthorized") {
+    super(message);
+    this.name = "UnauthorizedError";
+  }
+}
+
+export class EmailNotVerifiedError extends Error {
+  constructor(message = "Email not verified") {
+    super(message);
+    this.name = "EmailNotVerifiedError";
+  }
+}
+
 // Simply get the session from the API
 export async function getSessionHelper() {
   const session = await auth.api.getSession({
@@ -23,7 +37,7 @@ export async function requireAuth() {
 export async function requireAuthAPI() {
   const session = await getSessionHelper();
   if (!session) {
-    return new Response("Unauthorized", { status: 401 });
+    return new UnauthorizedError();
   }
   return session;
 }
@@ -44,10 +58,10 @@ export async function requireAuthAndEmailVerified() {
 export async function requireAuthAndEmailVerifiedAPI() {
   const session = await getSessionHelper();
   if (!session) {
-    return new Response("Unauthorized", { status: 401 });
+    return new UnauthorizedError();
   }
   if (!session.user?.emailVerified) {
-    return new Response("Unauthorized", { status: 401 });
+    return new EmailNotVerifiedError();
   }
   return session;
 }
