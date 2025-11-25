@@ -37,7 +37,9 @@
     "sendingResetLink": "Sending...",
     "resetLinkSent": "Reset link sent!",
     "checkEmail": "Check your email for instructions.",
-    "backToSignIn": "Back to Sign In"
+    "backToSignIn": "Back to Sign In",
+    "emailAlreadyTaken": "Email is already taken.",
+    "forgotPasswordLink": "If you forgot your password click here."
   },
   "validation": {
     "emailRequired": "Email is required.",

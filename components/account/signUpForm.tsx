@@ -58,12 +58,17 @@ export function SignUpForm() {
           router.push("/"); // TODO Direct to edit profile page
         },
         onError: (ctx) => {
-          // TODO update UI when fail (probably when Email is already taken)
-          if (ctx.error.status === 409) {
-            alert("Email already taken");
-          }
           setIsPending(false);
-          alert(ctx.error.message);
+          // Handle email already taken error
+          if (ctx.error.status === 409) {
+            signUpForm.setError("email", {
+              type: "emailTaken",
+              message: onboardingMessages("emailAlreadyTaken"),
+            });
+          } else {
+            // Handle other errors
+            alert(ctx.error.message);
+          }
         },
       }
     );
@@ -153,12 +158,12 @@ export function SignUpForm() {
                       <FieldError errors={[fieldState.error]} />
                       {fieldState.error?.type === "emailTaken" && (
                         <div className="text-sm text-red-600 mt-1">
-                          Email is already taken.{" "}
+                          {onboardingMessages("emailAlreadyTaken")}{" "}
                           <Link
                             href="/forgot-password"
                             className="underline text-blue-700 hover:text-blue-900"
                           >
-                            If you forgot your password click here.
+                            {onboardingMessages("forgotPasswordLink")}
                           </Link>
                         </div>
                       )}
