@@ -14,12 +14,15 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
+import { useSearchParams } from "next/navigation";
 
 export function ResetPasswordForm() {
   const validationMessages = useTranslations("validation");
   const onboardingMessages = useTranslations("onboarding");
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(getResetPasswordSchema(validationMessages)),
@@ -32,9 +35,6 @@ export function ResetPasswordForm() {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-
     // TODO better error handling
     if (!token) {
       alert("No token found");
@@ -45,8 +45,7 @@ export function ResetPasswordForm() {
       {
         newPassword: data.password,
         token: token,
-        // Better Auth automatically looks for 'token' in the URL query params
-        // If your URL is /reset-password?token=xyz, you don't need to pass it manually
+        // Better auth normally looks for 'token' in the URL query params but
       },
       {
         onRequest: () => setIsPending(true),
