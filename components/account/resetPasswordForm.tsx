@@ -10,12 +10,7 @@ import {
   getResetPasswordSchema,
   ResetPasswordFormData,
 } from "@/lib/zod-schemas/resetPasswordSchema";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "../ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
@@ -37,9 +32,19 @@ export function ResetPasswordForm() {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    // TODO better error handling
+    if (!token) {
+      alert("No token found");
+      return;
+    }
+
     await authClient.resetPassword(
       {
         newPassword: data.password,
+        token: token,
         // Better Auth automatically looks for 'token' in the URL query params
         // If your URL is /reset-password?token=xyz, you don't need to pass it manually
       },
@@ -51,6 +56,7 @@ export function ResetPasswordForm() {
         },
         onError: (ctx) => {
           alert(ctx.error.message);
+          console.error(ctx.error);
         },
       }
     );
@@ -104,7 +110,9 @@ export function ResetPasswordForm() {
                     id="confirm-password"
                     type="password"
                     aria-invalid={fieldState.invalid}
-                    placeholder={onboardingMessages("confirmPasswordPlaceholder")}
+                    placeholder={onboardingMessages(
+                      "confirmPasswordPlaceholder"
+                    )}
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid &&

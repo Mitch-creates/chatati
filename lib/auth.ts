@@ -3,6 +3,7 @@ import {
   sendVerificationEmail,
   sendPasswordResetEmail,
 } from "@/lib/mail/email";
+import { prisma } from "@/lib/prisma"; // Defined as a singleton so we can reuse it across the app
 
 config();
 // TODO Implement magic link auth https://www.better-auth.com/docs/plugins/magic-link
@@ -10,9 +11,7 @@ config();
 
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
