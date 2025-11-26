@@ -6,6 +6,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ViZgie2d3WDasgN
       POSTGRES_DB: chatati
+      TZ: UTC
+      PGTZ: UTC
     ports:
       - "5432:5432"
     volumes:
