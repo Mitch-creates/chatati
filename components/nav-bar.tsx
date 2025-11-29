@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useEffect, useState } from "react";
 
 interface NavbarProps {
   initialSession?: Awaited<
@@ -24,20 +23,10 @@ export default function Navbar({ initialSession }: NavbarProps) {
   const navigationMessages = useTranslations("navigation");
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // On server and first client render, use initialSession
-  // After mount, use hook data (which should match by then)
-  const effectiveSession = mounted ? session : initialSession ?? session;
-  const effectiveIsPending = mounted
-    ? isPending
-    : initialSession !== undefined
-    ? false
-    : isPending;
+  const effectiveSession =
+    initialSession !== undefined ? initialSession : session;
+  const effectiveIsPending = initialSession !== undefined ? false : isPending;
 
   const user = effectiveSession?.user;
 
