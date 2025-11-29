@@ -48,7 +48,6 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
               <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
                 {user.name.charAt(0).toUpperCase()}
               </div>
-              <span className="hidden md:block">{user.name}</span>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -96,4 +95,3 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
     </nav>
   );
 }
-

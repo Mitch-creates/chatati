@@ -1,7 +1,7 @@
 "use client";
 import { NavbarContent } from "./nav-bar-content";
 import { authClient } from "@/lib/auth-client";
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 
 interface NavbarProps {
   initialSession?: Awaited<
@@ -11,22 +11,32 @@ interface NavbarProps {
 
 export default function Navbar({ initialSession }: NavbarProps) {
   const { data: session, isPending } = authClient.useSession();
-  const [mounted, setMounted] = useState(false);
+  const [currentSession, setCurrentSession] = useState(initialSession ?? null);
+  const initialSessionRef = useRef(initialSession);
+  const hasSwitchedRef = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    // Only switch to hook data if:
+    // 1. Hook is not pending
+    // 2. Session has actually changed (e.g., after sign-in)
+    // 3. We haven't switched yet OR session is different from initial
+    if (!isPending && session !== undefined) {
+      const sessionChanged =
+        session?.user?.id !== initialSessionRef.current?.user?.id;
 
-  // On first render (server + initial client), use initialSession to prevent flash
-  // After mount, use hook data so it can update when session changes (e.g., after sign-in)
-  const effectiveSession = mounted ? session ?? null : initialSession ?? null;
-  const effectiveIsPending = mounted
-    ? isPending
-    : initialSession !== undefined
-    ? false
-    : isPending;
+      if (sessionChanged || !hasSwitchedRef.current) {
+        setCurrentSession(session ?? null);
+        hasSwitchedRef.current = true;
+      }
+    }
+  }, [session, isPending]);
 
+  // Always use currentSession state, which starts with initialSession
+  // This prevents flash because we control when it updates
   return (
-    <NavbarContent session={effectiveSession} isPending={effectiveIsPending} />
+    <NavbarContent
+      session={currentSession}
+      isPending={initialSession !== undefined ? false : isPending}
+    />
   );
 }
