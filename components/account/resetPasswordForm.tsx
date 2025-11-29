@@ -45,7 +45,7 @@ export function ResetPasswordForm() {
       {
         newPassword: data.password,
         token: token,
-        // Better auth normally looks for 'token' in the URL query params but
+        // Better auth normally looks for 'token' in the URL query params but The client-side method may not have access to the full URL context.....?
       },
       {
         onRequest: () => setIsPending(true),
@@ -63,7 +63,7 @@ export function ResetPasswordForm() {
 
   return (
     <Card className="w-full border-2 border-black shadow-[4px_4px_0_0_black]">
-      <CardContent className="p-4 sm:p-6">
+      <CardContent>
         <form
           id="resetPasswordForm"
           className="w-full flex flex-col justify-center space-y-4"

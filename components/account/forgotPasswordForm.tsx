@@ -65,7 +65,7 @@ export function ForgotPasswordForm() {
 
   return (
     <Card className="w-full border-2 border-black shadow-[4px_4px_0_0_black]">
-      <CardContent className="p-4 sm:p-6">
+      <CardContent>
         <form
           id="forgotPasswordForm"
           className="w-full flex flex-col justify-center space-y-4"
