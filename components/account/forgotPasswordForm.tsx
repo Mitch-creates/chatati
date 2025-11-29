@@ -21,6 +21,7 @@ export function ForgotPasswordForm() {
   const locale = useLocale();
   const [isPending, setIsPending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(getForgotPasswordSchema(validationMessages)),
@@ -43,8 +44,8 @@ export function ForgotPasswordForm() {
         onSuccess: () => {
           setIsSuccess(true);
         },
-        onError: (ctx) => {
-          alert(ctx.error.message);
+        onError: () => {
+          setFormError(onboardingMessages("forgotPasswordError"));
         },
       }
     );
@@ -70,6 +71,7 @@ export function ForgotPasswordForm() {
           id="forgotPasswordForm"
           className="w-full flex flex-col justify-center space-y-4"
           onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
         >
           <FieldGroup>
             <Controller
@@ -110,15 +112,12 @@ export function ForgotPasswordForm() {
             ? onboardingMessages("sendingResetLink").toUpperCase()
             : onboardingMessages("sendResetLink").toUpperCase()}
         </CtaButton>
-        <div className="text-center">
-          <Link
-            href="/signin"
-            className="text-sm underline hover:text-gray-600"
-          >
-            {onboardingMessages("backToSignIn")}
-          </Link>
-        </div>
       </CardFooter>
+      {formError && (
+        <CardContent>
+          <p className="text-red-500">{formError}</p>
+        </CardContent>
+      )}
     </Card>
   );
 }

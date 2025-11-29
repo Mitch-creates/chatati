@@ -23,6 +23,7 @@ export function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(getResetPasswordSchema(validationMessages)),
@@ -35,9 +36,8 @@ export function ResetPasswordForm() {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    // TODO better error handling
     if (!token) {
-      alert("No token found");
+      setFormError(onboardingMessages("resetTokenMissing"));
       return;
     }
 
@@ -54,8 +54,13 @@ export function ResetPasswordForm() {
           router.push("/signin");
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
-          console.error(ctx.error);
+          if (ctx.error.status === 400) {
+            setFormError(onboardingMessages("resetTokenInvalid"));
+          } else if (ctx.error.status === 401) {
+            setFormError(onboardingMessages("resetTokenExpired"));
+          } else {
+            setFormError(onboardingMessages("resetPasswordError"));
+          }
         },
       }
     );
@@ -68,6 +73,7 @@ export function ResetPasswordForm() {
           id="resetPasswordForm"
           className="w-full flex flex-col justify-center space-y-4"
           onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
         >
           <FieldGroup>
             <Controller
@@ -80,6 +86,10 @@ export function ResetPasswordForm() {
                   </FieldLabel>
                   <Input
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (formError) setFormError(null);
+                    }}
                     id="new-password"
                     type="password"
                     aria-invalid={fieldState.invalid}
@@ -106,6 +116,10 @@ export function ResetPasswordForm() {
                   </FieldLabel>
                   <Input
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (formError) setFormError(null);
+                    }}
                     id="confirm-password"
                     type="password"
                     aria-invalid={fieldState.invalid}
@@ -125,7 +139,7 @@ export function ResetPasswordForm() {
         </form>
       </CardContent>
 
-      <CardFooter className="p-4 sm:p-6 pt-0">
+      <CardFooter>
         <CtaButton
           type="submit"
           form="resetPasswordForm"
@@ -137,6 +151,11 @@ export function ResetPasswordForm() {
             : onboardingMessages("resetPassword").toUpperCase()}
         </CtaButton>
       </CardFooter>
+      {formError && (
+        <CardContent>
+          <p className="text-red-500">{formError}</p>
+        </CardContent>
+      )}
     </Card>
   );
 }

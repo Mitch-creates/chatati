@@ -39,7 +39,14 @@
     "checkEmail": "Check your email for instructions.",
     "backToSignIn": "Back to Sign In",
     "emailAlreadyTaken": "Email is already taken.",
-    "forgotPasswordLink": "If you forgot your password click here."
+    "forgotPasswordLink": "If you forgot your password click here.",
+    "resetTokenMissing": "Reset token is missing. Please request a new password reset link.",
+    "resetTokenInvalid": "This password reset link is invalid or has expired.",
+    "resetTokenExpired": "This password reset link has expired. Please request a new one.",
+    "resetPasswordError": "An error occurred while resetting your password. Please try again.",
+    "emailNotFound": "Email not found. Please check your email and try again.",
+    "forgotPasswordError": "An error occurred while sending the password reset link. Please try again.",
+    "requestNewResetLink": "Request a new reset link"
   },
   "validation": {
     "emailRequired": "Email is required.",
