@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import {
   getResetPasswordSchema,
@@ -154,6 +154,15 @@ export function ResetPasswordForm() {
       {formError && (
         <CardContent>
           <p className="text-red-500">{formError}</p>
+          {formError === onboardingMessages("resetTokenInvalid") ||
+            (formError === onboardingMessages("resetTokenExpired") && (
+              <Link
+                href="/account/forgot-password"
+                className="text-black underline"
+              >
+                {onboardingMessages("requestNewResetLink")}
+              </Link>
+            ))}
         </CardContent>
       )}
     </Card>
