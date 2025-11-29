@@ -37,7 +37,16 @@
     "sendingResetLink": "Senden...",
     "resetLinkSent": "Link gesendet!",
     "checkEmail": "Prüfen Sie Ihre E-Mails.",
-    "backToSignIn": "Zurück zur Anmeldung"
+    "backToSignIn": "Zurück zur Anmeldung",
+    "emailAlreadyTaken": "E-Mail ist bereits vergeben.",
+    "forgotPasswordLink": "Wenn Sie Ihr Passwort vergessen haben, klicken Sie hier.",
+    "resetTokenMissing": "Zurücksetzungstoken fehlt. Bitte fordern Sie einen neuen Link an.",
+    "resetTokenInvalid": "Dieser Link ist ungültig oder abgelaufen.",
+    "resetTokenExpired": "Dieser Link ist abgelaufen. Bitte fordern Sie einen neuen Link an.",
+    "resetPasswordError": "Ein Fehler ist aufgetreten, während Ihr Passwort zurückgesetzt wurde. Bitte versuchen Sie es erneut.",
+    "emailNotFound": "E-Mail nicht gefunden. Bitte prüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
+    "forgotPasswordError": "Ein Fehler ist aufgetreten, während der Link zum Zurücksetzen des Passworts gesendet wurde. Bitte versuchen Sie es erneut.",
+    "requestNewResetLink": "Neuen Link anfordern"
   },
   "validation": {
     "emailRequired": "E-Mail ist erforderlich.",
@@ -57,5 +66,15 @@
     "news": "Neuigkeiten",
     "signIn": "Anmelden",
     "signUp": "Registrieren"
+  },
+  "api": {
+    "errors": {
+      "unauthorized": "Nicht autorisiert",
+      "userNotFound": "Benutzer nicht gefunden",
+      "internalServerError": "Interner Serverfehler",
+      "emailNotVerified": "E-Mail nicht verifiziert",
+      "badRequest": "Ungültige Anfrage",
+      "forbidden": "Verboten"
+    }
   }
 }

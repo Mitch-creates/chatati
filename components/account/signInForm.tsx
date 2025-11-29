@@ -65,6 +65,7 @@ export function SignInForm() {
           id="signInForm"
           className="w-full flex flex-col justify-center space-y-4"
           onSubmit={signInForm.handleSubmit(onSubmit)}
+          noValidate
         >
           <FieldGroup>
             <Controller

@@ -114,3 +114,13 @@ docker-compose logs
 # Rebuild containers
 docker-compose up --build
 ```
+
+## Decisions that were made
+
+_1. E-mail verification_
+I was considering demanding email verification right from the start. Showing a message after sign up that a mail was sent and guiding the user back to sign in page after clicking the verify link in their mail. Not allowing the user to log in before clicking on that verify link.
+I read on several blog posts how this can really throw off users from the very start and reduce 'conversion rate'. I don't want to lose potential users, while still maintaining safety (real users).
+Another reason is that the ideal onboarding consists of signing up and immediately being guided to profile creation. Which would still be possible with email verification in between, but it wouldn't be as smooth.
+So I've decided to instead;
+**- Allow users to log in to the application directly after sign up and use the application EXCEPT for adding users to their favorites, sending a meet-request or accepting a meet-request.**
+**- Get a captcha on the sign up form instead to reduce fake users(bots)**

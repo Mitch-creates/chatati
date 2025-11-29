@@ -17,7 +17,7 @@ import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
 export function SignUpForm() {
@@ -45,7 +45,7 @@ export function SignUpForm() {
         email: data.email,
         password: data.password,
         name: data.firstName + " " + data.lastName.charAt(0).toUpperCase(),
-        // callbackURL: "/", TODO when verification with email is setup this is the URL the user is redirected to
+        callbackURL: "/signin", // TODO Implement page for email verification succeeded
       },
       {
         onRequest: () => {
@@ -55,13 +55,20 @@ export function SignUpForm() {
           setIsPending(false);
         },
         onSuccess: () => {
-          router.push("/"); // TODO Direct to search Chatati page
+          router.push("/"); // TODO Direct to edit profile page
         },
         onError: (ctx) => {
-          // TODO update UI when fail (probably when Email is already taken)
-          // If that's the case we can show a forgot password link or similar
-          alert(ctx.error.message);
           setIsPending(false);
+          // Handle email already taken error
+          if (ctx.error.status === 422) {
+            signUpForm.setError("email", {
+              type: "emailTaken",
+              message: onboardingMessages("emailAlreadyTaken"),
+            });
+          } else {
+            // TODO Implement better error handling
+            console.error(ctx.error.message);
+          }
         },
       }
     );
@@ -74,6 +81,7 @@ export function SignUpForm() {
           id="signUpForm"
           className="w-full flex flex-col justify-center space-y-4"
           onSubmit={signUpForm.handleSubmit(onSubmit)}
+          noValidate
         >
           <FieldGroup>
             <Controller
@@ -147,7 +155,22 @@ export function SignUpForm() {
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <>
+                      {fieldState.error?.type !== "emailTaken" && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                      {fieldState.error?.type === "emailTaken" && (
+                        <div className="text-sm text-red-600 mt-1">
+                          {onboardingMessages("emailAlreadyTaken")}{" "}
+                          <Link
+                            href="/account/forgot-password"
+                            className="underline text-blue-700 hover:text-blue-900"
+                          >
+                            {onboardingMessages("forgotPasswordLink")}
+                          </Link>
+                        </div>
+                      )}
+                    </>
                   )}
                 </Field>
               )}

@@ -4,27 +4,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import {
   getResetPasswordSchema,
   ResetPasswordFormData,
 } from "@/lib/zod-schemas/resetPasswordSchema";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "../ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
+import { useSearchParams } from "next/navigation";
 
 export function ResetPasswordForm() {
   const validationMessages = useTranslations("validation");
   const onboardingMessages = useTranslations("onboarding");
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(getResetPasswordSchema(validationMessages)),
@@ -37,11 +36,16 @@ export function ResetPasswordForm() {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
+    if (!token) {
+      setFormError(onboardingMessages("resetTokenMissing"));
+      return;
+    }
+
     await authClient.resetPassword(
       {
         newPassword: data.password,
-        // Better Auth automatically looks for 'token' in the URL query params
-        // If your URL is /reset-password?token=xyz, you don't need to pass it manually
+        token: token,
+        // Better auth normally looks for 'token' in the URL query params but The client-side method may not have access to the full URL context.....?
       },
       {
         onRequest: () => setIsPending(true),
@@ -50,7 +54,13 @@ export function ResetPasswordForm() {
           router.push("/signin");
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
+          if (ctx.error.status === 400) {
+            setFormError(onboardingMessages("resetTokenInvalid"));
+          } else if (ctx.error.status === 401) {
+            setFormError(onboardingMessages("resetTokenExpired"));
+          } else {
+            setFormError(onboardingMessages("resetPasswordError"));
+          }
         },
       }
     );
@@ -58,11 +68,12 @@ export function ResetPasswordForm() {
 
   return (
     <Card className="w-full border-2 border-black shadow-[4px_4px_0_0_black]">
-      <CardContent className="p-4 sm:p-6">
+      <CardContent>
         <form
           id="resetPasswordForm"
           className="w-full flex flex-col justify-center space-y-4"
           onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
         >
           <FieldGroup>
             <Controller
@@ -75,6 +86,10 @@ export function ResetPasswordForm() {
                   </FieldLabel>
                   <Input
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (formError) setFormError(null);
+                    }}
                     id="new-password"
                     type="password"
                     aria-invalid={fieldState.invalid}
@@ -101,10 +116,16 @@ export function ResetPasswordForm() {
                   </FieldLabel>
                   <Input
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (formError) setFormError(null);
+                    }}
                     id="confirm-password"
                     type="password"
                     aria-invalid={fieldState.invalid}
-                    placeholder={onboardingMessages("confirmPasswordPlaceholder")}
+                    placeholder={onboardingMessages(
+                      "confirmPasswordPlaceholder"
+                    )}
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid &&
@@ -118,7 +139,7 @@ export function ResetPasswordForm() {
         </form>
       </CardContent>
 
-      <CardFooter className="p-4 sm:p-6 pt-0">
+      <CardFooter>
         <CtaButton
           type="submit"
           form="resetPasswordForm"
@@ -130,6 +151,20 @@ export function ResetPasswordForm() {
             : onboardingMessages("resetPassword").toUpperCase()}
         </CtaButton>
       </CardFooter>
+      {formError && (
+        <CardContent>
+          <p className="text-red-500">{formError}</p>
+          {formError === onboardingMessages("resetTokenInvalid") ||
+            (formError === onboardingMessages("resetTokenExpired") && (
+              <Link
+                href="/account/forgot-password"
+                className="text-black underline"
+              >
+                {onboardingMessages("requestNewResetLink")}
+              </Link>
+            ))}
+        </CardContent>
+      )}
     </Card>
   );
 }

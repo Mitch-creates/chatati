@@ -1,13 +1,7 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { requireAuthAndEmailVerified } from "@/lib/auth-utils";
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) {
-    redirect("/");
-  }
-  return <div>Profile page</div>;
+  const session = await requireAuthAndEmailVerified();
+  const user = session.user;
+  return <div>Profile page for {user.email}</div>;
 }
