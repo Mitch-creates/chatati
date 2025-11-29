@@ -16,6 +16,12 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  session: {
+    enabled: true,
+    expiresIn: 5 * 60,
+    strategy: "compact",
+  },
+
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false, // Defaults to false, but I chose to be explicit. Users should be able to access certain parts of the app without email verification.

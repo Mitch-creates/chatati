@@ -12,13 +12,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useEffect, useState } from "react";
 
-export default function Navbar() {
+interface NavbarProps {
+  initialSession?: Awaited<
+    ReturnType<typeof import("@/lib/auth-utils").getSessionHelper>
+  > | null;
+}
+
+export default function Navbar({ initialSession }: NavbarProps) {
   const navigationMessages = useTranslations("navigation");
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
-  const user = session?.user;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // On server and first client render, use initialSession
+  // After mount, use hook data (which should match by then)
+  const effectiveSession = mounted ? session : initialSession ?? session;
+  const effectiveIsPending = mounted
+    ? isPending
+    : initialSession !== undefined
+    ? false
+    : isPending;
+
+  const user = effectiveSession?.user;
 
   return (
     <nav className="flex justify-between items-center p-4 border-b-2 select-none">
@@ -33,7 +54,7 @@ export default function Navbar() {
           <Link href="/Dashboard">{navigationMessages("about")}</Link>
         </li>
       </ul>
-      {user && !isPending ? (
+      {user && !effectiveIsPending ? (
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="flex items-center gap-2">
@@ -42,7 +63,6 @@ export default function Navbar() {
                   {user.name.charAt(0).toUpperCase()}
                 </div>
               }
-              <span className="hidden md:block">{user.name}</span>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
