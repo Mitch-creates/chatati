@@ -1,17 +1,7 @@
 "use client";
-import Link from "next/link";
-import CtaButton from "./cta-button";
-import RegularButton from "./regular-button";
-import { useTranslations } from "next-intl";
+import { NavbarContent } from "./nav-bar-content";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { useState, useEffect } from "react";
 
 interface NavbarProps {
   initialSession?: Awaited<
@@ -20,82 +10,23 @@ interface NavbarProps {
 }
 
 export default function Navbar({ initialSession }: NavbarProps) {
-  const navigationMessages = useTranslations("navigation");
   const { data: session, isPending } = authClient.useSession();
-  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
-  const effectiveSession =
-    initialSession !== undefined ? initialSession : session;
-  const effectiveIsPending = initialSession !== undefined ? false : isPending;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const user = effectiveSession?.user;
+  // On first render (server + initial client), use initialSession to prevent flash
+  // After mount, use hook data so it can update when session changes (e.g., after sign-in)
+  const effectiveSession = mounted ? session ?? null : initialSession ?? null;
+  const effectiveIsPending = mounted
+    ? isPending
+    : initialSession !== undefined
+    ? false
+    : isPending;
 
   return (
-    <nav className="flex justify-between items-center p-4 border-b-2 select-none">
-      <h1>
-        <Link href="/">Logo Website</Link>
-      </h1>
-      <ul className="flex space-x-4">
-        <li>
-          <Link href="/Content">{navigationMessages("news")}</Link>
-        </li>
-        <li>
-          <Link href="/Dashboard">{navigationMessages("about")}</Link>
-        </li>
-      </ul>
-      {user && !effectiveIsPending ? (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <div className="flex items-center gap-2">
-              {
-                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-              }
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem asChild>
-              <Link href={`/profile/${user.id}`}>Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/account/settings">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={async () => {
-                await authClient.signOut({
-                  fetchOptions: {
-                    onSuccess: () => {
-                      router.push("/");
-                      router.refresh();
-                    },
-                  },
-                });
-              }}
-            >
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ) : isPending ? (
-        <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-      ) : (
-        <ul className="flex space-x-4">
-          <li>
-            <Link href="/signin">
-              <RegularButton>{navigationMessages("signIn")}</RegularButton>
-            </Link>
-          </li>
-          <li>
-            <Link href="/signup">
-              <CtaButton accent="color2">
-                {navigationMessages("signUp")}
-              </CtaButton>
-            </Link>
-          </li>
-        </ul>
-      )}
-    </nav>
+    <NavbarContent session={effectiveSession} isPending={effectiveIsPending} />
   );
 }
