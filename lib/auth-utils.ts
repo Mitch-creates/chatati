@@ -45,12 +45,14 @@ export async function requireAuthAPI() {
 // Redirect to signin if not authenticated or if email not verified [server components]
 export async function requireAuthAndEmailVerified() {
   const session = await getSessionHelper();
+
   if (!session) {
     redirect("/signin");
   }
   if (!session.user?.emailVerified) {
-    redirect("/verify-email");
+    redirect("/verification-required");
   }
+
   return session;
 }
 

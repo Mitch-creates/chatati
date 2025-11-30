@@ -46,7 +46,8 @@
     "resetPasswordError": "Ein Fehler ist aufgetreten, während Ihr Passwort zurückgesetzt wurde. Bitte versuchen Sie es erneut.",
     "emailNotFound": "E-Mail nicht gefunden. Bitte prüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
     "forgotPasswordError": "Ein Fehler ist aufgetreten, während der Link zum Zurücksetzen des Passworts gesendet wurde. Bitte versuchen Sie es erneut.",
-    "requestNewResetLink": "Neuen Link anfordern"
+    "requestNewResetLink": "Neuen Link anfordern",
+    "invalidCredentials": "Ungültige Anmeldeinformationen. Bitte prüfen Sie Ihre E-Mail und Ihr Passwort und versuchen Sie es erneut."
   },
   "validation": {
     "emailRequired": "E-Mail ist erforderlich.",

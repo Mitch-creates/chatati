@@ -45,7 +45,7 @@ export function SignUpForm() {
         email: data.email,
         password: data.password,
         name: data.firstName + " " + data.lastName.charAt(0).toUpperCase(),
-        callbackURL: "/signin", // TODO Implement page for email verification succeeded
+        callbackURL: "/platform/account/edit?newUser=true",
       },
       {
         onRequest: () => {

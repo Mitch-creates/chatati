@@ -31,11 +31,13 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
-    sendOnSignUp: true, // TODO let users know that a verification email has been sent after signup
+    sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url }) => {
       await sendVerificationEmail(user.email, url);
       console.log("Sent verification email to", user.email);
     },
+    autoSignInAfterVerification: true,
+    callbackURL: "/platform/account/edit?newUser=true",
     onPasswordReset: async ({ user }: { user: { email: string } }) => {
       console.log(`Password for user ${user.email} has been reset.`);
     },
