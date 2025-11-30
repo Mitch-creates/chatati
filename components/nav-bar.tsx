@@ -1,92 +1,42 @@
 "use client";
-import Link from "next/link";
-import CtaButton from "./cta-button";
-import RegularButton from "./regular-button";
-import { useTranslations } from "next-intl";
+import { NavbarContent } from "./nav-bar-content";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { useRef, useState, useEffect } from "react";
 
-export default function Navbar() {
-  const navigationMessages = useTranslations("navigation");
+interface NavbarProps {
+  initialSession?: Awaited<
+    ReturnType<typeof import("@/lib/auth-utils").getSessionHelper>
+  > | null;
+}
+
+export default function Navbar({ initialSession }: NavbarProps) {
   const { data: session, isPending } = authClient.useSession();
-  const router = useRouter();
+  const [currentSession, setCurrentSession] = useState(initialSession ?? null);
+  const initialSessionRef = useRef(initialSession);
+  const hasSwitchedRef = useRef(false);
 
-  const user = session?.user;
+  useEffect(() => {
+    // Only switch to hook data if:
+    // 1. Hook is not pending
+    // 2. Session has actually changed (e.g., after sign-in)
+    // 3. We haven't switched yet OR session is different from initial
+    if (!isPending && session !== undefined) {
+      const sessionChanged =
+        session?.user?.id !== initialSessionRef.current?.user?.id;
 
+      if (sessionChanged || !hasSwitchedRef.current) {
+        setCurrentSession(session ?? null);
+        hasSwitchedRef.current = true;
+      }
+    }
+  }, [session, isPending]);
+
+  // Always use currentSession state, which starts with initialSession
+  // This prevents flash because we control when it updates
   return (
-    <nav className="flex justify-between items-center p-4 border-b-2 select-none">
-      <h1>
-        <Link href="/">Logo Website</Link>
-      </h1>
-      <ul className="flex space-x-4">
-        <li>
-          <Link href="/Content">{navigationMessages("news")}</Link>
-        </li>
-        <li>
-          <Link href="/Dashboard">{navigationMessages("about")}</Link>
-        </li>
-      </ul>
-      {user && !isPending ? (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <div className="flex items-center gap-2">
-              {
-                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-              }
-              <span className="hidden md:block">{user.name}</span>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem asChild>
-              <Link href={`/profile/${user.id}`}>Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/account/settings">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={async () => {
-                await authClient.signOut({
-                  fetchOptions: {
-                    onSuccess: () => {
-                      router.push("/");
-                      router.refresh();
-                    },
-                  },
-                });
-              }}
-            >
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ) : isPending ? (
-        <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
-      ) : (
-        <ul className="flex space-x-4">
-          <li>
-            <Link href="/signin">
-              <RegularButton>{navigationMessages("signIn")}</RegularButton>
-            </Link>
-          </li>
-          <li>
-            <Link href="/signup">
-              <CtaButton accent="color2">
-                {navigationMessages("signUp")}
-              </CtaButton>
-            </Link>
-          </li>
-        </ul>
-      )}
-    </nav>
+    <NavbarContent
+      session={currentSession}
+      isPending={initialSession !== undefined ? false : isPending}
+    />
   );
 }
