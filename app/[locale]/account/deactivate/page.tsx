@@ -1,6 +1,10 @@
+import { Spinner } from "@/components/ui/spinner";
+import { Suspense } from "react";
+
 export default async function DeactivatePage() {
-  return <div>Deactivate account page</div>;
+  return (
+    <Suspense fallback={<Spinner />}>
+      <div>Deactivate account page</div>
+    </Suspense>
+  );
 }
-
-
-
