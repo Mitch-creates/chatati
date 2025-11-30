@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { getSessionHelper } from "@/lib/auth-utils";
 import { Reem_Kufi } from "next/font/google";
+import { routing } from "@/i18n/routing";
 
 const reem = Reem_Kufi({
   subsets: ["latin"],
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
   title: "Learning application",
   description: "A learning application built with Next.js",
 };
+
+export function generateStaticParams() {
+  return routing.locales.map((locale: string) => ({ locale }));
+}
 
 export default async function RootLayout({
   children,
@@ -32,7 +37,7 @@ export default async function RootLayout({
       <body className={reem.className} suppressHydrationWarning>
         {/* suppressHydrationWarning is used to avoid the warning that the server and client are rendering different things. For example: Grammarly was causing errors because it was rendering the server and client differently. */}
         <NextIntlClientProvider messages={messages}>
-          {/* This is the provider that makes the messages available to the client. It's the same as the server provider, but it's used to make the messages available to the client. Otherwise, we were making an additional request to the server to get the messages. */}
+          {/* This is the provider that makes the messages available to the client. Otherwise, we were making an additional request to the server to get the messages. */}
           <Navbar initialSession={session} />
           {children}
         </NextIntlClientProvider>
