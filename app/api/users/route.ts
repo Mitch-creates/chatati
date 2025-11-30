@@ -1,13 +1,26 @@
 import { NextResponse } from "next/server";
 import { requireAuthAPI, UnauthorizedError } from "@/lib/auth-utils";
 import { getUserWithProfile } from "@/lib/services/user.service";
+import { cacheLife, cacheTag, updateTag } from "next/cache";
 
 // Get the current user's profile
 export async function GET() {
   try {
     const session = await requireAuthAPI();
+    const userId = session.user.id;
 
-    const user = await getUserWithProfile(session.user.id);
+    // Creates a user-specific cache tag for manual invalidation
+    const userCacheTag = `user-profile-${userId}`;
+
+    async function getCachedUser() {
+      "use cache";
+      cacheLife({ stale: 5, revalidate: 5 }); // Cache for 5 minutes
+      cacheTag(userCacheTag);
+
+      return await getUserWithProfile(userId);
+    }
+
+    const user = await getCachedUser();
 
     // Handle case where user doesn't exist
     if (!user) {
@@ -43,3 +56,5 @@ export async function GET() {
     );
   }
 }
+
+// When defining a function that updates the current user's profile we need to manually update the cache tag with updateTag('nameOfTheTag')
