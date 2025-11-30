@@ -1,10 +1,11 @@
 import { Spinner } from "@/components/ui/spinner";
 import { Suspense } from "react";
 
-export default async function DeletePage() {
+export default async function DeactivatePage() {
   return (
     <Suspense fallback={<Spinner />}>
-      <div>Delete account page</div>
+      <div>Deactivate account page</div>
     </Suspense>
   );
 }
+

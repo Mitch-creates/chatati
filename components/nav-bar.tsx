@@ -22,13 +22,14 @@ export default function Navbar({ initialSession }: NavbarProps) {
     if (!isPending && session !== undefined) {
       const currentUserId = currentSession?.user?.id ?? null;
       const newUserId = session?.user?.id ?? null;
-      
+
       // Check if session state changed (logged in <-> logged out)
-      const sessionStateChanged = (currentUserId === null) !== (newUserId === null);
-      
+      const sessionStateChanged =
+        (currentUserId === null) !== (newUserId === null);
+
       // Check if user ID changed (different user logged in)
       const userIdChanged = currentUserId !== newUserId;
-      
+
       // Update if session state changed or user changed
       if (sessionStateChanged || userIdChanged || !hasSwitchedRef.current) {
         setCurrentSession(session ?? null);

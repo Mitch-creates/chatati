@@ -34,11 +34,32 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
         <Link href="/">Logo Website</Link>
       </h1>
       <ul className="flex space-x-4">
+        {/* Platform navigation - only visible when logged in */}
+        {user && !isPending && (
+          <>
+            <li>
+              <Link href="/platform/search-chatati">
+                {navigationMessages("searchChatatis")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/platform/invites">
+                {navigationMessages("invites")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/platform/favorites">
+                {navigationMessages("savedChatatis")}
+              </Link>
+            </li>
+          </>
+        )}
+        {/* Public navigation - visible to everyone */}
         <li>
-          <Link href="/Content">{navigationMessages("news")}</Link>
+          <Link href="/news">{navigationMessages("news")}</Link>
         </li>
         <li>
-          <Link href="/Dashboard">{navigationMessages("about")}</Link>
+          <Link href="/about">{navigationMessages("about")}</Link>
         </li>
       </ul>
       {user && !isPending ? (
@@ -52,10 +73,10 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem asChild>
-              <Link href={`/profile/${user.id}`}>Profile</Link>
+              <Link href={`/platform/profile/${user.id}`}>Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/account/settings">Settings</Link>
+              <Link href="/platform/account/edit">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

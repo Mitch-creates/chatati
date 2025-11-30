@@ -65,7 +65,10 @@
     "about": "About",
     "news": "News",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "searchChatatis": "Search Chatatis",
+    "invites": "Invites",
+    "savedChatatis": "Saved Chatatis"
   },
   "api": {
     "errors": {

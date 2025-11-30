@@ -65,7 +65,10 @@
     "about": "Über uns",
     "news": "Neuigkeiten",
     "signIn": "Anmelden",
-    "signUp": "Registrieren"
+    "signUp": "Registrieren",
+    "searchChatatis": "Chatati suchen",
+    "invites": "Einladungen",
+    "savedChatatis": "Gespeicherte Chatatis"
   },
   "api": {
     "errors": {
