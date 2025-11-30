@@ -14,7 +14,11 @@ export async function GET() {
 
     async function getCachedUser() {
       "use cache";
-      cacheLife({ stale: 5, revalidate: 5 }); // Cache for 5 minutes
+      cacheLife({
+        stale: 300, // 5 minutes - fresh data window
+        revalidate: 1800, // 30 minutes - background revalidation
+        expire: 86400, // 1 day - complete expiration
+      });
       cacheTag(userCacheTag);
 
       return await getUserWithProfile(userId);
