@@ -55,7 +55,7 @@ export function SignUpForm() {
           setIsPending(false);
         },
         onSuccess: () => {
-          router.push("/"); // TODO Direct to edit profile page
+          router.push("/verification-sent");
         },
         onError: (ctx) => {
           setIsPending(false);

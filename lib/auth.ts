@@ -24,7 +24,8 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Defaults to false, but I chose to be explicit. Users should be able to access certain parts of the app without email verification.
+    requireEmailVerification: true,
+    verifyEmailUrl: "/verification-required",
     sendResetPassword: async ({ user, url }) => {
       await sendPasswordResetEmail(user.email, url);
     },
