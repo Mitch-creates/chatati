@@ -1,4 +1,4 @@
-import { ResetPasswordForm } from "@/components/account/resetPasswordForm";
+import { ResetPasswordForm } from "@/components/forms/resetPasswordForm";
 import { Spinner } from "@/components/ui/spinner";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 import { Suspense } from "react";

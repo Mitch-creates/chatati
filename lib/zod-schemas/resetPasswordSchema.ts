@@ -29,5 +29,5 @@ export const getResetPasswordSchema = (t?: (key: string) => string) => {
 };
 
 export type ResetPasswordFormData = z.infer<
-  ReturnType<typeof getResetPasswordSchema>
+  Awaited<ReturnType<typeof getResetPasswordSchema>>
 >;

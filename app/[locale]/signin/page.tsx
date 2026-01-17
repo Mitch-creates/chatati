@@ -1,4 +1,4 @@
-import { SignInForm } from "@/components/account/signInForm";
+import { SignInForm } from "@/components/forms/signInForm";
 import { Spinner } from "@/components/ui/spinner";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 import { Suspense } from "react";

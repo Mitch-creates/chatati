@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/components/account/signUpForm";
+import { SignUpForm } from "@/components/forms/signUpForm";
 import { Spinner } from "@/components/ui/spinner";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 import { Suspense } from "react";

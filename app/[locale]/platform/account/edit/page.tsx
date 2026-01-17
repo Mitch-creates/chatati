@@ -11,7 +11,10 @@ async function EditPageContent({
 }) {
   const { newUser } = await searchParams;
   const isFromNewUser = newUser === "true";
-  const onboardingMessages = await getCachedTranslations(locale, "onboarding");
+  const onboardingMessages = await getCachedTranslations(
+    locale,
+    "profileCreation"
+  );
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold">Edit Account</h1>

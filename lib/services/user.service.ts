@@ -43,6 +43,19 @@ export type UserWithProfile = {
   } | null;
 };
 
+export type LanguageOption = {
+  id: string;
+  code: string;
+  name: string;
+};
+
+export type DistrictOption = {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
+};
+
 /**
  * Get user by ID with full profile information
  * @param userId - The user's ID
@@ -97,6 +110,43 @@ export async function getUserWithProfile(
           updatedAt: true,
         },
       },
+    },
+  });
+}
+
+export async function getAvailableLanguages(): Promise<LanguageOption[]> {
+  return prisma.language.findMany({
+    select: {
+      id: true,
+      code: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+}
+
+/**
+ * Get all available districts (optionally filter by city/country)
+ */
+export async function getAvailableDistricts(
+  city?: string,
+  country?: string
+): Promise<DistrictOption[]> {
+  return prisma.district.findMany({
+    where: {
+      ...(city && { city }),
+      ...(country && { country }),
+    },
+    select: {
+      id: true,
+      name: true,
+      city: true,
+      country: true,
+    },
+    orderBy: {
+      name: "asc",
     },
   });
 }
