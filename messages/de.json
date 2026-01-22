@@ -74,7 +74,8 @@
     "interestsRequired": "Interessen sind erforderlich.",
     "interestsInvalid": "Interessen sind ungültig.",
     "availabilityRequired": "Verfügbarkeit ist erforderlich.",
-    "availabilityInvalid": "Verfügbarkeit ist ungültig."
+    "availabilityInvalid": "Verfügbarkeit ist ungültig.",
+    "invalidSelection": "Ungültige Auswahl."
   },
   "form": {},
   "navigation": {

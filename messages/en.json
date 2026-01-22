@@ -74,7 +74,8 @@
     "interestsRequired": "Interests are required.",
     "interestsInvalid": "Interests are invalid.",
     "availabilityRequired": "Availability is required.",
-    "availabilityInvalid": "Availability is invalid."
+    "availabilityInvalid": "Availability is invalid.",
+    "invalidSelection": "Invalid selection."
   },
   "form": {},
   "navigation": {
