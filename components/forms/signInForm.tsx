@@ -6,7 +6,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import {
   getSignInFormSchema,
   SignInFormData,
-} from "@/lib/zod-schemas/signInFormSchema";
+} from "@/lib/zod-schemas/signinFormSchema";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
@@ -146,7 +146,7 @@ export function SignInForm() {
         </Field>
         <div className="text-center">
           <Link
-            href="/account/forgot-password"
+            href="/forgot-password"
             className="text-sm underline hover:text-gray-600"
           >
             {onboardingMessages("forgotPassword")}

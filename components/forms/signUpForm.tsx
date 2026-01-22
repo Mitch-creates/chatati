@@ -12,7 +12,7 @@ import {
 import {
   getSignUpFormSchema,
   SignUpFormData,
-} from "@/lib/zod-schemas/signUpFormSchema";
+} from "@/lib/zod-schemas/signupFormSchema";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
