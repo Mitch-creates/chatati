@@ -1,4 +1,10 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "prisma.pinToPrisma6": false
+  "prisma.pinToPrisma6": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.snippetSuggestions": "top",
+  "editor.minimap.enabled": false,
+  "editor.linkedEditing": true,
+  "workbench.sideBar.location": "right"
 }
