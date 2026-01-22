@@ -89,6 +89,7 @@ model Profile {
   districtId String?
   district   District? @relation("ProfileDistrict", fields: [districtId], references: [id])
 
+  gender             Gender         @default(PRIVATE)
   bio                String?
   nativeLangs        Language[]     @relation("NativeLanguages")
   learningLangs      Language[]     @relation("LearningLanguages")
@@ -131,6 +132,13 @@ model Language {
 // ============================================
 // Enums
 // ============================================
+
+enum Gender {
+  MALE
+  FEMALE
+  X
+  PRIVATE
+}
 
 enum RequestStatus {
   OPEN

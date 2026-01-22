@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Interest, Availability } from "@prisma/client";
+import { Gender, Interest, Availability } from "@prisma/client";
 // TODO define and import enums for interest, nativeLang, learningLang, availability
 // TODO figure out how to handle preferedAreas and userArea
 // As for now I want to target just Hamburg, but I wan't to define a good structure so it's easily scalable
@@ -9,8 +9,8 @@ availableLanguageIds?: string[],
 availableDistrictIds?: string[]) {
   const baseSchema = z.object({
     image: z.string().optional(),
-    description: z.string().optional(), // Optional description box of max 400 characters
-    gender: z.enum(["male", "female", "x", "private"]), // Required field, default to private
+    bio: z.string().optional(), // Optional bio box of max 400 characters
+    gender: z.array(z.enum(Gender)),
     birthDate: z.date(), // Exact age not shown on profile. Used to filter on age category
     nativeLangs: z.array(z.string()).min(1, {
       message: t ? t("nativeLangsRequired") : "At least one native language is required",

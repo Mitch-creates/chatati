@@ -1,6 +1,6 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "prisma.pinToPrisma6": false,
+  "prisma.pinToPrisma6": true,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000
 }

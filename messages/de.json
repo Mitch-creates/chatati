@@ -59,7 +59,22 @@
     "confirmPasswordRequired": "Bitte bestätigen Sie Ihr Passwort.",
     "confirmPasswordMatch": "Passwörter stimmen nicht überein.",
     "firstNameInvalid": "Bitte geben Sie einen gültigen Vornamen an.",
-    "lastNameInvalid": "Bitte geben Sie einen gültigen Nachnamen an."
+    "lastNameInvalid": "Bitte geben Sie einen gültigen Nachnamen an.",
+    "genderRequired": "Geschlecht ist erforderlich.",
+    "genderInvalid": "Geschlecht ist ungültig.",
+    "birthDateRequired": "Geburtsdatum ist erforderlich.",
+    "birthDateInvalid": "Geburtsdatum ist ungültig.",
+    "nativeLangsRequired": "Mindestens eine Muttersprache ist erforderlich.",
+    "nativeLangsInvalid": "Muttersprachen sind ungültig.",
+    "learningLangsInvalid": "Lernsprachen sind ungültig.",
+    "districtRequired": "Bezirk ist erforderlich.",
+    "districtInvalid": "Bezirk ist ungültig.",
+    "preferenceDistrictRequired": "Bevorzugter Bezirk ist erforderlich.",
+    "preferenceDistrictInvalid": "Bevorzugter Bezirk ist ungültig.",
+    "interestsRequired": "Interessen sind erforderlich.",
+    "interestsInvalid": "Interessen sind ungültig.",
+    "availabilityRequired": "Verfügbarkeit ist erforderlich.",
+    "availabilityInvalid": "Verfügbarkeit ist ungültig."
   },
   "form": {},
   "navigation": {

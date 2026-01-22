@@ -59,7 +59,22 @@
     "confirmPasswordRequired": "Please confirm your password.",
     "confirmPasswordMatch": "Passwords do not match.",
     "firstNameInvalid": "Please provide a valid first name.",
-    "lastNameInvalid": "Please provide a valid last name."
+    "lastNameInvalid": "Please provide a valid last name.",
+    "genderRequired": "Gender is required.",
+    "genderInvalid": "Gender is invalid.",
+    "birthDateRequired": "Birth date is required.",
+    "birthDateInvalid": "Birth date is invalid.",
+    "nativeLangsRequired": "At least one native language is required.",
+    "nativeLangsInvalid": "Native languages are invalid.",
+    "learningLangsInvalid": "Learning languages are invalid.",
+    "districtRequired": "District is required.",
+    "districtInvalid": "District is invalid.",
+    "preferenceDistrictRequired": "Preference district is required.",
+    "preferenceDistrictInvalid": "Preference district is invalid.",
+    "interestsRequired": "Interests are required.",
+    "interestsInvalid": "Interests are invalid.",
+    "availabilityRequired": "Availability is required.",
+    "availabilityInvalid": "Availability is invalid."
   },
   "form": {},
   "navigation": {
