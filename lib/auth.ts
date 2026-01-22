@@ -21,7 +21,18 @@ export const auth = betterAuth({
     expiresIn: 5 * 60,
     strategy: "compact",
   },
-
+  user: {
+    additionalFields: {
+      firstName: {
+        type: "string",
+        required: false,
+      },
+      lastName: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,

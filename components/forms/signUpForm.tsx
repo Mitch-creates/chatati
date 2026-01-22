@@ -45,6 +45,8 @@ export function SignUpForm() {
         email: data.email,
         password: data.password,
         name: data.firstName + " " + data.lastName.charAt(0).toUpperCase(),
+        firstName: data.firstName,
+        lastName: data.lastName,
         callbackURL: "/platform/account/edit?newUser=true",
       },
       {
