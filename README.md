@@ -34,25 +34,40 @@ cd chatati
 npm install
 ```
 
-3. Start the database with Docker. Make sure to first already launch Docker
+3. Set up environment variables
+
+Copy the example environment file and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your actual values:
+- `DATABASE_URL`: Already configured for the Docker setup (matches docker-compose.yml)
+- `BETTER_AUTH_SECRET`: Generate a secure random string (e.g., `openssl rand -base64 32`)
+- `BETTER_AUTH_URL`: Your application URL (default: `http://localhost:3000`)
+- `RESEND_API_KEY`: (Optional) Get from [Resend](https://resend.com/api-keys) if you need email functionality
+- `EMAIL_FROM`: (Optional) Defaults to `noreply@chatati.de` if not set
+
+4. Start the database with Docker. Make sure to first already launch Docker
 
 ```bash
 docker-compose up -d
 ```
 
-4. Run Prisma migrations
+5. Run Prisma migrations
 
 ```bash
 npx prisma migrate dev
 ```
 
-5. Generate Prisma client
+6. Generate Prisma client
 
 ```bash
 npx prisma generate
 ```
 
-6. Start the development server
+7. Start the development server
 
 ```bash
 npm run dev
