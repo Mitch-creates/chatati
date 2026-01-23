@@ -75,7 +75,14 @@
     "interestsInvalid": "Interessen sind ungültig.",
     "availabilityRequired": "Verfügbarkeit ist erforderlich.",
     "availabilityInvalid": "Verfügbarkeit ist ungültig.",
-    "invalidSelection": "Ungültige Auswahl."
+    "invalidSelection": "Ungültige Auswahl.",
+    "imageTooLarge": "Bild ist zu groß. Bitte verwenden Sie ein Bild kleiner als 5MB.",
+    "imageInvalidType": "Bitte wählen Sie eine gültige Bilddatei (JPG, PNG oder WebP).",
+    "imageTooSmall": "Bild ist zu klein. Bitte verwenden Sie ein Bild mit mindestens 200x200 Pixeln.",
+    "imageTooLargeDimensions": "Bildabmessungen sind zu groß. Bitte verwenden Sie ein Bild kleiner als 10000x10000 Pixel.",
+    "imageCorrupted": "Diese Bilddatei scheint beschädigt zu sein. Bitte versuchen Sie ein anderes Bild.",
+    "imageProcessingError": "Bild konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
+    "imageLoadError": "Bild konnte nicht geladen werden. Bitte versuchen Sie es erneut."
   },
   "form": {},
   "navigation": {
