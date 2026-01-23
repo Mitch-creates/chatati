@@ -152,6 +152,8 @@ export function SignUpForm() {
                   <Input
                     {...field}
                     id="signUp-email"
+                    type="email"
+                    autoComplete="email"
                     aria-invalid={fieldState.invalid}
                     placeholder={onboardingMessages("emailPlaceholder")}
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
@@ -193,6 +195,7 @@ export function SignUpForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder={onboardingMessages("passwordPlaceholder")}
                     type="password"
+                    autoComplete="new-password"
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid && (
@@ -219,6 +222,7 @@ export function SignUpForm() {
                       "confirmPasswordPlaceholder"
                     )}
                     type="password"
+                    autoComplete="new-password"
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid &&
