@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { UsersRound } from "lucide-react";
 
 type SessionType = Awaited<
   ReturnType<typeof import("@/lib/auth-utils").getSessionHelper>
@@ -31,7 +32,9 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
   return (
     <nav className="flex justify-between items-center p-4 border-b-4 border-black select-none">
       <h1>
-        <Link href="/">Logo Website</Link>
+        <Link href="/" className="flex items-center">
+          <UsersRound className="w-10 h-10 text-accent-color2" />
+        </Link>
       </h1>
       <ul className="flex space-x-4">
         {/* Platform navigation - only visible when logged in */}

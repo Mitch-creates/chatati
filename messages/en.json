@@ -103,5 +103,9 @@
       "badRequest": "Bad request",
       "forbidden": "Forbidden"
     }
+  },
+  "editProfile": {
+    "image": "Add a profile picture (Optional)"
+    
   }
 }

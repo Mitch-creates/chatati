@@ -19,10 +19,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Card, CardContent } from "../ui/card";
 import { ImageUpload } from "../image-upload";
+import { Textarea } from "../ui/textarea";
 
 export function EditProfileForm() {
   const validationMessages = useTranslations("validation");
-  const onboardingMessages = useTranslations("editProfile");
+  const editProfileMessages = useTranslations("editProfile");
 
   const editProfileForm = useForm<EditProfileFormData>({
     resolver: zodResolver(getEditProfileSchema(validationMessages)),
@@ -88,22 +89,17 @@ export function EditProfileForm() {
   return (
     <form
           id="editProfileForm"
-          className="w-full flex flex-col justify-center items-center space-y-4"
+          className="w-full flex flex-col items-center space-y-4"
           onSubmit={editProfileForm.handleSubmit(onSubmit)}
           noValidate
         >
-          <FieldGroup className="mb-4 flex">
+          <FieldGroup className="mb-8 mt-8 flex">
             <Controller
               name="image"
               control={editProfileForm.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="editProfile-image">
-                    {onboardingMessages("image")}
-                  </FieldLabel>
-                  <FieldDescription>
-                    {onboardingMessages("imageDescription")}
-                  </FieldDescription>
+                <Field data-invalid={fieldState.invalid} className="text-center">
+                  
                   <ImageUpload
                     value={imagePreview}
                     onChange={handleImageChange}
@@ -112,6 +108,9 @@ export function EditProfileForm() {
                     id="editProfile-image"
                     ariaLabel="Upload profile image"
                   />
+                  <FieldLabel htmlFor="editProfile-image" className="w-full text-center justify-center">
+                    {editProfileMessages("image")}
+                  </FieldLabel>
                   {fieldState.invalid && (
                     <FieldError className="text-center" errors={[fieldState.error]} />
                   )}
@@ -120,7 +119,34 @@ export function EditProfileForm() {
             />
           </FieldGroup>
           <Card className="w-1/2 border-2 border-black shadow-[4px_4px_0_0_black]">
-            <CardContent></CardContent>
+            <CardContent>
+              <FieldGroup className="mb-4 flex">
+                <Controller
+                  name="bio"
+                  control={editProfileForm.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="text-center">
+                      <FieldLabel htmlFor="editProfile-firstName" className="w-full text-center justify-center">
+                        {editProfileMessages("bio")}
+                      </FieldLabel>
+                      <FieldDescription>
+                        {editProfileMessages("bioDescription")}
+                      </FieldDescription>
+                      <Textarea
+                        {...field}
+                        id="editProfile-bio"
+                        aria-invalid={fieldState.invalid}
+                        placeholder={editProfileMessages("bioPlaceholder")}
+                        className="w-full"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError className="text-center" errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
+            </CardContent>
           </Card>
         </form>
   )

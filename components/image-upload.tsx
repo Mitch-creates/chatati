@@ -56,7 +56,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Camera } from "lucide-react";
+import { ImagePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Cropper from "react-easy-crop";
 import type { Area, Point } from "react-easy-crop";
@@ -448,7 +448,7 @@ export function ImageUpload({
               className="w-full h-full object-cover rounded-full"
             />
           ) : (
-            <Camera className="text-black" style={{ width: size * 0.375, height: size * 0.375 }} strokeWidth={2} />
+            <ImagePlus className="text-black" style={{ width: size * 0.375, height: size * 0.375 }} strokeWidth={2} />
           )}
         </button>
         <input
@@ -471,7 +471,7 @@ export function ImageUpload({
       {/* Crop Modal */}
       {showCropModal && imageToCrop && !imageError && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg border-4 border-black shadow-[8px_8px_0_0_black] p-6 max-w-2xl w-full mx-4">
+          <div className="bg-white rounded-lg border-2 border-black shadow-[4px_4px_0_0_black] p-6 max-w-2xl w-full mx-4">
             <h2 className="text-2xl font-bold mb-4 text-black">Crop Your Image</h2>
             <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden border-2 border-black">
               <Cropper
