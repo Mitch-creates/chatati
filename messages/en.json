@@ -105,7 +105,40 @@
     }
   },
   "editProfile": {
-    "image": "Add a profile picture (Optional)"
-    
+    "image": "Add a profile picture (Optional)",
+    "bio": "Bio (Optional)",
+    "bioDescription": "Tell others about yourself (max 400 characters)",
+    "bioPlaceholder": "Write a short bio about yourself...",
+    "characters": "characters",
+    "gender": "Gender",
+    "genderDescription": "Select your gender. Chatati's can filter by gender. Choose Private if you don't want to share your gender.",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderX": "X",
+    "genderPrivate": "Private",
+    "birthDate": "Birth Date",
+    "birthDateDescription": "Your exact age is not shown on your profile. Used to filter by age category.",
+    "nativeLangs": "Your native language(s)",
+    "nativeLangsDescription": "Which languages do you speak (approximately) perfectly and can you offer to a Chatati?",
+    "nativeLangsPlaceholder": "Make a choice...",
+    "learningLangs": "Language you want to learn (Optional)",
+    "learningLangsDescription": "Which languages would you like to learn? (if you only want to teach, you don't need to fill this in)",
+    "learningLangsPlaceholder": "Make a choice...",
+    "district": "Your district (Optional)",
+    "districtDescription": "Select the district where you live",
+    "districtPlaceholder": "Make a choice...",
+    "preferenceDistrict": "Preferred districts",
+    "preferenceDistrictDescription": "Select the districts where you prefer to meet",
+    "preferenceDistrictPlaceholder": "Make a choice...",
+    "interests": "Interests (Optional)",
+    "interestsDescription": "Select your interests",
+    "interestsPlaceholder": "Make a choice...",
+    "availability": "Availability (Optional)",
+    "availabilityDescription": "When are you available?",
+    "availabilityDaytime": "Daytime",
+    "availabilityEvening": "Evening",
+    "availabilityWeekends": "Weekends",
+    "save": "Save Profile",
+    "saving": "Saving..."
   }
 }
