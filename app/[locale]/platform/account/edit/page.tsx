@@ -17,9 +17,9 @@ async function EditPageContent({
     "profileCreation"
   );
   return (
-    <div className="bg-accent-color2 items-center justify-center flex flex-col gap-4 pt-12 pb-12">
-      {isFromNewUser ? <><h1 className="text-3xl font-bold">Welcome to Chatati!</h1> <p className="text-lg">Please complete your profile to start using Chatati.</p></>
-       : <><h1 className="text-3xl font-bold">Edit your Profile</h1> <p className="text-lg">Please edit your profile to update your information.</p></>}
+    <div className="bg-accent-color2 items-center justify-center flex flex-col gap-4 min-h-[calc(30vh-4rem)] py-12 px-4 sm:px-6 lg:px-8">
+      {isFromNewUser ? <><h1 className="text-5xl font-bold">Welcome to Chatati!</h1> <p className="text-2xl">Please complete your profile to start using Chatati.</p></>
+       : <><h1 className="text-5xl font-bold">Edit your Profile</h1> <p className="text-2xl">Please edit your profile to update your information.</p></>}
       <EditProfileForm />
     </div>
   );

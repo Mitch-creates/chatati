@@ -29,7 +29,7 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
   const user = session?.user;
 
   return (
-    <nav className="flex justify-between items-center p-4 border-b-2 select-none">
+    <nav className="flex justify-between items-center p-4 border-b-4 border-black select-none">
       <h1>
         <Link href="/">Logo Website</Link>
       </h1>
