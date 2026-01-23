@@ -13,3 +13,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { getEditProfileSchema } from "@/lib/zod-schemas/editProfileSchema";
+import { editProfileSchema } from "@/lib/zod-schemas/editProfileSchema";
+
+export function EditProfileForm() {
+  const validationMessages = useTranslations("validation");
+  const form = useForm<EditProfileFormData>({
+    resolver: zodResolver(getEditProfileSchema(validationMessages)),
+  });
+}

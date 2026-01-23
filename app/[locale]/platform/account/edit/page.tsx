@@ -1,6 +1,7 @@
 import { Spinner } from "@/components/ui/spinner";
 import { getCachedTranslations } from "@/lib/i18n-helpers";
 import { Suspense } from "react";
+import { EditProfileForm } from "@/components/forms/editProfileForm";
 
 async function EditPageContent({
   searchParams,
@@ -16,9 +17,10 @@ async function EditPageContent({
     "profileCreation"
   );
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold">Edit Account</h1>
-      <div>{isFromNewUser ? "New User" : "Not New User"}</div>
+    <div className="bg-accent-color2 items-center justify-center flex flex-col gap-4 pt-12 pb-12">
+      {isFromNewUser ? <><h1 className="text-3xl font-bold">Welcome to Chatati!</h1> <p className="text-lg">Please complete your profile to start using Chatati.</p></>
+       : <><h1 className="text-3xl font-bold">Edit your Profile</h1> <p className="text-lg">Please edit your profile to update your information.</p></>}
+      <EditProfileForm />
     </div>
   );
 }
