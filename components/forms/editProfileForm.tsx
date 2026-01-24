@@ -11,7 +11,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { getEditProfileSchema } from "@/lib/zod-schemas/editProfileSchema";
 import { EditProfileFormData } from "@/lib/zod-schemas/editProfileSchema";
@@ -30,6 +30,7 @@ import CtaButton from "../cta-button";
 export function EditProfileForm() {
   const validationMessages = useTranslations("validation");
   const editProfileMessages = useTranslations("editProfile");
+  const locale = useLocale();
 
   const editProfileForm = useForm<EditProfileFormData>({
     resolver: zodResolver(getEditProfileSchema(validationMessages)),
@@ -42,8 +43,8 @@ export function EditProfileForm() {
       birthDate: new Date(),
       nativeLangs: [],
       learningLangs: [],
-      district: "",
-      preferenceDistrict: [],
+      area: "",
+      preferenceAreas: [],
       interests: [],
       availability: [],
     },
@@ -71,15 +72,15 @@ export function EditProfileForm() {
     // Add more languages...
   ];
 
-  const districtOptions = [
-    { value: "dist-1", label: "Altona" },
-    { value: "dist-2", label: "Bergedorf" },
-    { value: "dist-3", label: "Eimsbüttel" },
-    { value: "dist-4", label: "Harburg" },
-    { value: "dist-5", label: "Mitte" },
-    { value: "dist-6", label: "Nord" },
-    { value: "dist-7", label: "Wandsbek" },
-    // Add more districts...
+  const areaOptions = [
+    { value: "area-1", label: "Altona" },
+    { value: "area-2", label: "Bergedorf" },
+    { value: "area-3", label: "Eimsbüttel" },
+    { value: "area-4", label: "Harburg" },
+    { value: "area-5", label: "Mitte" },
+    { value: "area-6", label: "Nord" },
+    { value: "area-7", label: "Wandsbek" },
+    // Add more areas...
   ];
 
   const interestOptions = Object.values(Interest).map((interest) => ({
@@ -265,6 +266,7 @@ export function EditProfileForm() {
                         value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
                         onChange={(e) => field.onChange(new Date(e.target.value))}
                         className="w-full"
+                        lang={locale === "de" ? "de-DE" : "en-GB"}
                       />
                       {fieldState.invalid && (
                         <FieldError className="text-center" errors={[fieldState.error]} />
@@ -331,23 +333,23 @@ export function EditProfileForm() {
               </FieldGroup>
               <FieldGroup className="mb-4 flex">
                 <Controller
-                  name="district"
+                  name="area"
                   control={editProfileForm.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="editProfile-district" className="w-full">
+                      <FieldLabel htmlFor="editProfile-area" className="w-full">
                         {editProfileMessages("district")}
                       </FieldLabel>
                       <FieldDescription>
                         {editProfileMessages("districtDescription")}
                       </FieldDescription>
                       <MultiSelectCombobox
-                        options={districtOptions}
+                        options={areaOptions}
                         value={field.value ? [field.value] : []}
                         onChange={(values) => field.onChange(values[0] || "")}
                         placeholder={editProfileMessages("districtPlaceholder")}
                         searchPlaceholder={editProfileMessages("districtPlaceholder")}
-                        id="editProfile-district"
+                        id="editProfile-area"
                         aria-invalid={fieldState.invalid}
                       />
                       {fieldState.invalid && (
@@ -359,23 +361,23 @@ export function EditProfileForm() {
               </FieldGroup>
               <FieldGroup className="mb-4 flex">
                 <Controller
-                  name="preferenceDistrict"
+                  name="preferenceAreas"
                   control={editProfileForm.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="editProfile-preferenceDistrict" className="w-full">
+                      <FieldLabel htmlFor="editProfile-preferenceArea" className="w-full">
                         {editProfileMessages("preferenceDistrict")}
                       </FieldLabel>
                       <FieldDescription>
                         {editProfileMessages("preferenceDistrictDescription")}
                       </FieldDescription>
                       <MultiSelectCombobox
-                        options={districtOptions}
+                        options={areaOptions}
                         value={field.value}
                         onChange={field.onChange}
                         placeholder={editProfileMessages("preferenceDistrictPlaceholder")}
                         searchPlaceholder={editProfileMessages("preferenceDistrictPlaceholder")}
-                        id="editProfile-preferenceDistrict"
+                        id="editProfile-preferenceArea"
                         aria-invalid={fieldState.invalid}
                       />
                       {fieldState.invalid && (

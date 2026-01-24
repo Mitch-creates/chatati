@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { Gender, Interest, Availability } from "@prisma/client";
 // TODO define and import enums for interest, nativeLang, learningLang, availability
-// TODO figure out how to handle preferedAreas and userArea
-// As for now I want to target just Hamburg, but I wan't to define a good structure so it's easily scalable
+// TODO figure out how to handle preferredAreas and userArea
+// As for now I want to target just Hamburg, but I want to define a good structure so it's easily scalable
 
 export function getEditProfileSchema(t?: (key: string) => string,
 availableLanguageIds?: string[],
-availableDistrictIds?: string[]) {
+availableAreaIds?: string[]) {
   const baseSchema = z.object({
     image: z.string().optional(),
     bio: z.string().optional(), // Optional bio box of max 400 characters
@@ -16,13 +16,13 @@ availableDistrictIds?: string[]) {
       message: t ? t("nativeLangsRequired") : "At least one native language is required",
     }), // Required field
     learningLangs: z.array(z.string()).optional(), // If you only wanna teach, no need to fill in learning langs
-    district: z.string().optional(), 
-    preferenceDistrict: z.array(z.string()),
+    area: z.string().optional(), 
+    preferenceAreas: z.array(z.string()),
     interests: z.array(z.enum(Interest)),
     availability: z.array(z.enum(Availability)),
   });
 
-  if (availableLanguageIds || availableDistrictIds) {
+  if (availableLanguageIds || availableAreaIds) {
     return baseSchema.refine(
       (data) => {
         // Validate language IDs
@@ -37,16 +37,16 @@ availableDistrictIds?: string[]) {
           if (invalidLangs.length > 0) return false;
         }
 
-        // Validate district IDs
-        if (availableDistrictIds) {
-          const allDistrictIds = [
-            ...(data.preferenceDistrict || []),
-            ...(data.district ? [data.district] : []),
+        // Validate area IDs
+        if (availableAreaIds) {
+          const allAreaIds = [
+            ...(data.preferenceAreas || []),
+            ...(data.area ? [data.area] : []),
           ];
-          const invalidDistricts = allDistrictIds.filter(
-            (id) => !availableDistrictIds.includes(id)
+          const invalidAreas = allAreaIds.filter(
+            (id) => !availableAreaIds.includes(id)
           );
-          if (invalidDistricts.length > 0) return false;
+          if (invalidAreas.length > 0) return false;
         }
 
         return true;

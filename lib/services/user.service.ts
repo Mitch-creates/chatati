@@ -22,11 +22,17 @@ export type UserWithProfile = {
     timezone: string;
     availability: string[];
     interests: string[];
-    district: {
+    area: {
       id: string;
       name: string;
-      city: string;
-      country: string;
+      city: {
+        id: string;
+        name: string;
+        country: {
+          id: string;
+          name: string;
+        };
+      };
     } | null;
     nativeLangs: {
       id: string;
@@ -49,11 +55,17 @@ export type LanguageOption = {
   name: string;
 };
 
-export type DistrictOption = {
+export type AreaOption = {
   id: string;
   name: string;
-  city: string;
-  country: string;
+  city: {
+    id: string;
+    name: string;
+    country: {
+      id: string;
+      name: string;
+    };
+  };
 };
 
 /**
@@ -84,12 +96,22 @@ export async function getUserWithProfile(
           timezone: true,
           availability: true,
           interests: true,
-          district: {
+          area: {
             select: {
               id: true,
               name: true,
-              city: true,
-              country: true,
+              city: {
+                select: {
+                  id: true,
+                  name: true,
+                  country: {
+                    select: {
+                      id: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
             },
           },
           nativeLangs: {
@@ -128,22 +150,36 @@ export async function getAvailableLanguages(): Promise<LanguageOption[]> {
 }
 
 /**
- * Get all available districts (optionally filter by city/country)
+ * Get all available areas (optionally filter by city/country)
  */
-export async function getAvailableDistricts(
-  city?: string,
-  country?: string
-): Promise<DistrictOption[]> {
-  return prisma.district.findMany({
+export async function getAvailableAreas(
+  cityId?: string,
+  countryId?: string
+): Promise<AreaOption[]> {
+  return prisma.area.findMany({
     where: {
-      ...(city && { city }),
-      ...(country && { country }),
+      ...(cityId && { cityId }),
+      ...(countryId && {
+        city: {
+          countryId,
+        },
+      }),
     },
     select: {
       id: true,
       name: true,
-      city: true,
-      country: true,
+      city: {
+        select: {
+          id: true,
+          name: true,
+          country: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       name: "asc",

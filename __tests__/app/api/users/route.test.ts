@@ -176,11 +176,17 @@ describe("GET /api/users", () => {
         timezone: "Europe/Berlin",
         availability: ["monday"],
         interests: ["coding"],
-        district: {
-          id: "district-1",
-          name: "Berlin",
-          city: "Berlin",
-          country: "Germany",
+        area: {
+          id: "area-1",
+          name: "Altona",
+          city: {
+            id: "city-1",
+            name: "Hamburg",
+            country: {
+              id: "country-1",
+              name: "Germany",
+            },
+          },
         },
         nativeLangs: [{ id: "lang-1", code: "en", name: "English" }],
         learningLangs: [{ id: "lang-2", code: "de", name: "German" }],
@@ -197,7 +203,7 @@ describe("GET /api/users", () => {
 
     expect(responseData).toEqual(mockUser);
     expect(responseData.profile).toBeDefined();
-    expect(responseData.profile.district).toBeDefined();
+    expect(responseData.profile.area).toBeDefined();
     expect(responseData.profile.nativeLangs).toHaveLength(1);
     expect(responseData.profile.learningLangs).toHaveLength(1);
   });

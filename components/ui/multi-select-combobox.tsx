@@ -69,20 +69,19 @@ export function MultiSelectCombobox({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button
-          type="button"
+        <div
           id={id}
-          disabled={disabled}
-          aria-invalid={ariaInvalid}
           className={cn(
             "min-h-12 h-auto w-full rounded-md border-2 border-black bg-white px-3 py-2 text-base shadow-xs",
-            "flex items-center gap-2 flex-wrap",
+            "flex items-center gap-2 flex-wrap cursor-pointer",
             "focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "data-[invalid=true]:border-red-500",
             className
           )}
           data-invalid={ariaInvalid}
+          tabIndex={disabled ? -1 : 0}
+          role="button"
         >
           {selectedOptions.length > 0 ? (
             <div className="flex flex-wrap gap-1.5">
@@ -111,10 +110,10 @@ export function MultiSelectCombobox({
             <span className="text-muted-foreground">{placeholder}</span>
           )}
           <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
-        </button>
+        </div>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[var(--radix-popover-trigger-width)] p-0 border-2 border-black shadow-[4px_4px_0_0_black] bg-white"
+        className="w---radix-popover-trigger-width) p-0 border-2 border-black shadow-[4px_4px_0_0_black] bg-white"
         align="start"
       >
         <Command className="rounded-lg border-0" shouldFilter={false}>
