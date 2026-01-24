@@ -107,7 +107,10 @@ export function EditProfileForm() {
               interests: profile.interests || [],
               availability: profile.availability || [],
             });
-            if (userData.image) setImagePreview(userData.image);
+            // TODO: Remove this once the image is stored in R2
+            if (userData.image && userData.image !== "cropped") {
+              setImagePreview(userData.image);
+            }
           }
         }
       } catch (error) {
@@ -221,7 +224,7 @@ export function EditProfileForm() {
   return (
     <form
       id="editProfileForm"
-      className="w-full flex flex-col items-center space-y-4"
+      className="w-full flex flex-col items-center space-y-4 pb-12"
       onSubmit={editProfileForm.handleSubmit(onSubmit)}
       noValidate
     >

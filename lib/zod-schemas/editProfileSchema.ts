@@ -10,16 +10,22 @@ availableAreaIds?: string[]) {
   const baseSchema = z.object({
     image: z.string().optional(),
     bio: z.string().optional(), // Optional bio box of max 400 characters
-    gender: z.array(z.enum(Gender)),
+    gender: z.array(z.enum(Gender)).min(1, {
+      message: t ? t("genderRequired") : "Gender is required",
+    }),
     birthDate: z.date(), // Exact age not shown on profile. Used to filter on age category
     nativeLangs: z.array(z.string()).min(1, {
       message: t ? t("nativeLangsRequired") : "At least one native language is required",
     }), // Required field
     learningLangs: z.array(z.string()).optional(), // If you only wanna teach, no need to fill in learning langs
     area: z.string().optional(), 
-    preferenceAreas: z.array(z.string()),
-    interests: z.array(z.enum(Interest)),
-    availability: z.array(z.enum(Availability)),
+    preferenceAreas: z.array(z.string()).min(1, {
+      message: t ? t("preferenceDistrictRequired") : "At least one preferred district is required",
+    }),
+    interests: z.array(z.enum(Interest)).min(1, {
+      message: t ? t("interestsRequired") : "At least one interest is required",
+    }),
+    availability: z.array(z.enum(Availability))
   });
 
   if (availableLanguageIds || availableAreaIds) {

@@ -16,13 +16,19 @@ export type UserWithProfile = {
   image: string | null;
   createdAt: Date;
   updatedAt: Date;
+  birthDate: Date | null;
   profile: {
     id: string;
     bio: string | null;
     jobfield: string | null;
+    gender: Gender;
     timezone: string;
     availability: string[];
     interests: string[];
+    preferenceAreas: {
+      id: string;
+      name: string;
+    }[];
     area: {
       id: string;
       name: string;
@@ -89,14 +95,22 @@ export async function getUserWithProfile(
       image: true,
       createdAt: true,
       updatedAt: true,
+      birthDate: true,
       profile: {
         select: {
           id: true,
           bio: true,
+          gender: true,
           jobfield: true,
           timezone: true,
           availability: true,
           interests: true,
+          preferenceAreas: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           area: {
             select: {
               id: true,
