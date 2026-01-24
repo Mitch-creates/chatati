@@ -72,6 +72,11 @@ export async function PATCH(request: Request) {
     const userId = session.user.id;
     const body = await request.json();
 
+    // Convert date string to Date object for Zod validation
+    if (body.birthDate && typeof body.birthDate === "string") {
+      body.birthDate = new Date(body.birthDate);
+    }
+
     const t = await getTranslations("validation");
     const schema = getEditProfileSchema((key) => t(key));
     const validatedData = schema.safeParse(body);

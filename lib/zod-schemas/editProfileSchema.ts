@@ -11,7 +11,7 @@ availableAreaIds?: string[]) {
     image: z.string().optional(),
     bio: z.string().optional(), // Optional bio box of max 400 characters
     gender: z.array(z.enum(Gender)),
-    birthDate: z.coerce.date(), // Exact age not shown on profile. Used to filter on age category
+    birthDate: z.date(), // Exact age not shown on profile. Used to filter on age category
     nativeLangs: z.array(z.string()).min(1, {
       message: t ? t("nativeLangsRequired") : "At least one native language is required",
     }), // Required field
@@ -61,5 +61,5 @@ availableAreaIds?: string[]) {
 }
 
 export type EditProfileFormData = z.infer<
-  Awaited<ReturnType<typeof getEditProfileSchema>>
+  ReturnType<typeof getEditProfileSchema>
 >;

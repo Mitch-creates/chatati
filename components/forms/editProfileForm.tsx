@@ -10,7 +10,7 @@
 
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useTranslations, useLocale } from "next-intl";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { getEditProfileSchema } from "@/lib/zod-schemas/editProfileSchema";
@@ -170,7 +170,7 @@ export function EditProfileForm() {
     }
   };
 
-  const onSubmit = async (data: EditProfileFormData) => {
+  const onSubmit: SubmitHandler<EditProfileFormData> = async (data) => {
     setIsPending(true);
     setSubmitError(null);
     setSubmitSuccess(false);
@@ -202,7 +202,7 @@ export function EditProfileForm() {
   if (isLoadingData) {
     return (
       <div className="flex h-64 w-full items-center justify-center">
-        <Spinner className="h-8 w-8" />
+        <Spinner/>
       </div>
     );
   }
