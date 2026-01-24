@@ -2,5 +2,11 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "prisma.pinToPrisma6": true,
   "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000
+  "files.autoSaveDelay": 1000,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.snippetSuggestions": "top",
+  "editor.minimap.enabled": false,
+  "editor.linkedEditing": true,
+  "workbench.sideBar.location": "right"
 }
