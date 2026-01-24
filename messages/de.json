@@ -141,6 +141,7 @@
     "save": "Profil speichern",
     "saving": "Speichern...",
     "updateSuccess": "Profil erfolgreich aktualisiert!",
+    "genericError": "Etwas ist schief gelaufen, bitte versuchen Sie es erneut",
     "interestsList": {
       "TECHNOLOGY": "Technologie",
       "SPORTS": "Sport",

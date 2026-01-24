@@ -141,6 +141,7 @@
     "save": "Save Profile",
     "saving": "Saving...",
     "updateSuccess": "Profile updated successfully!",
+    "genericError": "Something went wrong, please try again",
     "interestsList": {
       "TECHNOLOGY": "Technology",
       "SPORTS": "Sports",

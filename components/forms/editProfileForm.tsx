@@ -1,13 +1,5 @@
 // TODO Implement Cloudflare R2 for image storage
 
-// Next steps: 
-// Fix the schema by importing/defining the enums
-// Implement the edit profile form component
-// Connect the form to the edit account page
-// Add API endpoint/server action for profile updates
-// Add missing translations
-//Handle district/language data fetching for dropdowns
-
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm, SubmitHandler } from "react-hook-form";
@@ -28,6 +20,7 @@ import { Gender, Interest, Availability } from "@prisma/client";
 import CtaButton from "../cta-button";
 import { useEffect } from "react";
 import { Spinner } from "../ui/spinner";
+import { Check, CircleCheckBigIcon } from "lucide-react";
 
 interface Option {
   value: string;
@@ -175,6 +168,9 @@ export function EditProfileForm() {
     setSubmitError(null);
     setSubmitSuccess(false);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     try {
       const response = await fetch("/api/users", {
         method: "PATCH",
@@ -182,18 +178,33 @@ export function EditProfileForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update profile");
+        throw new Error("API error");
       }
 
       setSubmitSuccess(true);
-      // Optional: router.refresh() or similar if needed
+      
+      // Clear success state after 2.5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 2500);
+
     } catch (error: any) {
+      clearTimeout(timeoutId);
       console.error("Error updating profile:", error);
-      setSubmitError(error.message || "An unexpected error occurred");
+      
+      const errorMessage = editProfileMessages("genericError");
+      setSubmitError(errorMessage);
+      
+      // Clear error after 4 seconds
+      setTimeout(() => {
+        setSubmitError(null);
+      }, 4000);
     } finally {
       setIsPending(false);
     }
@@ -214,16 +225,6 @@ export function EditProfileForm() {
       onSubmit={editProfileForm.handleSubmit(onSubmit)}
       noValidate
     >
-      {submitError && (
-        <div className="w-1/2 rounded-md border-2 border-red-500 bg-red-50 p-4 text-center text-red-700 font-bold">
-          {submitError}
-        </div>
-      )}
-      {submitSuccess && (
-        <div className="w-1/2 rounded-md border-2 border-green-500 bg-green-50 p-4 text-center text-green-700 font-bold">
-          {editProfileMessages("updateSuccess") || "Profile updated successfully!"}
-        </div>
-      )}
           <FieldGroup className="mb-8 mt-8 flex">
             <Controller
               name="image"
@@ -552,9 +553,19 @@ export function EditProfileForm() {
                 disabled={isPending}
                 fullWidth="w-full"
               >
-                {isPending
-                  ? editProfileMessages("saving")?.toUpperCase() || "SAVING..."
-                  : editProfileMessages("save")?.toUpperCase() || "SAVE PROFILE"}
+                {!submitSuccess && !submitError && (
+                  editProfileMessages("save")?.toUpperCase() || "SAVE PROFILE"
+                )}
+                {submitSuccess && (
+                  <div className="flex items-center justify-center gap-2">
+                    <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} /> <span>{editProfileMessages("updateSuccess")?.toUpperCase() || "Profile updated successfully!"}</span>
+                  </div>
+                )}
+                {submitError && (
+                  <span className="text-sm">
+                    {submitError.toUpperCase()}
+                  </span>
+                )}
               </CtaButton>
             </CardFooter>
           </Card>
