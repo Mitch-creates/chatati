@@ -140,7 +140,29 @@
     "availabilityWeekends": "Weekends",
     "save": "Save Profile",
     "saving": "Saving...",
-    "updateSuccess": "Profile updated successfully!"
+    "updateSuccess": "Profile updated successfully!",
+    "interestsList": {
+      "TECHNOLOGY": "Technology",
+      "SPORTS": "Sports",
+      "MUSIC": "Music",
+      "TRAVEL": "Travel",
+      "FOOD": "Food",
+      "ART": "Art",
+      "LITERATURE": "Literature",
+      "SCIENCE": "Science",
+      "HISTORY": "History",
+      "NATURE": "Nature",
+      "DANCE": "Dance",
+      "GAMING": "Gaming",
+      "MOVIES": "Movies",
+      "FITNESS": "Fitness",
+      "FASHION": "Fashion",
+      "PHOTOGRAPHY": "Photography",
+      "VOLUNTEERING": "Volunteering",
+      "THEATRE": "Theatre",
+      "POLITICS": "Politics",
+      "HUMOR": "Humor"
+    }
   },
   "languages": {
     "de": "German",

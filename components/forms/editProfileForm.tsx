@@ -38,6 +38,7 @@ export function EditProfileForm() {
   const validationMessages = useTranslations("validation");
   const editProfileMessages = useTranslations("editProfile");
   const languageMessages = useTranslations("languages");
+  const interestMessages = useTranslations("editProfile.interestsList");
   const locale = useLocale();
 
   const editProfileForm = useForm<EditProfileFormData>({
@@ -126,10 +127,12 @@ export function EditProfileForm() {
     fetchData();
   }, [editProfileForm]);
 
-  const interestOptions = Object.values(Interest).map((interest) => ({
-    value: interest,
-    label: interest.charAt(0) + interest.slice(1).toLowerCase().replace(/_/g, " "),
-  }));
+  const interestOptions = Object.values(Interest)
+    .map((interest) => ({
+      value: interest,
+      label: interestMessages(interest) || interest,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label, locale));
 
   const availabilityOptions = [
     { value: Availability.DAYTIME, label: editProfileMessages("availabilityDaytime") },

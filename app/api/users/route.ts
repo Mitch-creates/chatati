@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuthAPI, UnauthorizedError } from "@/lib/auth-utils";
 import { getUserWithProfile, updateUserProfile } from "@/lib/services/user.service";
-import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { cacheLife, cacheTag, revalidateTag } from "next/cache";
 import { getEditProfileSchema } from "@/lib/zod-schemas/editProfileSchema";
 import { getTranslations } from "next-intl/server";
 
@@ -63,7 +63,7 @@ export async function GET() {
   }
 }
 
-// When defining a function that updates the current user's profile we need to manually update the cache tag with updateTag('nameOfTheTag')
+// When defining a function that updates the current user's profile we need to manually update the cache tag with revalidateTag('nameOfTheTag')
 
 // Update the current user's profile
 export async function PATCH(request: Request) {
@@ -90,7 +90,7 @@ export async function PATCH(request: Request) {
     const updatedProfile = await updateUserProfile(userId, validatedData.data);
 
     // Invalidate the cache for this user's profile
-    updateTag(`user-profile-${userId}`);
+    revalidateTag(`user-profile-${userId}`);
 
     return NextResponse.json(updatedProfile);
   } catch (error) {

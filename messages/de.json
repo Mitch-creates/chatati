@@ -140,7 +140,29 @@
     "availabilityWeekends": "Wochenenden",
     "save": "Profil speichern",
     "saving": "Speichern...",
-    "updateSuccess": "Profil erfolgreich aktualisiert!"
+    "updateSuccess": "Profil erfolgreich aktualisiert!",
+    "interestsList": {
+      "TECHNOLOGY": "Technologie",
+      "SPORTS": "Sport",
+      "MUSIC": "Musik",
+      "TRAVEL": "Reisen",
+      "FOOD": "Essen",
+      "ART": "Kunst",
+      "LITERATURE": "Literatur",
+      "SCIENCE": "Wissenschaft",
+      "HISTORY": "Geschichte",
+      "NATURE": "Natur",
+      "DANCE": "Tanzen",
+      "GAMING": "Gaming",
+      "MOVIES": "Filme",
+      "FITNESS": "Fitness",
+      "FASHION": "Mode",
+      "PHOTOGRAPHY": "Fotografie",
+      "VOLUNTEERING": "Ehrenamt",
+      "THEATRE": "Theater",
+      "POLITICS": "Politik",
+      "HUMOR": "Humor"
+    }
   },
   "languages": {
     "de": "Deutsch",
