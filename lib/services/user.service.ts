@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Gender, Availability, Interest } from "@prisma/client";
 
 /**
  * User service - handles all user-related database operations
@@ -184,5 +185,102 @@ export async function getAvailableAreas(
     orderBy: {
       name: "asc",
     },
+  });
+}
+
+/**
+ * Update user profile information
+ * @param userId - The user's ID
+ * @param data - The profile data to update
+ * @returns The updated user with profile
+ */
+export async function updateUserProfile(
+  userId: string,
+  data: {
+    image?: string;
+    bio?: string;
+    gender?: Gender[];
+    birthDate?: Date;
+    nativeLangs?: string[];
+    learningLangs?: string[];
+    area?: string;
+    preferenceAreas?: string[];
+    interests?: Interest[];
+    availability?: Availability[];
+  }
+) {
+  const {
+    image,
+    bio,
+    gender,
+    birthDate,
+    nativeLangs,
+    learningLangs,
+    area,
+    preferenceAreas,
+    interests,
+    availability,
+  } = data;
+
+  return prisma.$transaction(async (tx) => {
+    // 1. Update User basic info
+    await tx.user.update({
+      where: { id: userId },
+      data: {
+        ...(image !== undefined && { image }),
+        ...(birthDate !== undefined && { birthDate }),
+      },
+    });
+
+    // 2. Update or create Profile
+    return tx.profile.upsert({
+      where: { userId },
+      create: {
+        userId,
+        bio,
+        gender: gender?.[0] || Gender.PRIVATE,
+        timezone: "Europe/Berlin", // Default for now
+        availability: availability || [],
+        interests: interests || [],
+        ...(area && { areaId: area }),
+        ...(nativeLangs && {
+          nativeLangs: {
+            connect: nativeLangs.map((id) => ({ id })),
+          },
+        }),
+        ...(learningLangs && {
+          learningLangs: {
+            connect: learningLangs.map((id) => ({ id })),
+          },
+        }),
+        ...(preferenceAreas && {
+          preferenceAreas: {
+            connect: preferenceAreas.map((id) => ({ id })),
+          },
+        }),
+      },
+      update: {
+        ...(bio !== undefined && { bio }),
+        ...(gender !== undefined && { gender: gender[0] || Gender.PRIVATE }),
+        ...(availability !== undefined && { availability }),
+        ...(interests !== undefined && { interests }),
+        ...(area !== undefined && { areaId: area || null }),
+        ...(nativeLangs !== undefined && {
+          nativeLangs: {
+            set: nativeLangs.map((id) => ({ id })),
+          },
+        }),
+        ...(learningLangs !== undefined && {
+          learningLangs: {
+            set: learningLangs.map((id) => ({ id })),
+          },
+        }),
+        ...(preferenceAreas !== undefined && {
+          preferenceAreas: {
+            set: preferenceAreas.map((id) => ({ id })),
+          },
+        }),
+      },
+    });
   });
 }

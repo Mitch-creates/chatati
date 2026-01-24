@@ -26,10 +26,18 @@ import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Gender, Interest, Availability } from "@prisma/client";
 import CtaButton from "../cta-button";
+import { useEffect } from "react";
+import { Spinner } from "../ui/spinner";
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 export function EditProfileForm() {
   const validationMessages = useTranslations("validation");
   const editProfileMessages = useTranslations("editProfile");
+  const languageMessages = useTranslations("languages");
   const locale = useLocale();
 
   const editProfileForm = useForm<EditProfileFormData>({
@@ -51,37 +59,72 @@ export function EditProfileForm() {
   });
 
   const [isPending, setIsPending] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [languageOptions, setLanguageOptions] = useState<Option[]>([]);
+  const [areaOptions, setAreaOptions] = useState<Option[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const router = useRouter();
   const maxBioLength = 400;
 
-  // TODO: Fetch from API/database
-  // Mock data for now - replace with actual API calls
-  const languageOptions = [
-    { value: "lang-1", label: "Afrikaans" },
-    { value: "lang-2", label: "Albanian" },
-    { value: "lang-3", label: "Amharic" },
-    { value: "lang-4", label: "Arabic" },
-    { value: "lang-5", label: "Armenian" },
-    { value: "lang-6", label: "Assyrian" },
-    { value: "lang-7", label: "Azerbaijani" },
-    { value: "lang-8", label: "Basque" },
-    { value: "lang-9", label: "Bengali" },
-    // Add more languages...
-  ];
+  // Fetch initial data (available options and user profile)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [configRes, userRes] = await Promise.all([
+          fetch("/api/config"),
+          fetch("/api/users"),
+        ]);
 
-  const areaOptions = [
-    { value: "area-1", label: "Altona" },
-    { value: "area-2", label: "Bergedorf" },
-    { value: "area-3", label: "Eimsbüttel" },
-    { value: "area-4", label: "Harburg" },
-    { value: "area-5", label: "Mitte" },
-    { value: "area-6", label: "Nord" },
-    { value: "area-7", label: "Wandsbek" },
-    // Add more areas...
-  ];
+        if (configRes.ok) {
+          const config = await configRes.json();
+          const translatedLangs = config.languages.map((l: any) => ({
+            value: l.id,
+            label: languageMessages(l.code) || l.name,
+          }));
+
+          // Sort languages alphabetically based on translated label
+          translatedLangs.sort((a: any, b: any) => a.label.localeCompare(b.label, locale));
+
+          setLanguageOptions(translatedLangs);
+          setAreaOptions(
+            config.areas
+              .map((a: any) => ({ value: a.id, label: a.name }))
+              .sort((a: any, b: any) => a.label.localeCompare(b.label, locale))
+          );
+        }
+
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          if (userData.profile) {
+            const profile = userData.profile;
+            editProfileForm.reset({
+              image: userData.image || "",
+              bio: profile.bio || "",
+              gender: profile.gender ? [profile.gender] : [],
+              birthDate: userData.birthDate ? new Date(userData.birthDate) : new Date(),
+              nativeLangs: profile.nativeLangs.map((l: any) => l.id),
+              learningLangs: profile.learningLangs.map((l: any) => l.id),
+              area: profile.area?.id || "",
+              preferenceAreas: profile.preferenceAreas?.map((a: any) => a.id) || [],
+              interests: profile.interests || [],
+              availability: profile.availability || [],
+            });
+            if (userData.image) setImagePreview(userData.image);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      } finally {
+        setIsLoadingData(false);
+      }
+    }
+
+    fetchData();
+  }, [editProfileForm]);
 
   const interestOptions = Object.values(Interest).map((interest) => ({
     value: interest,
@@ -125,19 +168,59 @@ export function EditProfileForm() {
   };
 
   const onSubmit = async (data: EditProfileFormData) => {
-    // TODO: Handle file upload to Cloudflare R2
-    console.log("Form data:", data);
-    console.log("Image file:", imageFile);
-    console.log("Image preview URL:", imagePreview);
+    setIsPending(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+
+    try {
+      const response = await fetch("/api/users", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update profile");
+      }
+
+      setSubmitSuccess(true);
+      // Optional: router.refresh() or similar if needed
+    } catch (error: any) {
+      console.error("Error updating profile:", error);
+      setSubmitError(error.message || "An unexpected error occurred");
+    } finally {
+      setIsPending(false);
+    }
   };
+
+  if (isLoadingData) {
+    return (
+      <div className="flex h-64 w-full items-center justify-center">
+        <Spinner className="h-8 w-8" />
+      </div>
+    );
+  }
 
   return (
     <form
-          id="editProfileForm"
-          className="w-full flex flex-col items-center space-y-4"
-          onSubmit={editProfileForm.handleSubmit(onSubmit)}
-          noValidate
-        >
+      id="editProfileForm"
+      className="w-full flex flex-col items-center space-y-4"
+      onSubmit={editProfileForm.handleSubmit(onSubmit)}
+      noValidate
+    >
+      {submitError && (
+        <div className="w-1/2 rounded-md border-2 border-red-500 bg-red-50 p-4 text-center text-red-700 font-bold">
+          {submitError}
+        </div>
+      )}
+      {submitSuccess && (
+        <div className="w-1/2 rounded-md border-2 border-green-500 bg-green-50 p-4 text-center text-green-700 font-bold">
+          {editProfileMessages("updateSuccess") || "Profile updated successfully!"}
+        </div>
+      )}
           <FieldGroup className="mb-8 mt-8 flex">
             <Controller
               name="image"
