@@ -7,5 +7,5 @@ export const getForgotPasswordSchema = (t?: (key: string) => string) => {
 };
 
 export type ForgotPasswordFormData = z.infer<
-  ReturnType<typeof getForgotPasswordSchema>
+  Awaited<ReturnType<typeof getForgotPasswordSchema>>
 >;

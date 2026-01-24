@@ -1,18 +1,21 @@
-import { SignUpForm } from "@/components/account/signUpForm";
-import { getTranslations } from "next-intl/server";
+import { SignUpForm } from "@/components/forms/signUpForm";
+import { Spinner } from "@/components/ui/spinner";
+import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
+import { Suspense } from "react";
 
-export default async function SignUp() {
-  const onboardingMessages = await getTranslations("onboarding");
+async function SignUpContent({ locale }: { locale: string }) {
+  const onboardingMessages = await getCachedTranslations(locale, "onboarding");
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left side or Top - Welcome text */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
         <div className="w-full max-w-md space-y-4 text-center lg:text-left">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
-            {onboardingMessages("becomeAChatati")}
+            {getTranslation(onboardingMessages, "becomeAChatati")}
           </h1>
           <p className="text-base sm:text-lg text-gray-600">
-            {onboardingMessages("welcomeMessage")}
+            {getTranslation(onboardingMessages, "welcomeMessage")}
           </p>
         </div>
       </div>
@@ -24,5 +27,19 @@ export default async function SignUp() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default async function SignUp({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  return (
+    <Suspense fallback={<Spinner />}>
+      <SignUpContent locale={locale} />
+    </Suspense>
   );
 }

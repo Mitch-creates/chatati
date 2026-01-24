@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { requireAuthAPI, UnauthorizedError } from "@/lib/auth-utils";
-import { getUserWithProfile } from "@/lib/services/user.service";
-import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { getUserWithProfile, updateUserProfile } from "@/lib/services/user.service";
+import { cacheLife, cacheTag, revalidateTag } from "next/cache";
+import { getEditProfileSchema } from "@/lib/zod-schemas/editProfileSchema";
+import { getTranslations } from "next-intl/server";
 
 // Get the current user's profile
 export async function GET() {
@@ -61,4 +63,59 @@ export async function GET() {
   }
 }
 
-// When defining a function that updates the current user's profile we need to manually update the cache tag with updateTag('nameOfTheTag')
+// When defining a function that updates the current user's profile we need to manually update the cache tag with revalidateTag('nameOfTheTag')
+
+// Update the current user's profile
+export async function PATCH(request: Request) {
+  try {
+    const session = await requireAuthAPI();
+    const userId = session.user.id;
+    const body = await request.json();
+
+    // Convert date string to Date object for Zod validation
+    if (body.birthDate && typeof body.birthDate === "string") {
+      body.birthDate = new Date(body.birthDate);
+    }
+
+    const t = await getTranslations("validation");
+    const schema = getEditProfileSchema((key) => t(key));
+    const validatedData = schema.safeParse(body);
+
+    if (!validatedData.success) {
+      return NextResponse.json(
+        {
+          error: "validationError",
+          message: "Invalid data",
+          details: validatedData.error.flatten(),
+        },
+        { status: 400 }
+      );
+    }
+
+    const updatedProfile = await updateUserProfile(userId, validatedData.data);
+
+    // Invalidate the cache for this user's profile
+    revalidateTag(`user-profile-${userId}`);
+
+    return NextResponse.json(updatedProfile);
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return NextResponse.json(
+        {
+          error: "unauthorized",
+          message: "Unauthorized",
+        },
+        { status: 401 }
+      );
+    }
+
+    console.error("Error in PATCH /api/users:", error);
+    return NextResponse.json(
+      {
+        error: "internalServerError",
+        message: "Internal server error",
+      },
+      { status: 500 }
+    );
+  }
+}

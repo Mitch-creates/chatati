@@ -6,7 +6,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import {
   getSignInFormSchema,
   SignInFormData,
-} from "@/lib/zod-schemas/signInFormSchema";
+} from "@/lib/zod-schemas/signinFormSchema";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
@@ -17,6 +17,7 @@ import { useState } from "react";
 export function SignInForm() {
   const validationMessages = useTranslations("validation");
   const onboardingMessages = useTranslations("onboarding");
+  const [formError, setFormError] = useState<string | null>(null);
 
   const signInForm = useForm<SignInFormData>({
     resolver: zodResolver(getSignInFormSchema(validationMessages)),
@@ -44,14 +45,15 @@ export function SignInForm() {
           setIsPending(false);
         },
         onSuccess: () => {
-          router.push("/"); // TODO Direct to search Chatati page
+          router.push("/platform/search-chatati");
         },
         onError: (ctx) => {
-          // TODO update UI when fail (probably when Email doesn't exist/Password is wrong, email not verified etc)
           if (ctx.error.status === 403) {
-            alert("Please verify your email address");
+            router.push("/verification-required");
           }
-          alert(ctx.error.message);
+          if (ctx.error.status === 401) {
+            setFormError(onboardingMessages("invalidCredentials"));
+          }
           setIsPending(false);
         },
       }
@@ -78,6 +80,10 @@ export function SignInForm() {
                   </FieldLabel>
                   <Input
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (formError) setFormError(null);
+                    }}
                     id="signIn-email"
                     aria-invalid={fieldState.invalid}
                     placeholder={onboardingMessages("emailPlaceholder")}
@@ -101,6 +107,10 @@ export function SignInForm() {
                   </FieldLabel>
                   <Input
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (formError) setFormError(null);
+                    }}
                     id="signIn-password"
                     aria-invalid={fieldState.invalid}
                     placeholder={onboardingMessages("passwordPlaceholder")}
@@ -116,6 +126,11 @@ export function SignInForm() {
           </FieldGroup>
         </form>
       </CardContent>
+      {formError && (
+        <CardContent>
+          <p className="text-red-500 text-center">{formError}</p>
+        </CardContent>
+      )}
       <CardFooter className="pt-0 flex flex-col gap-4">
         <Field orientation="horizontal">
           <CtaButton
@@ -131,7 +146,7 @@ export function SignInForm() {
         </Field>
         <div className="text-center">
           <Link
-            href="/account/forgot-password"
+            href="/forgot-password"
             className="text-sm underline hover:text-gray-600"
           >
             {onboardingMessages("forgotPassword")}

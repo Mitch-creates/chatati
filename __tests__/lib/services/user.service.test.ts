@@ -43,11 +43,17 @@ describe("user.service", () => {
           timezone: "Europe/Berlin",
           availability: ["monday", "tuesday"],
           interests: ["coding", "languages"],
-          district: {
-            id: "district-1",
-            name: "Berlin",
-            city: "Berlin",
-            country: "Germany",
+          area: {
+            id: "area-1",
+            name: "Altona",
+            city: {
+              id: "city-1",
+              name: "Hamburg",
+              country: {
+                id: "country-1",
+                name: "Germany",
+              },
+            },
           },
           nativeLangs: [{ id: "lang-1", code: "en", name: "English" }],
           learningLangs: [{ id: "lang-2", code: "de", name: "German" }],
@@ -66,19 +72,19 @@ describe("user.service", () => {
           id: true,
           name: true,
           email: true,
-          emailVerified: true,
-          profile: expect.objectContaining({
-            select: expect.objectContaining({
-              district: expect.any(Object),
-              nativeLangs: expect.any(Object),
-              learningLangs: expect.any(Object),
-            }),
+        emailVerified: true,
+        profile: expect.objectContaining({
+          select: expect.objectContaining({
+            area: expect.any(Object),
+            nativeLangs: expect.any(Object),
+            learningLangs: expect.any(Object),
           }),
         }),
-      });
-
-      expect(result).toEqual(mockUser);
+      }),
     });
+
+    expect(result).toEqual(mockUser);
+  });
 
     it("should return user with null profile when profile doesn't exist", async () => {
       const mockUser = {
@@ -114,7 +120,7 @@ describe("user.service", () => {
       });
     });
 
-    it("should handle profile with null district", async () => {
+    it("should handle profile with null area", async () => {
       const mockUser = {
         id: mockUserId,
         name: "Test User",
@@ -132,7 +138,7 @@ describe("user.service", () => {
           timezone: "Europe/Berlin",
           availability: [],
           interests: [],
-          district: null,
+          area: null,
           nativeLangs: [],
           learningLangs: [],
           createdAt: new Date("2024-01-01"),
@@ -144,7 +150,7 @@ describe("user.service", () => {
 
       const result = await getUserWithProfile(mockUserId);
 
-      expect(result?.profile?.district).toBeNull();
+      expect(result?.profile?.area).toBeNull();
     });
 
     it("should select only required fields", async () => {

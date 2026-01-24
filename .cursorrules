@@ -19,4 +19,9 @@ Branch naming convention:
 - Example: `feature/CHA-1-finish-login-flow`
 - Always create branches based on GitHub issues and use this naming convention
 
-Referring to documentation: use context7
+Documentation and research requirements:
+
+- ALWAYS use the Context7 MCP server to fetch the latest documentation
+- Before implementing features or making changes, query Context7 for the latest official documentation
+- Prefer Context7 documentation over web searches or outdated documentation
+- When Context7 documentation is available, cite it in your responses

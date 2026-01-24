@@ -34,25 +34,40 @@ cd chatati
 npm install
 ```
 
-3. Start the database with Docker. Make sure to first already launch Docker
+3. Set up environment variables
+
+Copy the example environment file and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your actual values:
+- `DATABASE_URL`: Already configured for the Docker setup (matches docker-compose.yml)
+- `BETTER_AUTH_SECRET`: Generate a secure random string (e.g., `openssl rand -base64 32`)
+- `BETTER_AUTH_URL`: Your application URL (default: `http://localhost:3000`)
+- `RESEND_API_KEY`: (Optional) Get from [Resend](https://resend.com/api-keys) if you need email functionality
+- `EMAIL_FROM`: (Optional) Defaults to `noreply@chatati.de` if not set
+
+4. Start the database with Docker. Make sure to first already launch Docker
 
 ```bash
 docker-compose up -d
 ```
 
-4. Run Prisma migrations
+5. Run Prisma migrations
 
 ```bash
 npx prisma migrate dev
 ```
 
-5. Generate Prisma client
+6. Generate Prisma client
 
 ```bash
 npx prisma generate
 ```
 
-6. Start the development server
+7. Start the development server
 
 ```bash
 npm run dev
@@ -124,3 +139,30 @@ Another reason is that the ideal onboarding consists of signing up and immediate
 So I've decided to instead;
 **- Allow users to log in to the application directly after sign up and use the application EXCEPT for adding users to their favorites, sending a meet-request or accepting a meet-request.**
 **- Get a captcha on the sign up form instead to reduce fake users(bots)**
+
+## Expansion Strategy
+
+### Geographical Hierarchy
+
+The application uses a normalized geographical structure to allow for easy expansion beyond Hamburg:
+
+- **Country**: Top-level entity (e.g., Germany, Netherlands).
+- **City**: Belongs to a Country (e.g., Hamburg, Berlin).
+- **Area**: Belongs to a City (e.g., Altona, Mitte).
+
+In the code, we use the term **"Area"** as the generic identifier for sub-city regions. In the UI, we currently label these as **"Districts"**, which is the preferred terminology for Hamburg.
+
+### How to Expand
+
+1. **New Cities in Germany**:
+   - Seed the database with a new `City` record linked to the Germany `Country`.
+   - Add `Area` records for the new city.
+   - The UI logic is built to filter areas based on the selected city (currently defaulted to Hamburg).
+
+2. **New Countries**:
+   - Add a new `Country` record.
+   - Follow the city/area creation process.
+   - The multi-select and selection components are designed to handle these relationships once country/city selectors are enabled in the UI.
+
+3. **Terminology**:
+   - If a new city uses different terminology (e.g., "Neighborhoods" or "Boroughs"), this can be handled via the internationalization files (`messages/*.json`) by adding city-specific translation keys.

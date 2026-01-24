@@ -86,28 +86,48 @@ model Profile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  districtId String?
-  district   District? @relation("ProfileDistrict", fields: [districtId], references: [id])
+  areaId String?
+  area   Area? @relation("ProfileArea", fields: [areaId], references: [id])
 
+  gender             Gender         @default(PRIVATE)
   bio                String?
   nativeLangs        Language[]     @relation("NativeLanguages")
   learningLangs      Language[]     @relation("LearningLanguages")
   interests          Interest[]
   jobfield           String?
-  preferenceDistrict District[]     @relation("PreferenceDistricts")
+  preferenceAreas    Area[]         @relation("PreferenceAreas")
   timezone           String         @default("Europe/Berlin")
   availability       Availability[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 }
 
-model District {
+model Country {
+  id     String @id @default(cuid())
+  code   String @unique // e.g., "DE", "NL"
+  name   String // e.g., "Germany", "Netherlands"
+  cities City[]
+}
+
+model City {
+  id        String @id @default(cuid())
+  name      String // e.g., "Hamburg", "Berlin"
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+  areas     Area[]
+
+  @@unique([name, countryId])
+}
+
+model Area {
   id                  String    @id @default(cuid())
-  name                String    @unique
-  city                String
-  country             String
-  profiles            Profile[] @relation("ProfileDistrict")
-  preferredByProfiles Profile[] @relation("PreferenceDistricts")
+  name                String
+  cityId              String
+  city                City      @relation(fields: [cityId], references: [id])
+  profiles            Profile[] @relation("ProfileArea")
+  preferredByProfiles Profile[] @relation("PreferenceAreas")
+
+  @@unique([name, cityId])
 }
 
 model PracticeRequest {
@@ -131,6 +151,13 @@ model Language {
 // ============================================
 // Enums
 // ============================================
+
+enum Gender {
+  MALE
+  FEMALE
+  X
+  PRIVATE
+}
 
 enum RequestStatus {
   OPEN

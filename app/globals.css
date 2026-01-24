@@ -143,4 +143,31 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Remove autofill yellow background across all browsers */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  textarea:-webkit-autofill:active,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus,
+  select:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: var(--color-foreground) !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  
+  /* Firefox autofill (less common, but for completeness) */
+  input:-moz-autofill,
+  textarea:-moz-autofill,
+  select:-moz-autofill {
+    background-color: white !important;
+    color: var(--color-foreground) !important;
+  }
 }

@@ -21,20 +21,34 @@ export const auth = betterAuth({
     expiresIn: 5 * 60,
     strategy: "compact",
   },
-
+  user: {
+    additionalFields: {
+      firstName: {
+        type: "string",
+        required: false,
+      },
+      lastName: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Defaults to false, but I chose to be explicit. Users should be able to access certain parts of the app without email verification.
+    requireEmailVerification: true,
+    verifyEmailUrl: "/verification-required",
     sendResetPassword: async ({ user, url }) => {
       await sendPasswordResetEmail(user.email, url);
     },
   },
   emailVerification: {
-    sendOnSignUp: true, // TODO let users know that a verification email has been sent after signup
+    sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url }) => {
       await sendVerificationEmail(user.email, url);
       console.log("Sent verification email to", user.email);
     },
+    autoSignInAfterVerification: true,
+    callbackURL: "/platform/account/edit?newUser=true",
     onPasswordReset: async ({ user }: { user: { email: string } }) => {
       console.log(`Password for user ${user.email} has been reset.`);
     },

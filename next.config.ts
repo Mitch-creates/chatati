@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     typedEnv: true, // This allows you to use process.env.MY_ENV_VAR with type safety
   },
-  cacheComponents: true, // Enable Cache Components
+  cacheComponents: true,
 };
 
 const withNextIntl = createNextIntlPlugin();

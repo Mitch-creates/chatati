@@ -12,7 +12,7 @@ import {
 import {
   getSignUpFormSchema,
   SignUpFormData,
-} from "@/lib/zod-schemas/signUpFormSchema";
+} from "@/lib/zod-schemas/signupFormSchema";
 import { Input } from "../ui/input";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import CtaButton from "../cta-button";
@@ -45,7 +45,9 @@ export function SignUpForm() {
         email: data.email,
         password: data.password,
         name: data.firstName + " " + data.lastName.charAt(0).toUpperCase(),
-        callbackURL: "/signin", // TODO Implement page for email verification succeeded
+        firstName: data.firstName,
+        lastName: data.lastName,
+        callbackURL: "/platform/account/edit?newUser=true",
       },
       {
         onRequest: () => {
@@ -55,7 +57,7 @@ export function SignUpForm() {
           setIsPending(false);
         },
         onSuccess: () => {
-          router.push("/"); // TODO Direct to edit profile page
+          router.push("/verification-sent");
         },
         onError: (ctx) => {
           setIsPending(false);
@@ -150,6 +152,8 @@ export function SignUpForm() {
                   <Input
                     {...field}
                     id="signUp-email"
+                    type="email"
+                    autoComplete="email"
                     aria-invalid={fieldState.invalid}
                     placeholder={onboardingMessages("emailPlaceholder")}
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
@@ -191,6 +195,7 @@ export function SignUpForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder={onboardingMessages("passwordPlaceholder")}
                     type="password"
+                    autoComplete="new-password"
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid && (
@@ -217,6 +222,7 @@ export function SignUpForm() {
                       "confirmPasswordPlaceholder"
                     )}
                     type="password"
+                    autoComplete="new-password"
                     className="placeholder:opacity-0 focus:placeholder:opacity-100 transition-opacity"
                   />
                   {fieldState.invalid &&

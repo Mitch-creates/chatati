@@ -3,8 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslations, useLocale } from "next-intl";
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import {
   getForgotPasswordSchema,
@@ -33,10 +32,10 @@ export function ForgotPasswordForm() {
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
-    await authClient.forgetPassword(
+    await authClient.requestPasswordReset(
       {
         email: data.email,
-        redirectTo: `/${locale}/account/reset-password`,
+        redirectTo: `/${locale}/reset-password`,
       },
       {
         onRequest: () => setIsPending(true),
@@ -50,6 +49,16 @@ export function ForgotPasswordForm() {
       }
     );
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        setIsSuccess(false);
+      }, 8000); // Reset after 8 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
 
   if (isSuccess) {
     return (
