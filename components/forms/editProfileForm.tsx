@@ -83,7 +83,7 @@ export function EditProfileForm() {
           const config = await configRes.json();
           const translatedLangs = config.languages.map((l: any) => ({
             value: l.id,
-            label: languageMessages(l.code) || l.name,
+            label: languageMessages.has(l.code) ? languageMessages(l.code) : l.name,
           }));
 
           // Sort languages alphabetically based on translated label
