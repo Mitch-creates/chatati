@@ -76,10 +76,13 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem asChild>
-              <Link href={`/platform/profile/${user.id}`}>Profile</Link>
+              <Link href={`/platform/profile/${user.id}`}>{navigationMessages("myProfile")}</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/platform/account/edit">Settings</Link>
+              <Link href="/platform/account/edit">{navigationMessages("editProfile")}</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/platform/account/edit">{navigationMessages("accountSettings")}</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

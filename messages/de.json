@@ -94,7 +94,10 @@
     "signUp": "Registrieren",
     "searchChatatis": "Chatati suchen",
     "invites": "Einladungen",
-    "savedChatatis": "Gespeicherte Chatatis"
+    "savedChatatis": "Gespeicherte Chatatis",
+    "myProfile": "Mein Profil",
+    "editProfile": "Profil bearbeiten",
+    "accountSettings": "Kontoeinstellungen"
   },
   "api": {
     "errors": {

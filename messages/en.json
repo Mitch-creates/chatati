@@ -94,7 +94,10 @@
     "signUp": "Sign up",
     "searchChatatis": "Search Chatatis",
     "invites": "Invites",
-    "savedChatatis": "Saved Chatatis"
+    "savedChatatis": "Saved Chatatis",
+    "myProfile": "My Profile",
+    "editProfile": "Edit Profile",
+    "accountSettings": "Account Settings"
   },
   "api": {
     "errors": {
