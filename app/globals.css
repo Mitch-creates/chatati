@@ -14,15 +14,15 @@
   --font-sans: "Inter", sans-serif;
 }
 
-/* ::selection {
+::selection {
   background-color: var(--color-accent-color2);
-  color: #000000;
+  color: var(--color-accent-white);
 }
 
 ::-moz-selection {
   background-color: var(--color-accent-color2);
-  color: #000000;
-} */
+  color: var(--color-accent-white)
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
