@@ -37,9 +37,11 @@ async function LayoutContent({
   return (
     <>
       <NextIntlClientProvider messages={messages}>
+        <div className="bg-accent-white w-full">
         {/* This is the provider that makes the messages available to the client. Otherwise, we were making an additional request to the server to get the messages. */}
         <Navbar initialSession={session} />
         {children}
+        </div>
       </NextIntlClientProvider>
     </>
   );
