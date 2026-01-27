@@ -1,8 +1,19 @@
 import { UserWithProfile } from "@/lib/services/user.service";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
+import CtaButton from "./cta-button";
+import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 
-export default function ProfileHeader({ user }: { user: UserWithProfile }) {
+interface ProfileHeaderProps {
+  user: UserWithProfile;
+  isOwnProfile: boolean;
+  locale: string;
+}
+
+export default async function ProfileHeader({ user, isOwnProfile, locale }: ProfileHeaderProps) {
+  const profileMessages = await getCachedTranslations(locale, "profile");
+  
   // Ensure image URL is a full URL (external) for Next.js Image component
   const imageSrc = user.image?.startsWith("http://") || user.image?.startsWith("https://")
     ? user.image
@@ -13,26 +24,50 @@ export default function ProfileHeader({ user }: { user: UserWithProfile }) {
   // Check if it's an external URL (R2 or other external source)
   const isExternalUrl = imageSrc?.startsWith("http://") || imageSrc?.startsWith("https://");
 
+  // Format name: first name + first letter of last name
+  const firstName = user.firstName || user.name.split(" ")[0] || user.name;
+  const lastNameInitial = user.lastName ? user.lastName.charAt(0).toUpperCase() : (user.name.split(" ")[1]?.charAt(0).toUpperCase() || "");
+  const displayName = `${firstName.toUpperCase()}${lastNameInitial ? ` ${lastNameInitial}.` : ""}`;
+
   return (
-    <div className={cn(
+    <div className="flex flex-col items-center gap-6 py-8">
+      {/* Profile Picture */}
+      <div className={cn(
         "relative rounded-full border-4 border-black",
         "flex items-center justify-center",
-        "bg-white hover:bg-gray-50 transition-colors",
+        "bg-white",
         "overflow-hidden",
+        "w-32 h-32"
       )}>
         {imageSrc ? (
           <Image 
             src={imageSrc} 
             alt={user.name} 
-            width={100} 
-            height={100}
-            className="object-cover"
-            unoptimized={isExternalUrl} // Disable optimization for external URLs to avoid Next.js trying to fetch them as local paths
+            width={128} 
+            height={128}
+            className="object-cover w-full h-full"
+            unoptimized={isExternalUrl}
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-            {user.name.charAt(0).toUpperCase()}
+          <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-4xl font-bold">
+            {firstName.charAt(0).toUpperCase()}
           </div>
         )}
       </div>
-  );}
+
+      {/* Name */}
+      <h1 className="text-4xl sm:text-5xl font-bold uppercase tracking-tight">
+        {displayName}
+      </h1>
+
+      {/* Edit Profile Button - Only show if it's their own profile */}
+      {isOwnProfile && (
+        <Link href={`/${locale}/platform/account/edit`}>
+          <CtaButton>
+            {getTranslation(profileMessages, "editProfile")}
+          </CtaButton>
+        </Link>
+      )}
+    </div>
+  );
+}
