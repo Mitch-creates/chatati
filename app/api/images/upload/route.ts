@@ -46,7 +46,9 @@ export async function POST(request: Request) {
     const fileName = `profile-images/${userId}-${timestamp}-${random}.${extension}`;
 
     // Upload to R2
+    console.log(`Uploading image: ${fileName}, size: ${buffer.length} bytes, type: ${file.type}`);
     const imageUrl = await uploadImageToR2(buffer, fileName, file.type);
+    console.log(`Image uploaded successfully: ${imageUrl}`);
 
     return NextResponse.json({ url: imageUrl });
   } catch (error) {
@@ -58,8 +60,9 @@ export async function POST(request: Request) {
     }
 
     console.error("Error uploading image:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to upload image";
     return NextResponse.json(
-      { error: "internalServerError", message: "Failed to upload image" },
+      { error: "internalServerError", message: errorMessage },
       { status: 500 }
     );
   }

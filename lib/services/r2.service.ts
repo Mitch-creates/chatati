@@ -10,41 +10,20 @@ const s3Client = new S3Client({
   },
 });
 
-/**
- * Get the bucket name based on environment
- * Development uses R2_BUCKET_NAME_DEV or falls back to R2_BUCKET_NAME with -dev suffix
- * Production uses R2_BUCKET_NAME
- */
-function getBucketName(): string {
-  const isDevelopment = process.env.NODE_ENV === "development";
-  
-  if (isDevelopment && process.env.R2_BUCKET_NAME_DEV) {
-    return process.env.R2_BUCKET_NAME_DEV;
-  }
-  
-  if (isDevelopment && process.env.R2_BUCKET_NAME) {
-    // Fallback: use production bucket name with -dev suffix if dev bucket not specified
-    return `${process.env.R2_BUCKET_NAME}-dev`;
-  }
-  
-  return process.env.R2_BUCKET_NAME!;
-}
+// Use environment-specific values from .env.development or .env.production
+const BUCKET_NAME = process.env.R2_BUCKET_NAME!;
+// Remove trailing slash from PUBLIC_URL if present
+const PUBLIC_URL = process.env.R2_PUBLIC_URL?.replace(/\/$/, "") || "";
 
-/**
- * Get the public URL based on environment
- */
-function getPublicUrl(): string {
-  const isDevelopment = process.env.NODE_ENV === "development";
-  
-  if (isDevelopment && process.env.R2_PUBLIC_URL_DEV) {
-    return process.env.R2_PUBLIC_URL_DEV;
-  }
-  
-  return process.env.R2_PUBLIC_URL!;
+// Validate required environment variables
+if (!BUCKET_NAME || !PUBLIC_URL || !process.env.R2_ENDPOINT || !process.env.R2_ACCESS_KEY_ID || !process.env.R2_SECRET_ACCESS_KEY) {
+  console.error("Missing R2 configuration. Please check your environment variables:");
+  console.error("- R2_BUCKET_NAME:", BUCKET_NAME ? "✓" : "✗");
+  console.error("- R2_PUBLIC_URL:", PUBLIC_URL ? "✓" : "✗");
+  console.error("- R2_ENDPOINT:", process.env.R2_ENDPOINT ? "✓" : "✗");
+  console.error("- R2_ACCESS_KEY_ID:", process.env.R2_ACCESS_KEY_ID ? "✓" : "✗");
+  console.error("- R2_SECRET_ACCESS_KEY:", process.env.R2_SECRET_ACCESS_KEY ? "✓" : "✗");
 }
-
-const BUCKET_NAME = getBucketName();
-const PUBLIC_URL = getPublicUrl();
 
 /**
  * Upload an image to R2
@@ -58,19 +37,26 @@ export async function uploadImageToR2(
   fileName: string,
   contentType: string
 ): Promise<string> {
-  const command = new PutObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: fileName,
-    Body: file,
-    ContentType: contentType,
-    // Note: Public access is configured at the bucket level in Cloudflare R2
-    // No ACL parameter needed - bucket must be set to public access in R2 settings
-  });
+  try {
+    const command = new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: fileName,
+      Body: file,
+      ContentType: contentType,
+      // Note: Public access is configured at the bucket level in Cloudflare R2
+      // No ACL parameter needed - bucket must be set to public access in R2 settings
+    });
 
-  await s3Client.send(command);
+    await s3Client.send(command);
 
-  // Return the public URL
-  return `${PUBLIC_URL}/${fileName}`;
+    // Return the public URL (ensure no double slashes)
+    const imageUrl = `${PUBLIC_URL}/${fileName}`;
+    console.log(`Image uploaded successfully to R2: ${imageUrl}`);
+    return imageUrl;
+  } catch (error) {
+    console.error("R2 upload error:", error);
+    throw new Error(`Failed to upload image to R2: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
 }
 
 /**

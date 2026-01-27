@@ -179,7 +179,7 @@ export function EditProfileForm() {
       let imageUrl = data.image;
       
       if (imageFile && imagePreview && data.image === "cropped") {
-        // Convert blob URL to File if needed, or use the existing file
+        // Upload the cropped file to R2
         const formData = new FormData();
         formData.append("file", imageFile);
 
@@ -191,27 +191,47 @@ export function EditProfileForm() {
 
         if (!uploadResponse.ok) {
           const errorData = await uploadResponse.json().catch(() => ({}));
-          throw new Error(errorData.message || "Failed to upload image");
+          const errorMessage = errorData.message || errorData.error || "Failed to upload image";
+          console.error("Image upload failed:", errorData);
+          throw new Error(errorMessage);
         }
 
         const uploadData = await uploadResponse.json();
         imageUrl = uploadData.url;
 
-        // Optionally delete old image if it exists and is from R2
-        if (currentImageUrl && currentImageUrl !== imageUrl) {
+        // Delete old image if it exists, is different, and is from R2
+        if (currentImageUrl && currentImageUrl !== imageUrl && currentImageUrl.startsWith("http")) {
+          // Check if it's an R2 URL (starts with the public URL pattern)
+          // We'll let the API handle the validation
+          try {
+            const deleteResponse = await fetch(`/api/images/upload?url=${encodeURIComponent(currentImageUrl)}`, {
+              method: "DELETE",
+              signal: controller.signal,
+            });
+            if (!deleteResponse.ok) {
+              console.warn("Failed to delete old image (non-critical)");
+            }
+          } catch (deleteError) {
+            // Log but don't fail the request if deletion fails
+            console.warn("Failed to delete old image:", deleteError);
+          }
+        }
+      } else if (data.image === "" && currentImageUrl) {
+        // User removed the image - delete from R2 if it's an R2 URL
+        if (currentImageUrl.startsWith("http")) {
           try {
             await fetch(`/api/images/upload?url=${encodeURIComponent(currentImageUrl)}`, {
               method: "DELETE",
               signal: controller.signal,
             });
           } catch (deleteError) {
-            // Log but don't fail the request if deletion fails
-            console.warn("Failed to delete old image:", deleteError);
+            console.warn("Failed to delete removed image:", deleteError);
           }
         }
+        imageUrl = "";
       }
 
-      // Update profile with the image URL
+      // Update profile with the image URL (empty string if removed)
       const response = await fetch("/api/users", {
         method: "PATCH",
         headers: {
@@ -219,7 +239,7 @@ export function EditProfileForm() {
         },
         body: JSON.stringify({
           ...data,
-          image: imageUrl,
+          image: imageUrl || "",
         }),
         signal: controller.signal,
       });
@@ -227,13 +247,13 @@ export function EditProfileForm() {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error("API error");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Profile update failed:", errorData);
+        throw new Error(errorData.message || "Failed to update profile");
       }
 
-      // Update current image URL to the new one
-      if (imageUrl) {
-        setCurrentImageUrl(imageUrl);
-      }
+      // Update current image URL to the new one (or clear it)
+      setCurrentImageUrl(imageUrl || null);
 
       setSubmitSuccess(true);
       
