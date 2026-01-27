@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { prisma } from "./prisma";
 
 export class UnauthorizedError extends Error {
   constructor(message = "Unauthorized") {
@@ -17,10 +18,35 @@ export class EmailNotVerifiedError extends Error {
 }
 
 // Simply get the session from the API
+// Validates that the user still exists in the database (handles cases like database resets)
 export async function getSessionHelper() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
+  // If no session, return null
+  if (!session || !session.user?.id) {
+    return null;
+  }
+
+  // Validate that the user still exists in the database
+  // This prevents issues when database is reset but session cookie still exists
+  try {
+    const userExists = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true }, // Only select id for performance
+    });
+
+    // If user doesn't exist, invalidate the session
+    if (!userExists) {
+      return null;
+    }
+  } catch (error) {
+    // If database query fails, invalidate session for safety
+    console.error("Error validating user in session:", error);
+    return null;
+  }
+
   return session;
 }
 
