@@ -97,7 +97,8 @@
     "savedChatatis": "Saved Chatatis",
     "myProfile": "My Profile",
     "editProfile": "Edit Profile",
-    "accountSettings": "Account Settings"
+    "accountSettings": "Account Settings",
+    "logOut": "Log Out"
   },
   "api": {
     "errors": {

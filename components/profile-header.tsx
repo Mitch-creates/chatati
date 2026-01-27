@@ -49,7 +49,7 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
             unoptimized={isExternalUrl}
           />
         ) : (
-          <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center text-4xl font-bold">
+          <div className="w-full h-full rounded-full bg-accent-color4 flex items-center justify-center text-4xl font-bold">
             {firstName.charAt(0).toUpperCase()}
           </div>
         )}
@@ -62,7 +62,7 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
 
       {/* Edit Profile Button - Only show if it's their own profile */}
       {isOwnProfile && (
-        <Link href={`/${locale}/platform/account/edit`}>
+        <Link href={`/platform/account/edit`}>
           <CtaButton>
             {getTranslation(profileMessages, "editProfile")}
           </CtaButton>

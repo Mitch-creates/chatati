@@ -8,5 +8,8 @@
   "editor.snippetSuggestions": "top",
   "editor.minimap.enabled": false,
   "editor.linkedEditing": true,
-  "workbench.sideBar.location": "right"
+  "workbench.sideBar.location": "right",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

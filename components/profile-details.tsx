@@ -178,7 +178,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
                   key={interest}
                   className="px-3 py-1 bg-accent-color2 border-2 border-black rounded-md font-medium"
                 >
-                  {getInterestLabel(interest, editProfileMessages)}
+                  {getInterestLabel(interest as Interest, editProfileMessages)}
                 </span>
               ))}
             </div>
@@ -199,7 +199,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
               {profile.preferenceAreas.map((area) => (
                 <span
                   key={area.id}
-                  className="px-3 py-1 bg-white border-2 border-black rounded-md font-medium"
+                  className="px-3 py-1 bg-accent-color4 border-2 border-black rounded-md font-medium"
                 >
                   {area.name}
                 </span>
@@ -222,9 +222,9 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
               {profile.availability.map((availability) => (
                 <span
                   key={availability}
-                  className="px-3 py-1 bg-white border-2 border-black rounded-md font-medium"
+                  className="px-3 py-1 bg-accent-color3 border-2 border-black rounded-md font-medium"
                 >
-                  {getAvailabilityLabel(availability, profileMessages)}
+                  {getAvailabilityLabel(availability as Availability, profileMessages)}
                 </span>
               ))}
             </div>

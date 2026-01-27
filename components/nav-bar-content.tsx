@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { UsersRound } from "lucide-react";
+import { LogOutIcon, LucideLogOut, UsersRound } from "lucide-react";
 
 type SessionType = Awaited<
   ReturnType<typeof import("@/lib/auth-utils").getSessionHelper>
@@ -69,7 +69,7 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-accent-color4  flex items-center justify-center cursor-pointer">
                 {user.name.charAt(0).toUpperCase()}
               </div>
             </div>
@@ -97,7 +97,7 @@ export function NavbarContent({ session, isPending }: NavbarContentProps) {
                 });
               }}
             >
-              Log out
+              <div className="justify-between flex items-align-center"><LucideLogOut className="w-4 h-4" /><div>{navigationMessages("logOut")}</div></div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

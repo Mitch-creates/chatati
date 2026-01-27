@@ -97,7 +97,8 @@
     "savedChatatis": "Gespeicherte Chatatis",
     "myProfile": "Mein Profil",
     "editProfile": "Profil bearbeiten",
-    "accountSettings": "Kontoeinstellungen"
+    "accountSettings": "Kontoeinstellungen",
+    "logOut": "Abmelden"
   },
   "api": {
     "errors": {
