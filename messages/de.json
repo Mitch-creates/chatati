@@ -49,7 +49,9 @@
     "emailNotFound": "E-Mail nicht gefunden. Bitte prüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
     "forgotPasswordError": "Ein Fehler ist aufgetreten, während der Link zum Zurücksetzen des Passworts gesendet wurde. Bitte versuchen Sie es erneut.",
     "requestNewResetLink": "Neuen Link anfordern",
-    "invalidCredentials": "Ungültige Anmeldeinformationen. Bitte prüfen Sie Ihre E-Mail und Ihr Passwort und versuchen Sie es erneut."
+    "invalidCredentials": "Ungültige Anmeldeinformationen. Bitte prüfen Sie Ihre E-Mail und Ihr Passwort und versuchen Sie es erneut.",
+    "welcome": "Willkommen bei Chatati!",
+    "newUserProfileMessage": "Bitte füllen Sie Ihr Profil aus, um Chatati zu nutzen."
   },
   "validation": {
     "emailRequired": "E-Mail ist erforderlich.",
@@ -112,6 +114,7 @@
   },
   "editProfile": {
     "image": "Profilbild hinzufügen (Optional)",
+    "editProfile": "Profil bearbeiten",
     "bio": "Biografie (Optional)",
     "bioDescription": "Erzählen Sie anderen von sich (max. 400 Zeichen)",
     "bioPlaceholder": "Schreiben Sie eine kurze Biografie über sich...",

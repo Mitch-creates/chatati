@@ -9,7 +9,10 @@
   "editor.minimap.enabled": false,
   "editor.linkedEditing": true,
   "workbench.sideBar.location": "right",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
   "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    
   }
 }
