@@ -49,8 +49,16 @@ export async function uploadImageToR2(
 
     await s3Client.send(command);
 
-    // Return the public URL (ensure no double slashes)
-    const imageUrl = `${PUBLIC_URL}/${fileName}`;
+    // Return the public URL (ensure it's a full URL with protocol)
+    // Remove any leading slash from fileName to avoid double slashes
+    const cleanFileName = fileName.startsWith("/") ? fileName.slice(1) : fileName;
+    let imageUrl = `${PUBLIC_URL}/${cleanFileName}`;
+    
+    // Ensure the URL starts with http:// or https://
+    if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
+      imageUrl = `https://${imageUrl}`;
+    }
+    
     console.log(`Image uploaded successfully to R2: ${imageUrl}`);
     return imageUrl;
   } catch (error) {
