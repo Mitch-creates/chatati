@@ -1,5 +1,3 @@
-// TODO Implement Cloudflare R2 for image storage
-
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm, SubmitHandler } from "react-hook-form";
@@ -61,6 +59,7 @@ export function EditProfileForm() {
   const [imageError, setImageError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const router = useRouter();
   const maxBioLength = 400;
 
@@ -107,9 +106,10 @@ export function EditProfileForm() {
               interests: profile.interests || [],
               availability: profile.availability || [],
             });
-            // TODO: Remove this once the image is stored in R2
-            if (userData.image && userData.image !== "cropped") {
+            // Set image preview and current URL if image exists
+            if (userData.image) {
               setImagePreview(userData.image);
+              setCurrentImageUrl(userData.image);
             }
           }
         }
@@ -172,15 +172,55 @@ export function EditProfileForm() {
     setSubmitSuccess(false);
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for image upload
 
     try {
+      // Upload image if a new one was selected
+      let imageUrl = data.image;
+      
+      if (imageFile && imagePreview && data.image === "cropped") {
+        // Convert blob URL to File if needed, or use the existing file
+        const formData = new FormData();
+        formData.append("file", imageFile);
+
+        const uploadResponse = await fetch("/api/images/upload", {
+          method: "POST",
+          body: formData,
+          signal: controller.signal,
+        });
+
+        if (!uploadResponse.ok) {
+          const errorData = await uploadResponse.json().catch(() => ({}));
+          throw new Error(errorData.message || "Failed to upload image");
+        }
+
+        const uploadData = await uploadResponse.json();
+        imageUrl = uploadData.url;
+
+        // Optionally delete old image if it exists and is from R2
+        if (currentImageUrl && currentImageUrl !== imageUrl) {
+          try {
+            await fetch(`/api/images/upload?url=${encodeURIComponent(currentImageUrl)}`, {
+              method: "DELETE",
+              signal: controller.signal,
+            });
+          } catch (deleteError) {
+            // Log but don't fail the request if deletion fails
+            console.warn("Failed to delete old image:", deleteError);
+          }
+        }
+      }
+
+      // Update profile with the image URL
       const response = await fetch("/api/users", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          image: imageUrl,
+        }),
         signal: controller.signal,
       });
 
@@ -188,6 +228,11 @@ export function EditProfileForm() {
 
       if (!response.ok) {
         throw new Error("API error");
+      }
+
+      // Update current image URL to the new one
+      if (imageUrl) {
+        setCurrentImageUrl(imageUrl);
       }
 
       setSubmitSuccess(true);
@@ -201,7 +246,7 @@ export function EditProfileForm() {
       clearTimeout(timeoutId);
       console.error("Error updating profile:", error);
       
-      const errorMessage = editProfileMessages("genericError");
+      const errorMessage = error.message || editProfileMessages("genericError");
       setSubmitError(errorMessage);
       
       // Clear error after 4 seconds

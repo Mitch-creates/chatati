@@ -1,6 +1,8 @@
+import ProfileHeader from "@/components/profile-header";
 import { Spinner } from "@/components/ui/spinner";
 import { requireAuthAndEmailVerified } from "@/lib/auth-utils";
 import { getUserWithProfile } from "@/lib/services/user.service";
+import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -12,6 +14,7 @@ async function ProfilePageContent({userId, locale}: {userId: string; locale: str
   }
   return (
     <>
+    <ProfileHeader user={user} />
     </>
   );
 }
