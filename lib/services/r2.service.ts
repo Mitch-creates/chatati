@@ -43,6 +43,7 @@ export async function uploadImageToR2(
       Key: fileName,
       Body: file,
       ContentType: contentType,
+      CacheControl: "public, max-age=31536000, immutable",
       // Note: Public access is configured at the bucket level in Cloudflare R2
       // No ACL parameter needed - bucket must be set to public access in R2 settings
     });
