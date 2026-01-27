@@ -348,35 +348,61 @@ export function EditProfileForm() {
           control={editProfileForm.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="text-center">
-              <div className="relative inline-flex items-center justify-center group">
-                <ImageUpload
-                  value={imagePreview}
-                  onChange={handleImageChange}
-                  onError={handleImageError}
-                  validationMessages={validationMessages}
-                  id="editProfile-image"
-                  ariaLabel="Upload profile image"
-                />
-                {hasProfileImage && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded-full pointer-events-none">
-                    <button
-                      type="button"
-                      onClick={handleEditProfileImage}
-                      className="text-white font-bold hover:underline cursor-pointer pointer-events-auto"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleRemoveProfileImage}
-                      className="text-white hover:text-red-400 transition-colors cursor-pointer pointer-events-auto"
-                      aria-label="Remove image"
-                    >
-                      <Trash2Icon className="w-6 h-6" />
-                    </button>
-                  </div>
-                )}
+              <div className="relative inline-flex items-center justify-center w-32 h-32 mx-auto">
+                <div className="relative w-32 h-32 group">
+                  <ImageUpload
+                    value={imagePreview}
+                    onChange={handleImageChange}
+                    onError={handleImageError}
+                    validationMessages={validationMessages}
+                    id="editProfile-image"
+                    ariaLabel="Upload profile image"
+                  />
+                  {hasProfileImage && (
+                    <>
+                      {/* Desktop overlay - hidden on mobile */}
+                      <div className="hidden md:flex absolute inset-0 items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded-full pointer-events-none z-10">
+                        <button
+                          type="button"
+                          onClick={handleEditProfileImage}
+                          className="text-white font-bold hover:underline cursor-pointer pointer-events-auto"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleRemoveProfileImage}
+                          className="text-white hover:text-red-400 transition-colors cursor-pointer pointer-events-auto"
+                          aria-label="Remove image"
+                        >
+                          <Trash2Icon className="w-6 h-6" />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
+              {/* Mobile buttons - shown on mobile, hidden on desktop */}
+              {hasProfileImage && (
+                <div className="flex items-center justify-center gap-3 mt-3 md:hidden">
+                  <button
+                    type="button"
+                    onClick={handleEditProfileImage}
+                    className="text-sm font-bold text-black hover:underline cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRemoveProfileImage}
+                    className="text-sm font-bold text-red-600 hover:text-red-700 cursor-pointer flex items-center gap-1"
+                    aria-label="Remove image"
+                  >
+                    <Trash2Icon className="w-4 h-4" />
+                    Remove
+                  </button>
+                </div>
+              )}
               <FieldLabel htmlFor="editProfile-image" className={cn("w-full text-center justify-center", hasProfileImage ? "hidden" : "")}>
                 {editProfileMessages("image")}
               </FieldLabel>
