@@ -107,16 +107,9 @@ export function EditProfileForm() {
               availability: profile.availability || [],
             });
             // Set image preview and current URL if image exists
-            // Ensure the URL is properly formatted (full URL with protocol)
             if (userData.image) {
-              let formattedImageUrl = userData.image;
-              // Ensure it's a full URL
-              if (!formattedImageUrl.startsWith("http://") && !formattedImageUrl.startsWith("https://")) {
-                formattedImageUrl = `https://${formattedImageUrl}`;
-              }
-              console.log(`Setting image preview: ${formattedImageUrl}`);
-              setImagePreview(formattedImageUrl);
-              setCurrentImageUrl(formattedImageUrl);
+              setImagePreview(userData.image);
+              setCurrentImageUrl(userData.image);
             }
           }
         }

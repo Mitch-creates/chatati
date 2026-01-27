@@ -37,7 +37,6 @@ export async function uploadImageToR2(
   fileName: string,
   contentType: string
 ): Promise<string> {
-  // Validate PUBLIC_URL is set before attempting upload
   if (!PUBLIC_URL || PUBLIC_URL.trim() === "") {
     throw new Error("R2_PUBLIC_URL environment variable is not set. Please configure your R2 public URL.");
   }
@@ -49,23 +48,16 @@ export async function uploadImageToR2(
       Body: file,
       ContentType: contentType,
       CacheControl: "public, max-age=31536000, immutable",
-      // Note: Public access is configured at the bucket level in Cloudflare R2
-      // No ACL parameter needed - bucket must be set to public access in R2 settings
     });
 
     await s3Client.send(command);
 
-    // Return the public URL (ensure it's a full URL with protocol)
-    // Remove any leading slash from fileName to avoid double slashes
+    // PUBLIC_URL should always include https://, but keep safety check
     const cleanFileName = fileName.startsWith("/") ? fileName.slice(1) : fileName;
-    let imageUrl = `${PUBLIC_URL}/${cleanFileName}`;
+    const imageUrl = PUBLIC_URL.startsWith("http://") || PUBLIC_URL.startsWith("https://")
+      ? `${PUBLIC_URL}/${cleanFileName}`
+      : `https://${PUBLIC_URL}/${cleanFileName}`;
     
-    // Ensure the URL starts with http:// or https://
-    if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
-      imageUrl = `https://${imageUrl}`;
-    }
-    
-    console.log(`Image uploaded successfully to R2: ${imageUrl}`);
     return imageUrl;
   } catch (error) {
     console.error("R2 upload error:", error);
