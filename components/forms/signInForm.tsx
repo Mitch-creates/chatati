@@ -102,9 +102,17 @@ export function SignInForm() {
               control={signInForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
+                  <div className="flex justify-between">
                   <FieldLabel htmlFor="signIn-password">
                     {onboardingMessages("password")}
                   </FieldLabel>
+                  <Link
+            href="/forgot-password"
+            className="text-sm underline hover:text-gray-600"
+          >
+            {onboardingMessages("forgotPassword")}
+          </Link>
+                  </div>
                   <Input
                     {...field}
                     onChange={(e) => {
@@ -144,12 +152,13 @@ export function SignInForm() {
               : onboardingMessages("signIn").toLocaleUpperCase()}
           </CtaButton>
         </Field>
-        <div className="text-center">
-          <Link
-            href="/forgot-password"
+        <div className="text-center flex justify-center gap-1">
+        <span className="text-sm">{onboardingMessages("noAccountYet")}</span>
+        <Link
+            href="/signup"
             className="text-sm underline hover:text-gray-600"
           >
-            {onboardingMessages("forgotPassword")}
+             {onboardingMessages("signUpHere")}
           </Link>
         </div>
       </CardFooter>

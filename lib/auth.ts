@@ -18,8 +18,12 @@ export const auth = betterAuth({
   }),
   session: {
     enabled: true,
-    expiresIn: 5 * 60,
+    expiresIn: 7 * 24 * 60 * 60, // 7 days
     strategy: "compact",
+    cookieCache: {
+      enabled: true,
+      expiresIn: 7 * 24 * 60 * 60, // 7 days
+    }
   },
   user: {
     additionalFields: {

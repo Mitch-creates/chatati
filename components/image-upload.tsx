@@ -312,11 +312,26 @@ export function ImageUpload({
       setShowCropModal(false);
       setImageToCrop(null);
       
-      // Get the original file from the input
-      const originalFile = fileInputRef.current?.files?.[0] || null;
+      // Convert cropped blob URL to File object
+      // Fetch the blob from the blob URL
+      const response = await fetch(croppedImageUrl);
+      const blob = await response.blob();
       
-      // Notify parent component
-      onChange?.(originalFile, croppedImageUrl);
+      // Get original filename for extension, or use default
+      const originalFile = fileInputRef.current?.files?.[0];
+      const originalName = originalFile?.name || "image.jpg";
+      const extension = originalName.split(".").pop() || "jpg";
+      
+      // Create a File object from the cropped blob
+      // Use JPEG as the type since we're converting to JPEG in getCroppedImg
+      const croppedFile = new File(
+        [blob],
+        `cropped-${Date.now()}.${extension}`,
+        { type: "image/jpeg" }
+      );
+      
+      // Notify parent component with the cropped file
+      onChange?.(croppedFile, croppedImageUrl);
     } catch (error) {
       console.error("Error cropping image:", error);
       const errorMessage = validationMessages?.("imageProcessingError") || "Failed to process image. Please try again.";
@@ -411,12 +426,13 @@ export function ImageUpload({
   };
 
   // Cleanup preview URLs on unmount
+  // Only revoke blob URLs, not external URLs (http/https)
   useEffect(() => {
     return () => {
-      if (imagePreview) {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
         URL.revokeObjectURL(imagePreview);
       }
-      if (imageToCrop && imageToCrop !== imagePreview) {
+      if (imageToCrop && imageToCrop !== imagePreview && imageToCrop.startsWith("blob:")) {
         URL.revokeObjectURL(imageToCrop);
       }
     };

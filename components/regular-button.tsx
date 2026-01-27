@@ -14,7 +14,9 @@ export default function RegularButton({
   return (
     <button
       type={type}
-      className={`bg-black text-white p-2 rounded-lg cursor-pointer appearance-none selector-none relative inline-block selector-none border-3 px-5 py-3 border-black font-bold hover:bg-white hover:text-black transition-colors duration-100`}
+      className={`bg-black text-white p-2 rounded-lg cursor-pointer appearance-none selector-none
+         relative inline-block selector-none border-3 px-5 py-3 border-black font-bold hover:bg-white
+          hover:text-black ${type === "reset" && "text-red-500"} transition-colors duration-100`}
       onClick={onClick}
     >
       {children}

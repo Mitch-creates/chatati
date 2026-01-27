@@ -5,8 +5,17 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 const fromEmail = process.env.EMAIL_FROM || "noreply@chatati.de";
 
+if (!process.env.RESEND_API_KEY) {
+  console.warn("RESEND_API_KEY is not set. Email functionality will not work.");
+}
+
 export async function sendVerificationEmail(email: string, url: string) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY is not set. Email functionality will not work.");
+    throw new Error("Email service is not configured, check .env");
+  }
   try {
+    console.log(`Attempting to send verification email to ${email}...`);
     await resend.emails.send({
       from: fromEmail,
       to: email,
@@ -26,7 +35,12 @@ export async function sendVerificationEmail(email: string, url: string) {
 }
 
 export async function sendPasswordResetEmail(email: string, url: string) {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("Cannot send password reset email: RESEND_API_KEY is not configured");
+    throw new Error("Email service is not configured, check .env");
+  }
   try {
+    console.log(`Attempting to send password reset email to ${email}...`);
     await resend.emails.send({
       from: fromEmail,
       to: email,

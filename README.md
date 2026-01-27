@@ -67,6 +67,15 @@ npx prisma migrate dev
 npx prisma generate
 ```
 
+7. (Optional) Seed the database with test data
+
+```bash
+npx prisma db seed
+```
+
+If you want to modify the seed data, edit the `prisma/seed.ts` file before running this command.
+
+
 7. Start the development server
 
 ```bash

@@ -21,7 +21,7 @@ async function SignInContent({ locale }: { locale: string }) {
       </div>
 
       {/* Right side or Bottom - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12 bg-gray-50">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12">
         <div className="w-full lg:max-w-2xl md:max-w-xl max-w-md">
           <SignInForm />
         </div>

@@ -3,6 +3,8 @@
     "signUp": "Sign Up",
     "signIn": "Sign In",
     "forgotPassword": "Forgot Password?",
+    "noAccountYet": "Don't have an account yet?",
+    "signUpHere": "Sign up here",
     "becomeAChatati": "Become a Chatati",
     "welcomeMessage": "Practice a language. Or practice another language in exchange for your language.",
     "fillInAllFields": "Fill in all fields to create your account.",
@@ -47,7 +49,9 @@
     "emailNotFound": "Email not found. Please check your email and try again.",
     "forgotPasswordError": "An error occurred while sending the password reset link. Please try again.",
     "requestNewResetLink": "Request a new reset link",
-    "invalidCredentials": "Invalid credentials. Please check your email and password and try again."
+    "invalidCredentials": "Invalid credentials. Please check your email and password and try again.",
+    "welcome": "Welcome to Chatati!",
+    "newUserProfileMessage": "Please complete your profile to start using Chatati."
   },
   "validation": {
     "emailRequired": "Email is required.",
@@ -92,7 +96,11 @@
     "signUp": "Sign up",
     "searchChatatis": "Search Chatatis",
     "invites": "Invites",
-    "savedChatatis": "Saved Chatatis"
+    "savedChatatis": "Saved Chatatis",
+    "myProfile": "My Profile",
+    "editProfile": "Edit Profile",
+    "accountSettings": "Account Settings",
+    "logOut": "Log Out"
   },
   "api": {
     "errors": {
@@ -164,6 +172,37 @@
       "POLITICS": "Politics",
       "HUMOR": "Humor"
     }
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "messageFrom": "Message from {name}",
+    "personalDetails": "Personal Details",
+    "interests": "Interests",
+    "preferredMunicipalities": "Preferred Municipalities",
+    "availabilities": "Availabilities",
+    "gender": "Gender",
+    "age": "Age",
+    "nativeLanguage": "Language you speak",
+    "learningLanguage": "Language you want to practice",
+    "hometown": "Hometown",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderX": "X",
+    "genderPrivate": "Private",
+    "availabilityDaytime": "Daytime",
+    "availabilityEvening": "Evening",
+    "availabilityWeekends": "Weekends",
+    "ageUnder18": "Under 18",
+    "age18to24": "18 - 24 years",
+    "age25to34": "25 - 34 years",
+    "age35to44": "35 - 44 years",
+    "age45to54": "45 - 54 years",
+    "age55to64": "55 - 64 years",
+    "age65plus": "65+ years",
+    "noBio": "No bio provided",
+    "noInterests": "No interests selected",
+    "noPreferredMunicipalities": "No preferred municipalities selected",
+    "noAvailabilities": "No availabilities selected"
   },
   "languages": {
     "de": "German",

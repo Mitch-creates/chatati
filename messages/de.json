@@ -3,6 +3,8 @@
     "signUp": "Registrieren",
     "signIn": "Anmelden",
     "forgotPassword": "Passwort vergessen?",
+    "noAccountYet": "Noch kein Konto?",
+    "signUpHere": "Registrieren Sie sich hier",
     "becomeAChatati": "Werde ein Chatati",
     "welcomeMessage": "Übe eine Sprache. Oder übe eine andere Sprache im Austausch für deine Sprache.",
     "fillInAllFields": "Füllen Sie alle Felder aus, um Ihr Konto zu erstellen.",
@@ -47,7 +49,9 @@
     "emailNotFound": "E-Mail nicht gefunden. Bitte prüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
     "forgotPasswordError": "Ein Fehler ist aufgetreten, während der Link zum Zurücksetzen des Passworts gesendet wurde. Bitte versuchen Sie es erneut.",
     "requestNewResetLink": "Neuen Link anfordern",
-    "invalidCredentials": "Ungültige Anmeldeinformationen. Bitte prüfen Sie Ihre E-Mail und Ihr Passwort und versuchen Sie es erneut."
+    "invalidCredentials": "Ungültige Anmeldeinformationen. Bitte prüfen Sie Ihre E-Mail und Ihr Passwort und versuchen Sie es erneut.",
+    "welcome": "Willkommen bei Chatati!",
+    "newUserProfileMessage": "Bitte füllen Sie Ihr Profil aus, um Chatati zu nutzen."
   },
   "validation": {
     "emailRequired": "E-Mail ist erforderlich.",
@@ -92,7 +96,11 @@
     "signUp": "Registrieren",
     "searchChatatis": "Chatati suchen",
     "invites": "Einladungen",
-    "savedChatatis": "Gespeicherte Chatatis"
+    "savedChatatis": "Gespeicherte Chatatis",
+    "myProfile": "Mein Profil",
+    "editProfile": "Profil bearbeiten",
+    "accountSettings": "Kontoeinstellungen",
+    "logOut": "Abmelden"
   },
   "api": {
     "errors": {
@@ -106,6 +114,7 @@
   },
   "editProfile": {
     "image": "Profilbild hinzufügen (Optional)",
+    "editProfile": "Profil bearbeiten",
     "bio": "Biografie (Optional)",
     "bioDescription": "Erzählen Sie anderen von sich (max. 400 Zeichen)",
     "bioPlaceholder": "Schreiben Sie eine kurze Biografie über sich...",
@@ -164,6 +173,37 @@
       "POLITICS": "Politik",
       "HUMOR": "Humor"
     }
+  },
+  "profile": {
+    "editProfile": "Profil bearbeiten",
+    "messageFrom": "Botschaft von {name}",
+    "personalDetails": "Persönliche Daten",
+    "interests": "Interessen",
+    "preferredMunicipalities": "Wunschgemeinden",
+    "availabilities": "Verfügbarkeiten",
+    "gender": "Geschlecht",
+    "age": "Alter",
+    "nativeLanguage": "Sprache, die Sie sprechen",
+    "learningLanguage": "Sprache, die Sie üben möchten",
+    "hometown": "Wohnort",
+    "genderMale": "Männlich",
+    "genderFemale": "Weiblich",
+    "genderX": "X",
+    "genderPrivate": "Privat",
+    "availabilityDaytime": "Tagsüber",
+    "availabilityEvening": "Abends",
+    "availabilityWeekends": "Wochenenden",
+    "ageUnder18": "Unter 18",
+    "age18to24": "18 - 24 Jahre",
+    "age25to34": "25 - 34 Jahre",
+    "age35to44": "35 - 44 Jahre",
+    "age45to54": "45 - 54 Jahre",
+    "age55to64": "55 - 64 Jahre",
+    "age65plus": "65+ Jahre",
+    "noBio": "Keine Biografie vorhanden",
+    "noInterests": "Keine Interessen ausgewählt",
+    "noPreferredMunicipalities": "Keine Wunschgemeinden ausgewählt",
+    "noAvailabilities": "Keine Verfügbarkeiten ausgewählt"
   },
   "languages": {
     "de": "Deutsch",
