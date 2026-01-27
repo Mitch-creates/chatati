@@ -18,7 +18,9 @@ import { Gender, Interest, Availability } from "@prisma/client";
 import CtaButton from "../cta-button";
 import { useEffect } from "react";
 import { Spinner } from "../ui/spinner";
-import { Check, CircleCheckBigIcon } from "lucide-react";
+import { Check, CircleCheckBigIcon, LucideTrash } from "lucide-react";
+import { cn } from "@/lib/utils";
+import RegularButton from "../regular-button";
 
 interface Option {
   value: string;
@@ -57,11 +59,17 @@ export function EditProfileForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [hasProfileImage, setHasProfileImage] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
   const router = useRouter();
   const maxBioLength = 400;
+
+  useEffect(() => {
+    // Show buttons if there's either an existing image (currentImageUrl) or a newly selected one (imagePreview)
+    setHasProfileImage(!!(currentImageUrl || imagePreview));
+  }, [currentImageUrl, imagePreview]);
 
   // Fetch initial data (available options and user profile)
   useEffect(() => {
@@ -288,6 +296,14 @@ export function EditProfileForm() {
     }
   };
 
+  useEffect(() => {
+    if (currentImageUrl) {
+      setHasProfileImage(true);
+    } else {
+      setHasProfileImage(false);
+    }
+  }, [currentImageUrl]);
+
   if (isLoadingData) {
     return (
       <div className="flex h-64 w-full items-center justify-center">
@@ -295,6 +311,29 @@ export function EditProfileForm() {
       </div>
     );
   }
+
+  const handleEditProfileImage = () => {
+    // Trigger the file input click
+    const fileInput = document.getElementById("editProfile-image") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleRemoveProfileImage = () => {
+    // Clear image state
+    setImagePreview(null);
+    setImageFile(null);
+    setCurrentImageUrl(null);
+    setHasProfileImage(false);
+    
+    // Set form value to empty string to trigger deletion on submit
+    editProfileForm.setValue("image", "", { shouldValidate: false });
+    
+    // Clear any image errors
+    setImageError(null);
+    editProfileForm.clearErrors("image");
+  };
 
   return (
     <form
@@ -318,9 +357,13 @@ export function EditProfileForm() {
                     id="editProfile-image"
                     ariaLabel="Upload profile image"
                   />
-                  <FieldLabel htmlFor="editProfile-image" className="w-full text-center justify-center">
+                  <FieldLabel htmlFor="editProfile-image" className={cn("w-full text-center justify-center", hasProfileImage ? "hidden" : "")}>
                     {editProfileMessages("image")}
                   </FieldLabel>
+                  {hasProfileImage && 
+                  <div className="justify-center flex gap-2 mt-2">
+                    <RegularButton onClick={handleEditProfileImage}>Edit</RegularButton>
+                    <RegularButton type="reset" onClick={handleRemoveProfileImage}><LucideTrash className="w-4 h-4" /></RegularButton></div>}
                   {fieldState.invalid && (
                     <FieldError className="text-center" errors={[fieldState.error]} />
                   )}
