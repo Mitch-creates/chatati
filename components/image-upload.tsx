@@ -426,12 +426,13 @@ export function ImageUpload({
   };
 
   // Cleanup preview URLs on unmount
+  // Only revoke blob URLs, not external URLs (http/https)
   useEffect(() => {
     return () => {
-      if (imagePreview) {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
         URL.revokeObjectURL(imagePreview);
       }
-      if (imageToCrop && imageToCrop !== imagePreview) {
+      if (imageToCrop && imageToCrop !== imagePreview && imageToCrop.startsWith("blob:")) {
         URL.revokeObjectURL(imageToCrop);
       }
     };

@@ -37,6 +37,11 @@ export async function uploadImageToR2(
   fileName: string,
   contentType: string
 ): Promise<string> {
+  // Validate PUBLIC_URL is set before attempting upload
+  if (!PUBLIC_URL || PUBLIC_URL.trim() === "") {
+    throw new Error("R2_PUBLIC_URL environment variable is not set. Please configure your R2 public URL.");
+  }
+
   try {
     const command = new PutObjectCommand({
       Bucket: BUCKET_NAME,
@@ -73,12 +78,42 @@ export async function uploadImageToR2(
  * @param fileName - The file name/key to delete
  */
 export async function deleteImageFromR2(fileName: string): Promise<void> {
-  const command = new DeleteObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: fileName,
-  });
+  try {
+    if (!fileName || fileName.trim() === "") {
+      throw new Error("File name/key is required for deletion");
+    }
 
-  await s3Client.send(command);
+    console.log(`Attempting to delete image from R2: ${fileName}`);
+    const command = new DeleteObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: fileName,
+    });
+
+    await s3Client.send(command);
+    console.log(`Successfully deleted image from R2: ${fileName}`);
+  } catch (error) {
+    console.error(`R2 delete error for key "${fileName}":`, error);
+    throw new Error(`Failed to delete image from R2: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
+}
+
+/**
+ * Check if a URL is from R2
+ * @param url - The URL to check
+ * @returns True if the URL is from R2
+ */
+export function isR2Url(url: string): boolean {
+  if (!url || !PUBLIC_URL) return false;
+  
+  try {
+    // Normalize URLs by removing protocol
+    const normalizedUrl = url.replace(/^https?:\/\//, "");
+    const normalizedPublicUrl = PUBLIC_URL.replace(/^https?:\/\//, "");
+    
+    return normalizedUrl.startsWith(normalizedPublicUrl) || normalizedUrl.includes(normalizedPublicUrl);
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -87,11 +122,25 @@ export async function deleteImageFromR2(fileName: string): Promise<void> {
  * @returns The file key/name
  */
 export function extractKeyFromR2Url(url: string): string {
+  if (!url || url.trim() === "") {
+    throw new Error("URL is required");
+  }
+
   try {
     const urlObj = new URL(url);
-    return urlObj.pathname.slice(1); // Remove leading slash
-  } catch {
+    const key = urlObj.pathname.slice(1); // Remove leading slash
+    
+    if (!key || key.trim() === "") {
+      throw new Error("Invalid R2 URL: no path found");
+    }
+    
+    return key;
+  } catch (error) {
     // If it's not a full URL, assume it's already a key
-    return url;
+    if (error instanceof TypeError) {
+      // Not a valid URL, treat as key
+      return url;
+    }
+    throw error;
   }
 }

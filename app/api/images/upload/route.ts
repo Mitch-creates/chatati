@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAuthAPI, UnauthorizedError } from "@/lib/auth-utils";
-import { uploadImageToR2, deleteImageFromR2, extractKeyFromR2Url } from "@/lib/services/r2.service";
+import { uploadImageToR2, deleteImageFromR2, extractKeyFromR2Url, isR2Url } from "@/lib/services/r2.service";
 
 export async function POST(request: Request) {
   try {
@@ -81,11 +81,24 @@ export async function DELETE(request: Request) {
       );
     }
 
+    // Validate that the URL is from R2
+    if (!isR2Url(imageUrl)) {
+      console.warn(`Attempted to delete non-R2 URL: ${imageUrl}`);
+      return NextResponse.json(
+        { error: "Invalid URL: URL is not from R2" },
+        { status: 400 }
+      );
+    }
+
+    console.log(`Deleting image from R2: ${imageUrl}`);
+    
     // Extract the key from the URL
     const key = extractKeyFromR2Url(imageUrl);
+    console.log(`Extracted key: ${key}`);
 
     // Delete from R2
     await deleteImageFromR2(key);
+    console.log(`Successfully deleted image: ${imageUrl}`);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -97,8 +110,9 @@ export async function DELETE(request: Request) {
     }
 
     console.error("Error deleting image:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to delete image";
     return NextResponse.json(
-      { error: "internalServerError", message: "Failed to delete image" },
+      { error: "internalServerError", message: errorMessage },
       { status: 500 }
     );
   }

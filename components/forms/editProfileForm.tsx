@@ -107,9 +107,16 @@ export function EditProfileForm() {
               availability: profile.availability || [],
             });
             // Set image preview and current URL if image exists
+            // Ensure the URL is properly formatted (full URL with protocol)
             if (userData.image) {
-              setImagePreview(userData.image);
-              setCurrentImageUrl(userData.image);
+              let formattedImageUrl = userData.image;
+              // Ensure it's a full URL
+              if (!formattedImageUrl.startsWith("http://") && !formattedImageUrl.startsWith("https://")) {
+                formattedImageUrl = `https://${formattedImageUrl}`;
+              }
+              console.log(`Setting image preview: ${formattedImageUrl}`);
+              setImagePreview(formattedImageUrl);
+              setCurrentImageUrl(formattedImageUrl);
             }
           }
         }
@@ -200,16 +207,19 @@ export function EditProfileForm() {
         imageUrl = uploadData.url;
 
         // Delete old image if it exists, is different, and is from R2
-        if (currentImageUrl && currentImageUrl !== imageUrl && currentImageUrl.startsWith("http")) {
-          // Check if it's an R2 URL (starts with the public URL pattern)
-          // We'll let the API handle the validation
+        if (currentImageUrl && currentImageUrl !== imageUrl && (currentImageUrl.startsWith("http://") || currentImageUrl.startsWith("https://"))) {
+          // The API will validate that it's an R2 URL
           try {
+            console.log(`Deleting old image: ${currentImageUrl}`);
             const deleteResponse = await fetch(`/api/images/upload?url=${encodeURIComponent(currentImageUrl)}`, {
               method: "DELETE",
               signal: controller.signal,
             });
             if (!deleteResponse.ok) {
-              console.warn("Failed to delete old image (non-critical)");
+              const errorData = await deleteResponse.json().catch(() => ({}));
+              console.warn("Failed to delete old image (non-critical):", errorData.message || errorData.error || "Unknown error");
+            } else {
+              console.log(`Successfully deleted old image: ${currentImageUrl}`);
             }
           } catch (deleteError) {
             // Log but don't fail the request if deletion fails
@@ -218,12 +228,19 @@ export function EditProfileForm() {
         }
       } else if (data.image === "" && currentImageUrl) {
         // User removed the image - delete from R2 if it's an R2 URL
-        if (currentImageUrl.startsWith("http")) {
+        if (currentImageUrl.startsWith("http://") || currentImageUrl.startsWith("https://")) {
           try {
-            await fetch(`/api/images/upload?url=${encodeURIComponent(currentImageUrl)}`, {
+            console.log(`Deleting removed image: ${currentImageUrl}`);
+            const deleteResponse = await fetch(`/api/images/upload?url=${encodeURIComponent(currentImageUrl)}`, {
               method: "DELETE",
               signal: controller.signal,
             });
+            if (!deleteResponse.ok) {
+              const errorData = await deleteResponse.json().catch(() => ({}));
+              console.warn("Failed to delete removed image (non-critical):", errorData.message || errorData.error || "Unknown error");
+            } else {
+              console.log(`Successfully deleted removed image: ${currentImageUrl}`);
+            }
           } catch (deleteError) {
             console.warn("Failed to delete removed image:", deleteError);
           }

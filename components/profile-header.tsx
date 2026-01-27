@@ -15,14 +15,22 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
   const profileMessages = await getCachedTranslations(locale, "profile");
   
   // Ensure image URL is a full URL (external) for Next.js Image component
-  const imageSrc = user.image?.startsWith("http://") || user.image?.startsWith("https://")
-    ? user.image
-    : user.image
-      ? `https://${user.image}`
-      : null;
+  let imageSrc: string | null = null;
+  if (user.image) {
+    if (user.image.startsWith("http://") || user.image.startsWith("https://")) {
+      imageSrc = user.image;
+    } else {
+      imageSrc = `https://${user.image}`;
+    }
+  }
 
   // Check if it's an external URL (R2 or other external source)
   const isExternalUrl = imageSrc?.startsWith("http://") || imageSrc?.startsWith("https://");
+  
+  // Debug logging (remove in production)
+  if (process.env.NODE_ENV === "development") {
+    console.log(`[ProfileHeader] User ID: ${user.id}, Image URL: ${user.image}, Formatted: ${imageSrc}, isExternal: ${isExternalUrl}`);
+  }
 
   // Format name: first name + first letter of last name
   const firstName = user.firstName || user.name.split(" ")[0] || user.name;
@@ -40,14 +48,22 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
         "w-32 h-32"
       )}>
         {imageSrc ? (
-          <Image 
-            src={imageSrc} 
-            alt={user.name} 
-            width={128} 
-            height={128}
-            className="object-cover w-full h-full"
-            unoptimized={isExternalUrl}
-          />
+          // Use regular img tag for external URLs to avoid Next.js Image optimization issues
+          isExternalUrl ? (
+            <img
+              src={imageSrc}
+              alt={user.name}
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <Image 
+              src={imageSrc} 
+              alt={user.name} 
+              width={128} 
+              height={128}
+              className="object-cover w-full h-full"
+            />
+          )
         ) : (
           <div className="w-full h-full rounded-full bg-accent-color4 flex items-center justify-center text-4xl font-bold">
             {firstName.charAt(0).toUpperCase()}
