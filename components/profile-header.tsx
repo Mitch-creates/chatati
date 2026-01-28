@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import CtaButton from "./cta-button";
+import { ContactButton } from "./contact-button";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 
 interface ProfileHeaderProps {
@@ -54,14 +55,22 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
         {displayName}
       </h1>
 
-      {/* Edit Profile Button - Only show if it's their own profile */}
-      {isOwnProfile && (
-        <Link href={`/platform/account/edit`}>
-          <CtaButton>
-            {getTranslation(profileMessages, "editProfile")}
-          </CtaButton>
-        </Link>
-      )}
+      <div className="flex flex-wrap justify-center gap-4">
+        {/* Edit Profile Button - Only show if it's their own profile */}
+        {isOwnProfile ? (
+          <Link href={`/platform/account/edit`}>
+            <CtaButton>
+              {getTranslation(profileMessages, "editProfile")}
+            </CtaButton>
+          </Link>
+        ) : (
+          <ContactButton
+            recipientId={user.id}
+            locale={locale}
+            buttonText={getTranslation(profileMessages, "contactThisChatati")}
+          />
+        )}
+      </div>
     </div>
   );
 }

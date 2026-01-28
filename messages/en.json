@@ -86,7 +86,10 @@
     "imageTooLargeDimensions": "Image dimensions are too large. Please use an image smaller than 10000x10000 pixels.",
     "imageCorrupted": "This image file appears to be corrupted. Please try a different image.",
     "imageProcessingError": "Failed to process image. Please try again.",
-    "imageLoadError": "Failed to load image. Please try again."
+    "imageLoadError": "Failed to load image. Please try again.",
+    "messageTooShort": "Message must be at least 10 characters.",
+    "messageTooLong": "Message must be at most 400 characters.",
+    "genericError": "Something went wrong. Please try again."
   },
   "form": {},
   "navigation": {
@@ -202,7 +205,8 @@
     "noBio": "No bio provided",
     "noInterests": "No interests selected",
     "noPreferredMunicipalities": "No preferred municipalities selected",
-    "noAvailabilities": "No availabilities selected"
+    "noAvailabilities": "No availabilities selected",
+    "contactThisChatati": "Contact this Chatati"
   },
   "languages": {
     "de": "German",
@@ -303,5 +307,30 @@
     "fil": "Filipino",
     "tl": "Tagalog",
     "ht": "Haitian Creole"
+  },
+  "contact": {
+    "title": "Contact another Chatati",
+    "description": "Send a short message to introduce yourself and explain why you would like to practice together.",
+    "titleMessageBox": "Your message",
+    "descriptionMessageBox": "Share something about yourself, your language goals and when you are usually available.",
+    "placeholderMessageBox": "Write a friendly message...",
+    "submit": "Send invitation",
+    "submitting": "Sending...",
+    "success": "Your invitation has been sent!"
+  },
+  "invitations": {
+    "title": "Invitations",
+    "newInvitations": "New invitations",
+    "sentInvitations": "Sent invitations",
+    "noUnanswered": "You currently have no unanswered invitations.",
+    "viewFullHistory": "View your full history",
+    "statusPending": "Pending",
+    "statusAnswered": "Answered",
+    "statusDeclined": "Declined",
+    "accept": "Accept",
+    "decline": "Decline",
+    "noSentYet": "You have not sent any invitations yet.",
+    "backToInvitations": "Back to invitations",
+    "invitationSentSuccess": "Invitation sent successfully!"
   }
 }

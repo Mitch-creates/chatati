@@ -721,7 +721,8 @@ export function EditProfileForm() {
             )}
             {submitSuccess && (
               <div className="flex items-center justify-center gap-2">
-                <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} /> <span>{editProfileMessages("updateSuccess")?.toUpperCase() || "Profile updated successfully!"}</span>
+                <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} /> 
+                <span>{editProfileMessages("updateSuccess")?.toUpperCase() || "Profile updated successfully!"}</span>
               </div>
             )}
             {submitError && (

@@ -86,7 +86,10 @@
     "imageTooLargeDimensions": "Bildabmessungen sind zu groß. Bitte verwenden Sie ein Bild kleiner als 10000x10000 Pixel.",
     "imageCorrupted": "Diese Bilddatei scheint beschädigt zu sein. Bitte versuchen Sie ein anderes Bild.",
     "imageProcessingError": "Bild konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
-    "imageLoadError": "Bild konnte nicht geladen werden. Bitte versuchen Sie es erneut."
+    "imageLoadError": "Bild konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "messageTooShort": "Die Nachricht muss mindestens 10 Zeichen lang sein.",
+    "messageTooLong": "Die Nachricht darf höchstens 400 Zeichen lang sein.",
+    "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
   },
   "form": {},
   "navigation": {
@@ -203,7 +206,8 @@
     "noBio": "Keine Biografie vorhanden",
     "noInterests": "Keine Interessen ausgewählt",
     "noPreferredMunicipalities": "Keine Wunschgemeinden ausgewählt",
-    "noAvailabilities": "Keine Verfügbarkeiten ausgewählt"
+    "noAvailabilities": "Keine Verfügbarkeiten ausgewählt",
+    "contactThisChatati": "Diesen Chatati kontaktieren"
   },
   "languages": {
     "de": "Deutsch",
@@ -304,5 +308,30 @@
     "fil": "Filipino",
     "tl": "Tagalog",
     "ht": "Haitianisch-Kreolisch"
+  },
+  "contact": {
+    "title": "Einen anderen Chatati kontaktieren",
+    "description": "Senden Sie eine kurze Nachricht, um sich vorzustellen und zu erklären, warum Sie gemeinsam üben möchten.",
+    "titleMessageBox": "Ihre Nachricht",
+    "descriptionMessageBox": "Erzählen Sie etwas über sich, Ihre Sprachziele und wann Sie normalerweise verfügbar sind.",
+    "placeholderMessageBox": "Schreiben Sie eine freundliche Nachricht...",
+    "submit": "Einladung senden",
+    "submitting": "Wird gesendet...",
+    "success": "Ihre Einladung wurde gesendet!"
+  },
+  "invitations": {
+    "title": "Einladungen",
+    "newInvitations": "Neue Einladungen",
+    "sentInvitations": "Gesendete Einladungen",
+    "noUnanswered": "Sie haben derzeit keine unbeantworteten Einladungen.",
+    "viewFullHistory": "Vollständige Historie anzeigen",
+    "statusPending": "Ausstehend",
+    "statusAnswered": "Beantwortet",
+    "statusDeclined": "Abgelehnt",
+    "accept": "Annehmen",
+    "decline": "Ablehnen",
+    "noSentYet": "Sie haben noch keine Einladungen gesendet.",
+    "backToInvitations": "Zurück zu den Einladungen",
+    "invitationSentSuccess": "Einladung erfolgreich gesendet!"
   }
 }

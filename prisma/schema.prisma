@@ -27,10 +27,12 @@ model User {
   birthDate     DateTime?
 
   // Relations
-  accounts  Account[]
-  sessions  Session[]
-  profile   Profile?
-  requests  PracticeRequest[]
+  accounts         Account[]
+  sessions         Session[]
+  profile          Profile?
+  requests         PracticeRequest[]
+  contactRequestsSent    ContactRequest[] @relation("ContactRequestSender")
+  contactRequestsReceived ContactRequest[] @relation("ContactRequestRecipient")
 }
 
 model Account {
@@ -140,6 +142,18 @@ model PracticeRequest {
   createdAt   DateTime      @default(now())
 }
 
+model ContactRequest {
+  id          String              @id @default(cuid())
+  senderId    String
+  sender      User                @relation("ContactRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User                @relation("ContactRequestRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  message     String?
+  status      ContactRequestStatus @default(PENDING)
+  createdAt   DateTime            @default(now())
+  respondedAt DateTime?
+}
+
 model Language {
   id       String    @id @default(cuid())
   code     String    @unique
@@ -163,6 +177,12 @@ enum RequestStatus {
   OPEN
   ACCEPTED
   CLOSED
+}
+
+enum ContactRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
 
 enum RequestType {

@@ -1,0 +1,210 @@
+import { prisma } from "@/lib/prisma";
+import type { ContactRequestStatus } from "@prisma/client";
+
+const PAGE_SIZE = 10;
+
+export type ContactRequestWithUsers = {
+  id: string;
+  message: string | null;
+  status: ContactRequestStatus;
+  createdAt: Date;
+  respondedAt: Date | null;
+  sender: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    name: string;
+    image: string | null;
+    profile: {
+      nativeLangs: { code: string; name: string }[];
+      learningLangs: { code: string; name: string }[];
+    } | null;
+  } | null;
+  recipient: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    name: string;
+    image: string | null;
+    profile: {
+      nativeLangs: { code: string; name: string }[];
+      learningLangs: { code: string; name: string }[];
+    } | null;
+  } | null;
+};
+
+export async function createContactRequest(
+  senderId: string,
+  recipientId: string,
+  message: string
+) {
+  return prisma.contactRequest.create({
+    data: {
+      senderId,
+      recipientId,
+      message: message.trim(),
+    },
+  });
+}
+
+export async function getContactRequestsReceived(
+  userId: string,
+  options: { page?: number; view?: "current" | "history" }
+) {
+  const page = Math.max(1, options.page ?? 1);
+  const view = options.view ?? "current";
+
+  const where =
+    view === "current"
+      ? { recipientId: userId, status: "PENDING" as const }
+      : { recipientId: userId };
+
+  const [items, total] = await Promise.all([
+    prisma.contactRequest.findMany({
+      where,
+      include: {
+        sender: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            name: true,
+            image: true,
+            profile: {
+              select: {
+                nativeLangs: { select: { code: true, name: true } },
+                learningLangs: { select: { code: true, name: true } },
+              },
+            },
+          },
+        },
+        recipient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            name: true,
+            image: true,
+            profile: {
+              select: {
+                nativeLangs: { select: { code: true, name: true } },
+                learningLangs: { select: { code: true, name: true } },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+    prisma.contactRequest.count({ where }),
+  ]);
+
+  return {
+    items: items.map((item) => ({
+      id: item.id,
+      message: item.message,
+      status: item.status,
+      createdAt: item.createdAt,
+      respondedAt: item.respondedAt,
+      sender: item.sender,
+      recipient: item.recipient,
+    })) as ContactRequestWithUsers[],
+    total,
+    page,
+    pageCount: Math.ceil(total / PAGE_SIZE) || 1,
+  };
+}
+
+export async function getContactRequestsSent(
+  userId: string,
+  options: { page?: number; view?: "current" | "history" }
+) {
+  const page = Math.max(1, options.page ?? 1);
+  const view = options.view ?? "current";
+
+  const where =
+    view === "current"
+      ? { senderId: userId, status: "PENDING" as const }
+      : { senderId: userId };
+
+  const [items, total] = await Promise.all([
+    prisma.contactRequest.findMany({
+      where,
+      include: {
+        sender: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            name: true,
+            image: true,
+            profile: {
+              select: {
+                nativeLangs: { select: { code: true, name: true } },
+                learningLangs: { select: { code: true, name: true } },
+              },
+            },
+          },
+        },
+        recipient: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            name: true,
+            image: true,
+            profile: {
+              select: {
+                nativeLangs: { select: { code: true, name: true } },
+                learningLangs: { select: { code: true, name: true } },
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+    }),
+    prisma.contactRequest.count({ where }),
+  ]);
+
+  return {
+    items: items.map((item) => ({
+      id: item.id,
+      message: item.message,
+      status: item.status,
+      createdAt: item.createdAt,
+      respondedAt: item.respondedAt,
+      sender: item.sender,
+      recipient: item.recipient,
+    })) as ContactRequestWithUsers[],
+    total,
+    page,
+    pageCount: Math.ceil(total / PAGE_SIZE) || 1,
+  };
+}
+
+export async function updateContactRequestStatus(
+  requestId: string,
+  userId: string,
+  status: "ACCEPTED" | "DECLINED"
+) {
+  const request = await prisma.contactRequest.findUnique({
+    where: { id: requestId },
+  });
+
+  if (!request || request.recipientId !== userId) {
+    return null;
+  }
+  if (request.status !== "PENDING") {
+    return null;
+  }
+
+  return prisma.contactRequest.update({
+    where: { id: requestId },
+    data: { status: status as ContactRequestStatus, respondedAt: new Date() },
+  });
+}
