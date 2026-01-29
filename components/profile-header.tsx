@@ -1,9 +1,7 @@
 import { UserWithProfile } from "@/lib/services/user.service";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import CtaButton from "./cta-button";
-import { ContactButton } from "./contact-button";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 
 interface ProfileHeaderProps {
@@ -13,15 +11,15 @@ interface ProfileHeaderProps {
 }
 
 export default async function ProfileHeader({ user, isOwnProfile, locale }: ProfileHeaderProps) {
-    const profileMessages = await getCachedTranslations(locale, "profile");
-  
-    // R2 URLs are always https://, but keep fallback for edge cases
-    const imageSrc = user.image?.startsWith("http://") || user.image?.startsWith("https://")
-      ? user.image
-      : user.image
-        ? `https://${user.image}`
-        : null;
-  
+  const profileMessages = await getCachedTranslations(locale, "profile");
+
+  // R2 URLs are always https://, but keep fallback for edge cases
+  const imageSrc = user.image?.startsWith("http://") || user.image?.startsWith("https://")
+    ? user.image
+    : user.image
+      ? `https://${user.image}`
+      : null;
+
   // Format name: first name + first letter of last name
   const firstName = user.firstName || user.name.split(" ")[0] || user.name;
   const lastNameInitial = user.lastName ? user.lastName.charAt(0).toUpperCase() : (user.name.split(" ")[1]?.charAt(0).toUpperCase() || "");
@@ -64,11 +62,9 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
             </CtaButton>
           </Link>
         ) : (
-          <ContactButton
-            recipientId={user.id}
-            locale={locale}
-            buttonText={getTranslation(profileMessages, "contactThisChatati")}
-          />
+          <Link href={`/platform/contact/${user.id}`}>
+            <CtaButton>{getTranslation(profileMessages, "contactThisChatati")}</CtaButton>
+          </Link>
         )}
       </div>
     </div>

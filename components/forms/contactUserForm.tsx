@@ -97,7 +97,7 @@ export function ContactUserForm({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="w-full flex flex-col space-y-4"
+      className="w-full min-w-0 flex flex-col space-y-4"
       noValidate
     >
       {/* Title */}
@@ -148,11 +148,11 @@ export function ContactUserForm({
           disabled={isSubmitting}
           fullWidth="w-full"
         >
-          {!submitSuccess && !submitError && 
+          {!submitSuccess && !submitError &&
             (messages.submit?.toUpperCase() || "SEND INVITATION")}
           {submitSuccess && (
             <div className="flex items-center justify-center gap-2">
-              <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} /> 
+              <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} />
               <span>{messages.invitationSentSuccess || "Invitation sent successfully!"}</span>
             </div>
           )}

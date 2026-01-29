@@ -309,6 +309,7 @@
     "ht": "Haitian Creole"
   },
   "contact": {
+    "contactHeading": "Contact",
     "title": "Contact another Chatati",
     "description": "Send a short message to introduce yourself and explain why you would like to practice together.",
     "titleMessageBox": "Your message",

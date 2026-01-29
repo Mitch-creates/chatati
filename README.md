@@ -141,7 +141,7 @@ docker-compose up --build
 
 ## Decisions that were made
 
-_1. E-mail verification_
+### E-mail verification
 I was considering demanding email verification right from the start. Showing a message after sign up that a mail was sent and guiding the user back to sign in page after clicking the verify link in their mail. Not allowing the user to log in before clicking on that verify link.
 I read on several blog posts how this can really throw off users from the very start and reduce 'conversion rate'. I don't want to lose potential users, while still maintaining safety (real users).
 Another reason is that the ideal onboarding consists of signing up and immediately being guided to profile creation. Which would still be possible with email verification in between, but it wouldn't be as smooth.
@@ -175,3 +175,28 @@ In the code, we use the term **"Area"** as the generic identifier for sub-city r
 
 3. **Terminology**:
    - If a new city uses different terminology (e.g., "Neighborhoods" or "Boroughs"), this can be handled via the internationalization files (`messages/*.json`) by adding city-specific translation keys.
+
+
+## Useful things
+
+### Mobile testing
+
+1. Use firefox on both mobile and desktop
+2. install android platform tools
+
+```bash
+brew install android-platform-tools
+```
+3. Connect phone by usb
+
+4. Enable USB debugging
+
+5. Run the following command
+```bash
+adb reverse tcp:3000 tcp:3000
+```
+
+6. Go to localhost:3000 on firefox mobile
+
+I prefer trying out the app on my phone instead of an emulator. There's also alternatives like ngrok, but this publicly exposes the app (good for showing a client for example) 
+

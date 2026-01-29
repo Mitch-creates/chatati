@@ -21,11 +21,13 @@ export default function CtaButton({
   fullWidth,
 }: CtaButtonProps) {
   return (
-    <div className={cn("relative inline-block", fullWidth)}>
+    <div className={cn("relative", fullWidth ? "block w-full min-w-0" : "inline-block")}>
       <span
         aria-hidden="true"
-        className="relative w-full inline-block
-            bg-black rounded-lg translate-x-1"
+        className={cn(
+          "relative w-full bg-black rounded-lg translate-x-1",
+          fullWidth ? "block" : "inline-block"
+        )}
       >
         <button
           type={type}

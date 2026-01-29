@@ -310,6 +310,7 @@
     "ht": "Haitianisch-Kreolisch"
   },
   "contact": {
+    "contactHeading": "Kontakt",
     "title": "Einen anderen Chatati kontaktieren",
     "description": "Senden Sie eine kurze Nachricht, um sich vorzustellen und zu erklären, warum Sie gemeinsam üben möchten.",
     "titleMessageBox": "Ihre Nachricht",
