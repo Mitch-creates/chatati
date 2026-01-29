@@ -7,10 +7,16 @@ import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 interface ProfileHeaderProps {
   user: UserWithProfile;
   isOwnProfile: boolean;
+  hasContacted?: boolean;
   locale: string;
 }
 
-export default async function ProfileHeader({ user, isOwnProfile, locale }: ProfileHeaderProps) {
+export default async function ProfileHeader({
+  user,
+  isOwnProfile,
+  hasContacted = false,
+  locale,
+}: ProfileHeaderProps) {
   const profileMessages = await getCachedTranslations(locale, "profile");
 
   // R2 URLs are always https://, but keep fallback for edge cases
@@ -61,6 +67,10 @@ export default async function ProfileHeader({ user, isOwnProfile, locale }: Prof
               {getTranslation(profileMessages, "editProfile")}
             </CtaButton>
           </Link>
+        ) : hasContacted ? (
+          <CtaButton disabled>
+            {getTranslation(profileMessages, "contacted")}
+          </CtaButton>
         ) : (
           <Link href={`/platform/contact/${user.id}`}>
             <CtaButton>{getTranslation(profileMessages, "contactThisChatati")}</CtaButton>

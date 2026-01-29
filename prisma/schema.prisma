@@ -152,6 +152,8 @@ model ContactRequest {
   status      ContactRequestStatus @default(PENDING)
   createdAt   DateTime            @default(now())
   respondedAt DateTime?
+
+  @@unique([senderId, recipientId])
 }
 
 model Language {

@@ -200,3 +200,10 @@ adb reverse tcp:3000 tcp:3000
 
 I prefer trying out the app on my phone instead of an emulator. There's also alternatives like ngrok, but this publicly exposes the app (good for showing a client for example) 
 
+### Dev user accounts
+
+michielvandevyver67@gmail.com / Password123!
+alice@test.chatati.dev / Password123!
+bob@test.chatati.dev / Password123!
+claire@test.chatati.dev / Password123!
+

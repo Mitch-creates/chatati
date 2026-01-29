@@ -195,6 +195,16 @@ export async function getContactRequestsSent(
   };
 }
 
+export async function hasContactRequestFromSenderToRecipient(
+  senderId: string,
+  recipientId: string
+): Promise<boolean> {
+  const existing = await prisma.contactRequest.findFirst({
+    where: { senderId, recipientId },
+  });
+  return !!existing;
+}
+
 export async function updateContactRequestStatus(
   requestId: string,
   userId: string,

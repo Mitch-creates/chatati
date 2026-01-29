@@ -67,7 +67,11 @@ export function ContactUserForm({
 
       if (!response.ok) {
         const json = await response.json().catch(() => null);
-        const message = json?.message ?? tValidation("genericError");
+        const isAlreadyContacted =
+          response.status === 409 && json?.error === "alreadyContacted";
+        const message = isAlreadyContacted
+          ? t("alreadyContacted")
+          : (json?.message ?? tValidation("genericError"));
         throw new Error(message);
       }
       setSubmitSuccess(true);

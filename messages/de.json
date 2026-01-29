@@ -207,7 +207,8 @@
     "noInterests": "Keine Interessen ausgewählt",
     "noPreferredMunicipalities": "Keine Wunschgemeinden ausgewählt",
     "noAvailabilities": "Keine Verfügbarkeiten ausgewählt",
-    "contactThisChatati": "Diesen Chatati kontaktieren"
+    "contactThisChatati": "Diesen Chatati kontaktieren",
+    "contacted": "Kontaktiert"
   },
   "languages": {
     "de": "Deutsch",
@@ -319,7 +320,9 @@
     "submit": "Einladung senden",
     "submitting": "Wird gesendet...",
     "success": "Ihre Einladung wurde gesendet!",
-    "contactInformation": "Wenn {firstName} Ihre Einladung annimmt, erhalten Sie beide automatisch die E-Mail-Adresse des anderen. Wenn {firstName} Ihre Einladung nicht annimmt, wird nichts geteilt."
+    "contactInformation": "Wenn {firstName} Ihre Einladung annimmt, erhalten Sie beide automatisch die E-Mail-Adresse des anderen. Wenn {firstName} Ihre Einladung nicht annimmt, wird nichts geteilt.",
+    "alreadyContacted": "Sie haben diesen Nutzer bereits kontaktiert.",
+    "backToProfile": "Zurück zum Profil"
   },
   "invitations": {
     "title": "Einladungen",

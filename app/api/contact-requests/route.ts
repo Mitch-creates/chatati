@@ -4,6 +4,7 @@ import {
   createContactRequest,
   getContactRequestsReceived,
   getContactRequestsSent,
+  hasContactRequestFromSenderToRecipient,
 } from "@/lib/services/contact-request.service";
 
 export async function POST(request: Request) {
@@ -41,6 +42,20 @@ export async function POST(request: Request) {
           message: "You cannot send a contact request to yourself",
         },
         { status: 400 }
+      );
+    }
+
+    const alreadyContacted = await hasContactRequestFromSenderToRecipient(
+      senderId,
+      recipientId
+    );
+    if (alreadyContacted) {
+      return NextResponse.json(
+        {
+          error: "alreadyContacted",
+          message: "You have already contacted this user.",
+        },
+        { status: 409 }
       );
     }
 

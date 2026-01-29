@@ -1,9 +1,12 @@
 import { getUserWithProfile } from "@/lib/services/user.service";
+import { hasContactRequestFromSenderToRecipient } from "@/lib/services/contact-request.service";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
+import { getSessionHelper } from "@/lib/auth-utils";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { ContactUserForm } from "@/components/forms/contactUserForm";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 async function ContactPageContent({
@@ -13,12 +16,19 @@ async function ContactPageContent({
   userId: string;
   locale: string;
 }) {
-  const user = await getUserWithProfile(userId);
-  const contactMessages = await getCachedTranslations(locale, "contact");
+  const [user, session, contactMessages] = await Promise.all([
+    getUserWithProfile(userId),
+    getSessionHelper(),
+    getCachedTranslations(locale, "contact"),
+  ]);
 
   if (!user) {
     notFound();
   }
+
+  const hasContacted =
+    !!session?.user?.id &&
+    (await hasContactRequestFromSenderToRecipient(session.user.id, userId));
 
   const firstName = user.firstName || user.name.split(" ")[0] || user.name;
   const imageSrc =
@@ -34,7 +44,6 @@ async function ContactPageContent({
   return (
     <div className="min-h-screen bg-accent-white">
       <div className="container mx-auto py-8">
-        {/* Header – matches profile page for smooth transition */}
         <div className="flex flex-col items-center gap-6 py-8">
           <div
             className={cn(
@@ -62,12 +71,27 @@ async function ContactPageContent({
           </h1>
         </div>
 
-        {/* Contact form */}
         <div className="max-w-2xl mx-auto px-4">
-          <ContactUserForm
-            recipientId={user.id}
-            recipientFirstName={firstName}
-          />
+          {hasContacted ? (
+            <div className="space-y-4 text-center">
+              <p className="text-muted-foreground">
+                {getTranslation(contactMessages, "alreadyContacted")}
+              </p>
+              <p className="text-sm">
+                <Link
+                  href={`/platform/profile/${userId}`}
+                  className="font-medium underline hover:no-underline"
+                >
+                  ← {getTranslation(contactMessages, "backToProfile")}
+                </Link>
+              </p>
+            </div>
+          ) : (
+            <ContactUserForm
+              recipientId={user.id}
+              recipientFirstName={firstName}
+            />
+          )}
         </div>
       </div>
     </div>

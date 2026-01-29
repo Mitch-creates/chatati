@@ -206,7 +206,8 @@
     "noInterests": "No interests selected",
     "noPreferredMunicipalities": "No preferred municipalities selected",
     "noAvailabilities": "No availabilities selected",
-    "contactThisChatati": "Contact this Chatati"
+    "contactThisChatati": "Contact this Chatati",
+    "contacted": "Contacted"
   },
   "languages": {
     "de": "German",
@@ -318,7 +319,9 @@
     "submit": "Send invitation",
     "submitting": "Sending...",
     "success": "Your invitation has been sent!",
-    "contactInformation": "If {firstName} accepts your invitation, you will both receive eachother's email address automatically. If {firstName} doesn't accept your invitation, nothing will be shared."
+    "contactInformation": "If {firstName} accepts your invitation, you will both receive eachother's email address automatically. If {firstName} doesn't accept your invitation, nothing will be shared.",
+    "alreadyContacted": "You have already contacted this user.",
+    "backToProfile": "Back to profile"
   },
   "invitations": {
     "title": "Invitations",
