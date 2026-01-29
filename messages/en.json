@@ -207,7 +207,10 @@
     "noPreferredMunicipalities": "No preferred municipalities selected",
     "noAvailabilities": "No availabilities selected",
     "contactThisChatati": "Contact this Chatati",
-    "contacted": "Contacted"
+    "contacted": "Contacted",
+    "accountCreated": "Account created",
+    "lastLogin": "Last login",
+    "lastLoginNever": "Never"
   },
   "languages": {
     "de": "German",

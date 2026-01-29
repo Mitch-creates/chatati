@@ -7,7 +7,7 @@ import { hasContactRequestFromSenderToRecipient } from "@/lib/services/contact-r
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-async function ProfilePageContent({userId, locale}: {userId: string; locale: string}) {
+async function ProfilePageContent({ userId, locale }: { userId: string; locale: string }) {
   const [user, session] = await Promise.all([
     getUserWithProfile(userId),
     getSessionHelper(),
@@ -39,10 +39,10 @@ async function ProfilePageContent({userId, locale}: {userId: string; locale: str
   );
 }
 
-export default async function ProfilePage({params}: {params: Promise<{id: string; locale: string}>}) {
-  const {id, locale} = await params;
+export default async function ProfilePage({ params }: { params: Promise<{ id: string; locale: string }> }) {
+  const { id, locale } = await params;
 
-  
+
   return (
     <Suspense fallback={<Spinner />}>
       <ProfilePageContent userId={id} locale={locale} />

@@ -208,7 +208,10 @@
     "noPreferredMunicipalities": "Keine Wunschgemeinden ausgewählt",
     "noAvailabilities": "Keine Verfügbarkeiten ausgewählt",
     "contactThisChatati": "Diesen Chatati kontaktieren",
-    "contacted": "Kontaktiert"
+    "contacted": "Kontaktiert",
+    "accountCreated": "Konto erstellt",
+    "lastLogin": "Letzte Anmeldung",
+    "lastLoginNever": "Nie"
   },
   "languages": {
     "de": "Deutsch",

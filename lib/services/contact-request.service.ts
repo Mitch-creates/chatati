@@ -61,7 +61,7 @@ export async function getContactRequestsReceived(
   const where =
     view === "current"
       ? { recipientId: userId, status: "PENDING" as const }
-      : { recipientId: userId };
+      : { recipientId: userId, status: { in: ["PENDING", "ACCEPTED"] as ContactRequestStatus[] } };
 
   const [items, total] = await Promise.all([
     prisma.contactRequest.findMany({
@@ -135,7 +135,7 @@ export async function getContactRequestsSent(
   const where =
     view === "current"
       ? { senderId: userId, status: "PENDING" as const }
-      : { senderId: userId };
+      : { senderId: userId, status: { in: ["PENDING", "ACCEPTED"] as ContactRequestStatus[] } };
 
   const [items, total] = await Promise.all([
     prisma.contactRequest.findMany({

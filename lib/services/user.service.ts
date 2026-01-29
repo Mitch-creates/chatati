@@ -17,6 +17,7 @@ export type UserWithProfile = {
   createdAt: Date;
   updatedAt: Date;
   birthDate: Date | null;
+  lastLoginAt: Date | null;
   profile: {
     id: string;
     bio: string | null;
@@ -96,6 +97,7 @@ export async function getUserWithProfile(
       createdAt: true,
       updatedAt: true,
       birthDate: true,
+      lastLoginAt: true,
       profile: {
         select: {
           id: true,

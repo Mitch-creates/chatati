@@ -25,6 +25,7 @@ model User {
   firstName     String?
   lastName      String?
   birthDate     DateTime?
+  lastLoginAt   DateTime?
 
   // Relations
   accounts         Account[]

@@ -59,6 +59,24 @@ export default async function ProfileHeader({
         {displayName}
       </h1>
 
+      <span className="text-sm text-muted-foreground text-center">
+        {getTranslation(profileMessages, "accountCreated")}{" "}
+        {new Intl.DateTimeFormat(locale, {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }).format(new Date(user.createdAt))}
+        {" · "}
+        {getTranslation(profileMessages, "lastLogin")}{" "}
+        {user.lastLoginAt
+          ? new Intl.DateTimeFormat(locale, {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }).format(new Date(user.lastLoginAt))
+          : getTranslation(profileMessages, "lastLoginNever")}
+      </span>
+
       <div className="flex flex-wrap justify-center gap-4">
         {/* Edit Profile Button - Only show if it's their own profile */}
         {isOwnProfile ? (

@@ -51,7 +51,7 @@ export default async function InvitesPage({
         {/* Recent received */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold uppercase">
-            {getTranslation(invitationsMessages, "recentReceived")}
+            {getTranslation(invitationsMessages, "receivedInvitations")}
           </h2>
           {received.items.length === 0 ? (
             <p className="text-muted-foreground">
@@ -101,7 +101,7 @@ export default async function InvitesPage({
         {/* Recent sent */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold uppercase">
-            {getTranslation(invitationsMessages, "recentSent")}
+            {getTranslation(invitationsMessages, "sentInvitations")}
           </h2>
           {sent.items.length === 0 ? (
             <p className="text-muted-foreground">
