@@ -83,7 +83,10 @@ export function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className={cn("flex items-center justify-center gap-2", className)}
+      className={cn(
+        "flex flex-wrap items-center justify-center gap-2",
+        className
+      )}
     >
       {/* Previous */}
       <PaginationLink
@@ -135,7 +138,7 @@ function PaginationLink({
   disabled = false,
 }: PaginationLinkProps) {
   const commonClasses =
-    "inline-flex min-w-9 items-center justify-center rounded-md border-2 border-black px-3 py-1 text-sm font-semibold select-none";
+    "inline-flex min-w-9 min-h-10 items-center justify-center rounded-md border-2 border-black px-3 py-2 text-sm font-semibold select-none";
 
   if (disabled) {
     return (
@@ -155,7 +158,7 @@ function PaginationLink({
       <span
         className={cn(
           commonClasses,
-          "bg-black text-white shadow-[4px_4px_0_0_black]"
+          "bg-black text-white"
         )}
       >
         {children}
@@ -168,7 +171,7 @@ function PaginationLink({
       href={href}
       className={cn(
         commonClasses,
-        "bg-accent-color2 text-black shadow-[4px_4px_0_0_black] hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_black] transition-transform"
+        "bg-accent-color2 text-black"
       )}
     >
       {children}

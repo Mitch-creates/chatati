@@ -144,7 +144,7 @@ export function ContactUserForm({
         <div className="flex items-center gap-2 mt-4">
           <Info className="size[1.15em] shrink-0" />
           <p className="text-sm text-accent-black">{messages.contactInformation.replace("{firstName}", recipientFirstName).replace("{firstName}", recipientFirstName) || "If {firstName} accepts your invitation, you will both receive eachother's email address automatically. If {firstName} doesn't accept your invitation, nothing will be shared."}</p>
-          {/* TODO Add a link to a page that explains the system of how to contact other Chatati's */}
+          {/* TODO Add a link to a page that explains the system of how to contact other Chatati's and how it works */}
         </div>
       </div>
 

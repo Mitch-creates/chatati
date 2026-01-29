@@ -49,10 +49,14 @@ export async function createContactRequest(
 
 export async function getContactRequestsReceived(
   userId: string,
-  options: { page?: number; view?: "current" | "history" }
+  options: { page?: number; view?: "current" | "history"; limit?: number }
 ) {
-  const page = Math.max(1, options.page ?? 1);
   const view = options.view ?? "current";
+  const limit = options.limit;
+  const useLimit = limit != null && limit > 0;
+  const page = useLimit ? 1 : Math.max(1, options.page ?? 1);
+  const take = useLimit ? limit : PAGE_SIZE;
+  const skip = useLimit ? 0 : (page - 1) * PAGE_SIZE;
 
   const where =
     view === "current"
@@ -95,8 +99,8 @@ export async function getContactRequestsReceived(
         },
       },
       orderBy: { createdAt: "desc" },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
+      skip,
+      take,
     }),
     prisma.contactRequest.count({ where }),
   ]);
@@ -113,16 +117,20 @@ export async function getContactRequestsReceived(
     })) as ContactRequestWithUsers[],
     total,
     page,
-    pageCount: Math.ceil(total / PAGE_SIZE) || 1,
+    pageCount: useLimit ? 1 : Math.ceil(total / PAGE_SIZE) || 1,
   };
 }
 
 export async function getContactRequestsSent(
   userId: string,
-  options: { page?: number; view?: "current" | "history" }
+  options: { page?: number; view?: "current" | "history"; limit?: number }
 ) {
-  const page = Math.max(1, options.page ?? 1);
   const view = options.view ?? "current";
+  const limit = options.limit;
+  const useLimit = limit != null && limit > 0;
+  const page = useLimit ? 1 : Math.max(1, options.page ?? 1);
+  const take = useLimit ? limit : PAGE_SIZE;
+  const skip = useLimit ? 0 : (page - 1) * PAGE_SIZE;
 
   const where =
     view === "current"
@@ -165,8 +173,8 @@ export async function getContactRequestsSent(
         },
       },
       orderBy: { createdAt: "desc" },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
+      skip,
+      take,
     }),
     prisma.contactRequest.count({ where }),
   ]);
@@ -183,7 +191,7 @@ export async function getContactRequestsSent(
     })) as ContactRequestWithUsers[],
     total,
     page,
-    pageCount: Math.ceil(total / PAGE_SIZE) || 1,
+    pageCount: useLimit ? 1 : Math.ceil(total / PAGE_SIZE) || 1,
   };
 }
 
