@@ -10,16 +10,16 @@ interface ProfileDetailsProps {
 
 function calculateAgeRange(birthDate: Date | null, profileMessages: Record<string, any>): string | null {
   if (!birthDate) return null;
-  
+
   const today = new Date();
   const birth = new Date(birthDate);
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
     age--;
   }
-  
+
   // Return age range with translation
   if (age < 18) return getTranslation(profileMessages, "ageUnder18");
   if (age < 25) return getTranslation(profileMessages, "age18to24");
@@ -110,24 +110,41 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid lg:grid-cols-1 grid-cols-2 gap-4 lg:text-base text-sm">
             {profile.gender !== Gender.PRIVATE && (
               <div>
                 <span className="font-bold">{getTranslation(profileMessages, "gender")}: </span>
+              </div>
+            )}
+
+
+
+            {profile.gender !== Gender.PRIVATE && (
+              <div>
                 <span>{getGenderLabel(profile.gender, profileMessages)}</span>
               </div>
             )}
-            
+
             {ageRange && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "age")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "age")}</span>
+              </div>
+            )}
+
+            {ageRange && (
+              <div>
                 <span>{ageRange}</span>
               </div>
             )}
 
             {profile.nativeLangs.length > 0 && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "nativeLanguage")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "nativeLanguage")}</span>
+              </div>
+            )}
+
+            {profile.nativeLangs.length > 0 && (
+              <div>
                 <span>
                   {profile.nativeLangs.map((lang, idx) => (
                     <span key={lang.id}>
@@ -141,7 +158,12 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
 
             {profile.learningLangs.length > 0 && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "learningLanguage")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "learningLanguage")}</span>
+              </div>
+            )}
+
+            {profile.learningLangs.length > 0 && (
+              <div>
                 <span>
                   {profile.learningLangs.map((lang, idx) => (
                     <span key={lang.id}>
@@ -155,7 +177,12 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
 
             {profile.area && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "hometown")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "hometown")}</span>
+              </div>
+            )}
+
+            {profile.area && (
+              <div>
                 <span>{profile.area.name}</span>
               </div>
             )}
