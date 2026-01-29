@@ -318,7 +318,8 @@
     "placeholderMessageBox": "Schreiben Sie eine freundliche Nachricht...",
     "submit": "Einladung senden",
     "submitting": "Wird gesendet...",
-    "success": "Ihre Einladung wurde gesendet!"
+    "success": "Ihre Einladung wurde gesendet!",
+    "contactInformation": "Wenn {firstName} Ihre Einladung annimmt, erhalten Sie beide automatisch die E-Mail-Adresse des anderen. Wenn {firstName} Ihre Einladung nicht annimmt, wird nichts geteilt."
   },
   "invitations": {
     "title": "Einladungen",

@@ -71,6 +71,7 @@ async function ContactPageContent({
         <div className="max-w-2xl mx-auto px-4">
           <ContactUserForm
             recipientId={user.id}
+            recipientFirstName={user.firstName}
             locale={locale}
             messages={messages}
           />

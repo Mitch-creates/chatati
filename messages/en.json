@@ -317,7 +317,8 @@
     "placeholderMessageBox": "Write a friendly message...",
     "submit": "Send invitation",
     "submitting": "Sending...",
-    "success": "Your invitation has been sent!"
+    "success": "Your invitation has been sent!",
+    "contactInformation": "If {firstName} accepts your invitation, you will both receive eachother's email address automatically. If {firstName} doesn't accept your invitation, nothing will be shared."
   },
   "invitations": {
     "title": "Invitations",
