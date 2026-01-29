@@ -31,11 +31,6 @@ async function ContactPageContent({
   const contactPrefix = getTranslation(contactMessages, "contactHeading");
   const heading = `${contactPrefix} ${firstName.toUpperCase()}`;
 
-  const messages = {
-    ...contactMessages,
-    invitationSentSuccess: contactMessages.success,
-  };
-
   return (
     <div className="min-h-screen bg-accent-white">
       <div className="container mx-auto py-8">
@@ -71,9 +66,7 @@ async function ContactPageContent({
         <div className="max-w-2xl mx-auto px-4">
           <ContactUserForm
             recipientId={user.id}
-            recipientFirstName={user.firstName || ""}
-            locale={locale}
-            messages={messages}
+            recipientFirstName={firstName}
           />
         </div>
       </div>
