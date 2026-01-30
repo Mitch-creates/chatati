@@ -6,36 +6,15 @@ import { Link } from "@/i18n/navigation";
 
 export interface ProfileCardProps {
   id: string;
-  /**
-   * Optional href; when provided the whole card becomes a link.
-   * Example: `/platform/profile/${id}`
-   */
   href?: string;
   imageUrl?: string | null;
   firstName: string;
   lastNameInitial?: string | null;
-  /**
-   * Already translated language labels (e.g. "Duits - Frans").
-   */
   languages: string[];
-  /**
-   * Whether this profile is currently marked as favorite.
-   */
   isFavorite?: boolean;
-  /**
-   * Whether to show the favorite toggle star in the top-right corner.
-   * Only used in search / favorites views, not invitations.
-   */
+  type: "search" | "favorites" | "invitations";
   showFavoriteToggle?: boolean;
-  /**
-   * Called when the favorite star is clicked. Optional so the card
-   * can be used in read-only contexts (e.g. invitations history).
-   */
   onToggleFavorite?: (id: string, next: boolean) => void;
-  /**
-   * Optional additional content rendered below the core profile info.
-   * Useful for invitations where we want to show date / status text.
-   */
   footerContent?: React.ReactNode;
   className?: string;
 }
@@ -49,15 +28,17 @@ export function ProfileCard(props: ProfileCardProps) {
     lastNameInitial,
     languages,
     isFavorite = false,
-    showFavoriteToggle = false,
     onToggleFavorite,
     footerContent,
     className,
+    type,
   } = props;
 
   const displayName = `${firstName.toUpperCase()}${
     lastNameInitial ? ` ${lastNameInitial.toUpperCase()}.` : ""
   }`;
+
+  const showFavoriteToggle = type !== "invitations";
 
   const cardInner = (
     <Card

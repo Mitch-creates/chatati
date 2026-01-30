@@ -77,6 +77,7 @@ export default async function InvitesPage({
                     <ProfileCard
                       id={user.id}
                       href={`/platform/profile/${user.id}`}
+                      type="invitations"
                       imageUrl={user.imageUrl}
                       firstName={user.firstName}
                       lastNameInitial={user.lastNameInitial}
@@ -122,6 +123,7 @@ export default async function InvitesPage({
                     <ProfileCard
                       id={user.id}
                       href={`/platform/profile/${user.id}`}
+                      type="invitations"
                       imageUrl={user.imageUrl}
                       firstName={user.firstName}
                       lastNameInitial={user.lastNameInitial}

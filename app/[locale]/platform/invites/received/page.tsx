@@ -83,6 +83,7 @@ export default async function InvitesReceivedPage({
                     <ProfileCard
                       id={user.id}
                       href={`/platform/profile/${user.id}`}
+                      type="invitations"
                       imageUrl={user.imageUrl}
                       firstName={user.firstName}
                       lastNameInitial={user.lastNameInitial}
