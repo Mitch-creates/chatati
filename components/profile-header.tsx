@@ -55,7 +55,7 @@ export default async function ProfileHeader({
       </div>
 
       {/* Name */}
-      <h1 className="text-4xl sm:text-5xl font-bold uppercase tracking-tight">
+      <h1 className="text-4xl sm:text-5xl font-bold uppercase tracking-tight wrap-break-words text-center w-full mx-auto min-w-0 overflow-hidden">
         {displayName}
       </h1>
 

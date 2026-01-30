@@ -92,12 +92,12 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.bio && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "messageFrom").replace("{name}", firstName.toUpperCase())}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-base">{profile.bio}</p>
+            <p className="text-base">{profile.bio} </p>
           </CardContent>
         </Card>
       )}
@@ -105,19 +105,17 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {/* Personal Details Section */}
       <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold uppercase">
+          <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
             {getTranslation(profileMessages, "personalDetails")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid lg:grid-cols-1 grid-cols-2 gap-4 lg:text-base text-sm">
+          <div className="grid grid-cols-2 gap-4 lg:text-base text-sm">
             {profile.gender !== Gender.PRIVATE && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "gender")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "gender")} </span>
               </div>
             )}
-
-
 
             {profile.gender !== Gender.PRIVATE && (
               <div>
@@ -194,7 +192,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.interests.length > 0 && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "interests")}
             </CardTitle>
           </CardHeader>
@@ -217,7 +215,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.preferenceAreas.length > 0 && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "preferredMunicipalities")}
             </CardTitle>
           </CardHeader>
@@ -240,7 +238,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.availability.length > 0 && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "availabilities")}
             </CardTitle>
           </CardHeader>
