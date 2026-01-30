@@ -10,16 +10,16 @@ interface ProfileDetailsProps {
 
 function calculateAgeRange(birthDate: Date | null, profileMessages: Record<string, any>): string | null {
   if (!birthDate) return null;
-  
+
   const today = new Date();
   const birth = new Date(birthDate);
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
     age--;
   }
-  
+
   // Return age range with translation
   if (age < 18) return getTranslation(profileMessages, "ageUnder18");
   if (age < 25) return getTranslation(profileMessages, "age18to24");
@@ -92,12 +92,12 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.bio && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
-              {getTranslation(profileMessages, "messageFrom").replace("{name}", firstName.toUpperCase())}
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
+              {getTranslation(profileMessages, "personalMessage")}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-base">{profile.bio}</p>
+            <p className="text-base">{profile.bio} </p>
           </CardContent>
         </Card>
       )}
@@ -105,29 +105,44 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {/* Personal Details Section */}
       <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold uppercase">
+          <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
             {getTranslation(profileMessages, "personalDetails")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 lg:text-base text-sm">
             {profile.gender !== Gender.PRIVATE && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "gender")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "gender")} </span>
+              </div>
+            )}
+
+            {profile.gender !== Gender.PRIVATE && (
+              <div>
                 <span>{getGenderLabel(profile.gender, profileMessages)}</span>
               </div>
             )}
-            
+
             {ageRange && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "age")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "age")}</span>
+              </div>
+            )}
+
+            {ageRange && (
+              <div>
                 <span>{ageRange}</span>
               </div>
             )}
 
             {profile.nativeLangs.length > 0 && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "nativeLanguage")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "nativeLanguage")}</span>
+              </div>
+            )}
+
+            {profile.nativeLangs.length > 0 && (
+              <div>
                 <span>
                   {profile.nativeLangs.map((lang, idx) => (
                     <span key={lang.id}>
@@ -141,7 +156,12 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
 
             {profile.learningLangs.length > 0 && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "learningLanguage")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "learningLanguage")}</span>
+              </div>
+            )}
+
+            {profile.learningLangs.length > 0 && (
+              <div>
                 <span>
                   {profile.learningLangs.map((lang, idx) => (
                     <span key={lang.id}>
@@ -155,7 +175,12 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
 
             {profile.area && (
               <div>
-                <span className="font-bold">{getTranslation(profileMessages, "hometown")}: </span>
+                <span className="font-bold">{getTranslation(profileMessages, "hometown")}</span>
+              </div>
+            )}
+
+            {profile.area && (
+              <div>
                 <span>{profile.area.name}</span>
               </div>
             )}
@@ -167,7 +192,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.interests.length > 0 && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "interests")}
             </CardTitle>
           </CardHeader>
@@ -190,7 +215,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.preferenceAreas.length > 0 && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "preferredMunicipalities")}
             </CardTitle>
           </CardHeader>
@@ -213,7 +238,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
       {profile.availability.length > 0 && (
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold uppercase">
+            <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
               {getTranslation(profileMessages, "availabilities")}
             </CardTitle>
           </CardHeader>

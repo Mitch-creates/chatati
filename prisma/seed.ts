@@ -1,6 +1,9 @@
-import { PrismaClient, Gender, Availability, Interest } from '@prisma/client'
+import { PrismaClient, Gender, Availability, Interest } from "@prisma/client";
+import { hashPassword } from "better-auth/crypto";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
+const SEED_PASSWORD = "Password123!";
 
 async function main() {
   console.log('Start seeding...')
@@ -171,45 +174,163 @@ async function main() {
     createdLangs.push(createdLang)
   }
 
-  // 5. Create 4 Users with Profiles
-  const baseEmail = 'michielvandevyver67'
-  const domain = 'gmail.com'
+  // 5. Create 4 Users with Profiles (michiel+1..4)
+  const baseEmail = "michielvandevyver67";
+  const domain = "gmail.com";
 
   for (let i = 1; i <= 4; i++) {
-    const email = `${baseEmail}+${i}@${domain}`
-    const name = `Test User ${i}`
-    
+    const email = `${baseEmail}+${i}@${domain}`;
+    const name = `Test User ${i}`;
+
     const user = await prisma.user.upsert({
       where: { email },
       update: {},
       create: {
         email,
         name,
-        firstName: `Test`,
+        firstName: "Test",
         lastName: `User ${i}`,
         emailVerified: true,
         profile: {
           create: {
             gender: i % 2 === 0 ? Gender.FEMALE : Gender.MALE,
             bio: `Hello, I am test user ${i}. I love learning new languages and meeting people from different cultures!`,
-            timezone: 'Europe/Berlin',
+            timezone: "Europe/Berlin",
             availability: [Availability.EVENING, Availability.WEEKENDS],
             interests: [Interest.TRAVEL, Interest.FOOD, Interest.MUSIC],
             areaId: areas[i % areas.length].id,
-            nativeLangs: {
-              connect: [{ id: createdLangs[0].id }]
-            },
-            learningLangs: {
-              connect: [{ id: createdLangs[1].id }]
-            }
-          }
-        }
+            nativeLangs: { connect: [{ id: createdLangs[0].id }] },
+            learningLangs: { connect: [{ id: createdLangs[1].id }] },
+          },
+        },
       },
-    })
-    console.log(`Created user: ${user.email}`)
+    });
+    console.log(`Created user: ${user.email}`);
   }
 
-  console.log('Seeding finished.')
+  // 6. Main account (michielvandevyver67@gmail.com) + credential, and extra users with contact requests
+  const passwordHash = await hashPassword(SEED_PASSWORD);
+
+  const michiel = await prisma.user.upsert({
+    where: { email: `${baseEmail}@${domain}` },
+    update: { emailVerified: true },
+    create: {
+      email: `${baseEmail}@${domain}`,
+      name: "Michiel Van de Vyver",
+      firstName: "Michiel",
+      lastName: "Van de Vyver",
+      emailVerified: true,
+      profile: {
+        create: {
+          gender: Gender.MALE,
+          bio: "Main seed account for testing invites and contact requests.",
+          timezone: "Europe/Berlin",
+          availability: [Availability.EVENING, Availability.WEEKENDS],
+          interests: [Interest.TRAVEL, Interest.FOOD, Interest.MUSIC],
+          areaId: areas[0].id,
+          nativeLangs: { connect: [{ id: createdLangs[0].id }] },
+          learningLangs: { connect: [{ id: createdLangs[1].id }] },
+        },
+      },
+    },
+  });
+
+  await prisma.account.upsert({
+    where: {
+      providerId_accountId: {
+        providerId: "credential",
+        accountId: michiel.id,
+      },
+    },
+    update: { password: passwordHash },
+    create: {
+      userId: michiel.id,
+      providerId: "credential",
+      accountId: michiel.id,
+      password: passwordHash,
+    },
+  });
+  console.log(`Upserted account + credential: ${michiel.email}`);
+
+  const extraUsers = [
+    { email: "alice@test.chatati.dev", name: "Alice Test", firstName: "Alice", lastName: "Test", gender: Gender.FEMALE },
+    { email: "bob@test.chatati.dev", name: "Bob Test", firstName: "Bob", lastName: "Test", gender: Gender.MALE },
+    { email: "claire@test.chatati.dev", name: "Claire Test", firstName: "Claire", lastName: "Test", gender: Gender.FEMALE },
+  ];
+
+  const senders: { id: string; email: string }[] = [];
+
+  for (const u of extraUsers) {
+    const user = await prisma.user.upsert({
+      where: { email: u.email },
+      update: {},
+      create: {
+        email: u.email,
+        name: u.name,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        emailVerified: true,
+        profile: {
+          create: {
+            gender: u.gender,
+            bio: `Test user ${u.firstName} for seed.`,
+            timezone: "Europe/Berlin",
+            availability: [Availability.EVENING, Availability.WEEKENDS],
+            interests: [Interest.TRAVEL, Interest.FOOD],
+            areaId: areas[1].id,
+            nativeLangs: { connect: [{ id: createdLangs[1].id }] },
+            learningLangs: { connect: [{ id: createdLangs[0].id }] },
+          },
+        },
+      },
+    });
+
+    await prisma.account.upsert({
+      where: {
+        providerId_accountId: {
+          providerId: "credential",
+          accountId: user.id,
+        },
+      },
+      update: { password: passwordHash },
+      create: {
+        userId: user.id,
+        providerId: "credential",
+        accountId: user.id,
+        password: passwordHash,
+      },
+    });
+    senders.push({ id: user.id, email: user.email });
+    console.log(`Created user + credential: ${user.email}`);
+  }
+
+  // Contact requests from alice, bob, claire -> michielvandevyver67@gmail.com
+  const statuses = ["PENDING", "ACCEPTED", "DECLINED"] as const;
+  for (let i = 0; i < senders.length; i++) {
+    const sender = senders[i];
+    const status = statuses[i];
+    await prisma.contactRequest.upsert({
+      where: {
+        senderId_recipientId: { senderId: sender.id, recipientId: michiel.id },
+      },
+      update: {},
+      create: {
+        senderId: sender.id,
+        recipientId: michiel.id,
+        message: `Hi Michiel, I'm ${sender.email.split("@")[0]}. Would love to practice languages!`,
+        status,
+        ...(status !== "PENDING" && { respondedAt: new Date() }),
+      },
+    });
+    console.log(`Contact request: ${sender.email} -> ${michiel.email} (${status})`);
+  }
+
+  console.log("");
+  console.log("--- Seeded users (email / password) ---");
+  console.log(`${michiel.email} / ${SEED_PASSWORD}`);
+  for (const s of senders) console.log(`${s.email} / ${SEED_PASSWORD}`);
+  console.log("--- End ---");
+  console.log("Seeding finished.");
 }
 
 main()

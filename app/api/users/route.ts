@@ -95,7 +95,7 @@ export async function PATCH(request: Request) {
     const updatedProfile = await updateUserProfile(userId, validatedData.data);
 
     // Invalidate the cache for this user's profile
-    revalidateTag(`user-profile-${userId}`);
+    revalidateTag(`user-profile-${userId}`, "max");
 
     return NextResponse.json(updatedProfile);
   } catch (error) {

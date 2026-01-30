@@ -10,12 +10,24 @@ config();
 // TODO Implement passkey https://www.better-auth.com/docs/plugins/passkey
 
 import { betterAuth } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      const newSession = ctx.context.newSession;
+      if (newSession?.user?.id) {
+        await prisma.user.update({
+          where: { id: newSession.user.id },
+          data: { lastLoginAt: new Date() },
+        });
+      }
+    }),
+  },
   session: {
     enabled: true,
     expiresIn: 7 * 24 * 60 * 60, // 7 days

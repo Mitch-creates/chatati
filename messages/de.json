@@ -86,7 +86,10 @@
     "imageTooLargeDimensions": "Bildabmessungen sind zu groß. Bitte verwenden Sie ein Bild kleiner als 10000x10000 Pixel.",
     "imageCorrupted": "Diese Bilddatei scheint beschädigt zu sein. Bitte versuchen Sie ein anderes Bild.",
     "imageProcessingError": "Bild konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
-    "imageLoadError": "Bild konnte nicht geladen werden. Bitte versuchen Sie es erneut."
+    "imageLoadError": "Bild konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "messageTooShort": "Die Nachricht muss mindestens 10 Zeichen lang sein.",
+    "messageTooLong": "Die Nachricht darf höchstens 400 Zeichen lang sein.",
+    "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
   },
   "form": {},
   "navigation": {
@@ -176,7 +179,7 @@
   },
   "profile": {
     "editProfile": "Profil bearbeiten",
-    "messageFrom": "Botschaft von {name}",
+    "personalMessage": "Persönliche Botschaft",
     "personalDetails": "Persönliche Daten",
     "interests": "Interessen",
     "preferredMunicipalities": "Wunschgemeinden",
@@ -203,7 +206,12 @@
     "noBio": "Keine Biografie vorhanden",
     "noInterests": "Keine Interessen ausgewählt",
     "noPreferredMunicipalities": "Keine Wunschgemeinden ausgewählt",
-    "noAvailabilities": "Keine Verfügbarkeiten ausgewählt"
+    "noAvailabilities": "Keine Verfügbarkeiten ausgewählt",
+    "contactThisChatati": "Diesen Chatati kontaktieren",
+    "contacted": "Kontaktiert",
+    "accountCreated": "Konto erstellt",
+    "lastLogin": "Letzte Anmeldung",
+    "lastLoginNever": "Nie"
   },
   "languages": {
     "de": "Deutsch",
@@ -304,5 +312,39 @@
     "fil": "Filipino",
     "tl": "Tagalog",
     "ht": "Haitianisch-Kreolisch"
+  },
+  "contact": {
+    "contactHeading": "Kontakt",
+    "title": "Einen anderen Chatati kontaktieren",
+    "description": "Senden Sie eine kurze Nachricht, um sich vorzustellen und zu erklären, warum Sie gemeinsam üben möchten.",
+    "titleMessageBox": "Ihre Nachricht",
+    "descriptionMessageBox": "Erzählen Sie etwas über sich, Ihre Sprachziele und wann Sie normalerweise verfügbar sind.",
+    "placeholderMessageBox": "Schreiben Sie eine freundliche Nachricht...",
+    "submit": "Einladung senden",
+    "submitting": "Wird gesendet...",
+    "success": "Ihre Einladung wurde gesendet!",
+    "contactInformation": "Wenn {firstName} Ihre Einladung annimmt, erhalten Sie beide automatisch die E-Mail-Adresse des anderen. Wenn {firstName} Ihre Einladung nicht annimmt, wird nichts geteilt.",
+    "alreadyContacted": "Sie haben diesen Nutzer bereits kontaktiert.",
+    "backToProfile": "Zurück zum Profil"
+  },
+  "invitations": {
+    "title": "Einladungen",
+    "newInvitations": "Neue Einladungen",
+    "sentInvitations": "Gesendete Einladungen",
+    "recentReceived": "Kürzlich erhalten",
+    "recentSent": "Kürzlich gesendet",
+    "receivedInvitations": "Erhaltene Einladungen",
+    "noReceived": "Noch keine erhaltenen Einladungen.",
+    "noSent": "Noch keine gesendeten Einladungen.",
+    "noUnanswered": "Sie haben derzeit keine unbeantworteten Einladungen.",
+    "viewFullHistory": "Vollständige Historie anzeigen",
+    "statusPending": "Ausstehend",
+    "statusAnswered": "Beantwortet",
+    "statusDeclined": "Abgelehnt",
+    "accept": "Annehmen",
+    "decline": "Ablehnen",
+    "noSentYet": "Sie haben noch keine Einladungen gesendet.",
+    "backToInvitations": "Zurück zu den Einladungen",
+    "invitationSentSuccess": "Einladung erfolgreich gesendet!"
   }
 }

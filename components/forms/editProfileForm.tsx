@@ -84,7 +84,7 @@ export function EditProfileForm() {
           const config = await configRes.json();
           const translatedLangs = config.languages.map((l: any) => ({
             value: l.id,
-            label: languageMessages.has(l.code) ? languageMessages(l.code) : l.name,
+            label: languageMessages(l.code) || l.name,
           }));
 
           // Sort languages alphabetically based on translated label
@@ -721,7 +721,8 @@ export function EditProfileForm() {
             )}
             {submitSuccess && (
               <div className="flex items-center justify-center gap-2">
-                <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} /> <span>{editProfileMessages("updateSuccess")?.toUpperCase() || "Profile updated successfully!"}</span>
+                <CircleCheckBigIcon className="h-5 w-5 text-black" strokeWidth={3} /> 
+                <span>{editProfileMessages("updateSuccess")?.toUpperCase() || "Profile updated successfully!"}</span>
               </div>
             )}
             {submitError && (

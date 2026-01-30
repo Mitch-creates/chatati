@@ -1,9 +1,148 @@
-export default function InvitesPage() {
+import { requireAuthAndEmailVerified } from "@/lib/auth-utils";
+import { getSessionHelper } from "@/lib/auth-utils";
+import {
+  getContactRequestsReceived,
+  getContactRequestsSent,
+} from "@/lib/services/contact-request.service";
+import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
+import {
+  formatDate,
+  getDisplayUser,
+  getStatusLabel,
+} from "@/lib/invitations-helpers";
+import { ProfileCard } from "@/components/profile-card";
+import { InvitationActions } from "@/components/invitation-actions";
+import { Link } from "@/i18n/navigation";
+
+const OVERVIEW_LIMIT = 3;
+
+export default async function InvitesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  await requireAuthAndEmailVerified();
+  const session = await getSessionHelper();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return null;
+  }
+
+  const locale = (await params).locale;
+
+  const [invitationsMessages, languageMessages, received, sent] =
+    await Promise.all([
+      getCachedTranslations(locale, "invitations"),
+      getCachedTranslations(locale, "languages"),
+      getContactRequestsReceived(userId, { view: "history", limit: OVERVIEW_LIMIT }),
+      getContactRequestsSent(userId, { view: "history", limit: OVERVIEW_LIMIT }),
+    ]);
+
+  const invitationsMsgs = invitationsMessages as Record<string, string>;
+  const langMsgs = languageMessages as Record<string, string>;
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold">Invites</h1>
-      <p className="mt-4 text-gray-600">This is a placeholder page for managing invites.</p>
+    <div className="min-h-screen bg-accent-white">
+      <div className="container mx-auto py-8 px-4 sm:px-6 space-y-10">
+        <h1 className="text-3xl sm:text-4xl font-extrabold uppercase tracking-tight">
+          {getTranslation(invitationsMessages, "title")}
+        </h1>
+
+        {/* Recent received */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold uppercase">
+            {getTranslation(invitationsMessages, "receivedInvitations")}
+          </h2>
+          {received.items.length === 0 ? (
+            <p className="text-muted-foreground">
+              {getTranslation(invitationsMessages, "noReceived")}
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {received.items.map((item) => {
+                const user = getDisplayUser(item, "sender", langMsgs);
+                const footer = (
+                  <>
+                    <span>
+                      {formatDate(item.createdAt, locale)} –{" "}
+                      {getStatusLabel(item.status, invitationsMsgs)}
+                    </span>
+                    {item.status === "PENDING" && (
+                      <InvitationActions requestId={item.id} />
+                    )}
+                  </>
+                );
+                return (
+                  <li key={item.id}>
+                    <ProfileCard
+                      id={user.id}
+                      href={`/platform/profile/${user.id}`}
+                      imageUrl={user.imageUrl}
+                      firstName={user.firstName}
+                      lastNameInitial={user.lastNameInitial}
+                      languages={user.languages}
+                      footerContent={footer}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          <p className="text-sm">
+            <Link
+              href="/platform/invites/received"
+              className="font-medium underline hover:no-underline"
+            >
+              {getTranslation(invitationsMessages, "viewFullHistory")}
+            </Link>
+          </p>
+        </section>
+
+        {/* Recent sent */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold uppercase">
+            {getTranslation(invitationsMessages, "sentInvitations")}
+          </h2>
+          {sent.items.length === 0 ? (
+            <p className="text-muted-foreground">
+              {getTranslation(invitationsMessages, "noSent")}
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {sent.items.map((item) => {
+                const user = getDisplayUser(item, "recipient", langMsgs);
+                const footer = (
+                  <span>
+                    {formatDate(item.createdAt, locale)} –{" "}
+                    {getStatusLabel(item.status, invitationsMsgs)}
+                  </span>
+                );
+                return (
+                  <li key={item.id}>
+                    <ProfileCard
+                      id={user.id}
+                      href={`/platform/profile/${user.id}`}
+                      imageUrl={user.imageUrl}
+                      firstName={user.firstName}
+                      lastNameInitial={user.lastNameInitial}
+                      languages={user.languages}
+                      footerContent={footer}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          <p className="text-sm">
+            <Link
+              href="/platform/invites/sent"
+              className="font-medium underline hover:no-underline"
+            >
+              {getTranslation(invitationsMessages, "viewFullHistory")}
+            </Link>
+          </p>
+        </section>
+      </div>
     </div>
   );
 }
-

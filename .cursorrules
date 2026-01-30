@@ -25,3 +25,11 @@ Documentation and research requirements:
 - Before implementing features or making changes, query Context7 for the latest official documentation
 - Prefer Context7 documentation over web searches or outdated documentation
 - When Context7 documentation is available, cite it in your responses
+
+Translations (i18n):
+
+- Server components (RSC): Use `getCachedTranslations(locale, namespace)` and `getTranslation(namespaceMessages, key)` from `@/lib/i18n-helpers`. For interpolation, use `getTranslation` then manual `.replace("{param}", value)` (or a small helper).
+- Client components: Use `useTranslations(namespace)` from `next-intl` only. Call `t(key)` or `t(key, { param: value })` for ICU interpolation. Do not pass translation objects as props.
+- API routes: Use `getTranslations(namespace)` from `next-intl/server` when translations are needed (e.g. validation).
+- Avoid hardcoded fallbacks (`|| "string"`) for translations; rely on keys existing in message files.
+- Use nested namespaces where it helps (e.g. `useTranslations("editProfile.interestsList")` or `getTranslation(msgs, "key.subkey")`).

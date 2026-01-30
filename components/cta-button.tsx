@@ -21,16 +21,23 @@ export default function CtaButton({
   fullWidth,
 }: CtaButtonProps) {
   return (
-    <div className={cn("relative inline-block", fullWidth)}>
+    <div className={cn("relative", fullWidth ? "block w-full min-w-0" : "inline-block")}>
       <span
         aria-hidden="true"
-        className="relative w-full inline-block
-            bg-black rounded-lg translate-x-1"
+        className={cn(
+          "relative w-full bg-black rounded-lg translate-x-1",
+          fullWidth ? "block" : "inline-block"
+        )}
       >
         <button
           type={type}
           form={form}
-          className={`bg-accent-color2 text-black p-2 w-full rounded-lg cursor-pointer appearance-none relative selector-none border-black border-2 px-5 py-3 font-bold -translate-x-1 -translate-y-1 hover:-translate-y-2 transition-transform duration-10 active:translate-x-0 active:translate-y-0`}
+          className={cn(
+            "p-2 w-full rounded-lg appearance-none relative selector-none border-2 border-black px-5 py-3 font-bold -translate-x-1 -translate-y-1",
+            disabled
+              ? "bg-muted text-muted-foreground cursor-not-allowed"
+              : "bg-accent-color2 text-black cursor-pointer hover:-translate-y-2 transition-transform duration-10 active:translate-x-0 active:translate-y-0"
+          )}
           onClick={onClick}
           disabled={disabled}
         >
