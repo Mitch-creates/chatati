@@ -9,7 +9,6 @@ import {
 } from "@/lib/invitations-helpers";
 import { ProfileCard } from "@/components/profile-card";
 import { Pagination } from "@/components/ui/pagination";
-import { InvitationActions } from "@/components/invitation-actions";
 import { Link } from "@/i18n/navigation";
 
 export default async function InvitesReceivedPage({
@@ -64,36 +63,34 @@ export default async function InvitesReceivedPage({
           </p>
         ) : (
           <>
-            <ul className="space-y-3">
-              {received.items.map((item) => {
-                const user = getDisplayUser(item, "sender", langMsgs);
-                const footer = (
-                  <>
-                    <span>
-                      {formatDate(item.createdAt, locale)} –{" "}
-                      {getStatusLabel(item.status, invitationsMsgs)}
-                    </span>
-                    {item.status === "PENDING" && (
-                      <InvitationActions requestId={item.id} />
-                    )}
-                  </>
-                );
-                return (
-                  <li key={item.id}>
-                    <ProfileCard
-                      id={user.id}
-                      href={`/platform/profile/${user.id}`}
-                      type="invitations"
-                      imageUrl={user.imageUrl}
-                      firstName={user.firstName}
-                      lastNameInitial={user.lastNameInitial}
-                      languages={user.languages}
-                      footerContent={footer}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="w-full md:max-w-2xl">
+              <ul className="space-y-3">
+                {received.items.map((item) => {
+                  const user = getDisplayUser(item, "sender", langMsgs);
+                  return (
+                    <li key={item.id}>
+                      <ProfileCard
+                        id={user.id}
+                        href={`/platform/profile/${user.id}`}
+                        type="invitationsReceived"
+                        imageUrl={user.imageUrl}
+                        firstName={user.firstName}
+                        lastNameInitial={user.lastNameInitial}
+                        languages={user.languages}
+                        footerContent={
+                          <span>
+                            {formatDate(item.createdAt, locale)} –{" "}
+                            {getStatusLabel(item.status, invitationsMsgs)}
+                          </span>
+                        }
+                        invitationRequestId={item.id}
+                        invitationStatus={item.status}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
             {received.pageCount > 1 && (
               <Pagination
                 page={received.page}

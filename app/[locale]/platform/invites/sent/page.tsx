@@ -63,8 +63,9 @@ export default async function InvitesSentPage({
           </p>
         ) : (
           <>
-            <ul className="space-y-3">
-              {sent.items.map((item) => {
+            <div className="w-full md:max-w-2xl">
+              <ul className="space-y-3">
+                {sent.items.map((item) => {
                 const user = getDisplayUser(item, "recipient", langMsgs);
                 const footer = (
                   <span>
@@ -77,7 +78,7 @@ export default async function InvitesSentPage({
                     <ProfileCard
                       id={user.id}
                       href={`/platform/profile/${user.id}`}
-                      type="invitations"
+                      type="invitationsSent"
                       imageUrl={user.imageUrl}
                       firstName={user.firstName}
                       lastNameInitial={user.lastNameInitial}
@@ -87,7 +88,8 @@ export default async function InvitesSentPage({
                   </li>
                 );
               })}
-            </ul>
+              </ul>
+            </div>
             {sent.pageCount > 1 && (
               <Pagination
                 page={sent.page}
