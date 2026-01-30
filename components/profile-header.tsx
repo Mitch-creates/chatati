@@ -66,7 +66,7 @@ export default async function ProfileHeader({
           month: "long",
           year: "numeric",
         }).format(new Date(user.createdAt))}
-        {" · "}
+        {" | "}
         {getTranslation(profileMessages, "lastLogin")}{" "}
         {user.lastLoginAt
           ? new Intl.DateTimeFormat(locale, {
@@ -74,7 +74,11 @@ export default async function ProfileHeader({
               month: "long",
               year: "numeric",
             }).format(new Date(user.lastLoginAt))
-          : getTranslation(profileMessages, "lastLoginNever")}
+          : new Intl.DateTimeFormat(locale, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }).format(new Date(user.createdAt))}
       </span>
 
       <div className="flex flex-wrap justify-center gap-4">

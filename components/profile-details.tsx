@@ -93,7 +93,7 @@ export default async function ProfileDetails({ user, locale }: ProfileDetailsPro
         <Card className="border-2 border-black shadow-[4px_4px_0_0_black] rounded-lg">
           <CardHeader>
             <CardTitle className="text-xl lg:text-2xl font-bold uppercase">
-              {getTranslation(profileMessages, "messageFrom").replace("{name}", firstName.toUpperCase())}
+              {getTranslation(profileMessages, "personalMessage")}
             </CardTitle>
           </CardHeader>
           <CardContent>

@@ -179,7 +179,7 @@
   },
   "profile": {
     "editProfile": "Profil bearbeiten",
-    "messageFrom": "Botschaft von {name}",
+    "personalMessage": "Persönliche Botschaft",
     "personalDetails": "Persönliche Daten",
     "interests": "Interessen",
     "preferredMunicipalities": "Wunschgemeinden",

@@ -178,7 +178,7 @@
   },
   "profile": {
     "editProfile": "Edit Profile",
-    "messageFrom": "Message from {name}",
+    "personalMessage": "Personal message",
     "personalDetails": "Personal Details",
     "interests": "Interests",
     "preferredMunicipalities": "Preferred Municipalities",
