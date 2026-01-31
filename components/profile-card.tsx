@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Star} from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { Button } from "./ui/button";
 
 export type ProfileCardType =
   | "search"
@@ -72,7 +73,7 @@ export function ProfileCard(props: ProfileCardProps) {
           <div
             className={cn(
               "relative overflow-hidden rounded-full border-2 border-black",
-              "w-14 h-14 bg-accent-color4 flex items-center justify-center"
+              "w-20 h-20 bg-accent-color4 flex items-center justify-center"
             )}
           >
             {imageUrl ? (
@@ -80,8 +81,7 @@ export function ProfileCard(props: ProfileCardProps) {
                 src={imageUrl}
                 alt={displayName}
                 fill
-                sizes="56px"
-                className="object-cover"
+                className="object-cover w-full h-full"
               />
             ) : (
               <span className="text-xl font-bold">
@@ -91,7 +91,7 @@ export function ProfileCard(props: ProfileCardProps) {
           </div>
         </div>
 
-        <CardContent className="flex-1 min-w-0 p-0">
+        <CardContent className="flex-1 min-w-0 p-0 gap-1">
           <div className="text-sm font-semibold tracking-wide uppercase wrap-break-word">
             {displayName}
           </div>
@@ -101,34 +101,13 @@ export function ProfileCard(props: ProfileCardProps) {
             </div>
           )}
         </CardContent>
+        <div className="flex items-start justify-start">
+          
+            <Button variant="outline" size="icon">
+              <Star className="w-4 h-4" />
+            </Button>
+        </div>
       </div>
-
-      {/* Right: for invitations = date/status column + buttons; for search/favorites = star only */}
-      {showFavoriteToggle && (
-        <button
-          type="button"
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          className={cn(
-            "absolute top-2 right-2 z-10 inline-flex items-center justify-center rounded-full border-2 border-black",
-            "w-8 h-8 bg-accent-color2 text-black",
-            "shadow-[2px_2px_0_0_black]",
-            "hover:translate-y-0.5 hover:shadow-none",
-            "transition-transform"
-          )}
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (onToggleFavorite) onToggleFavorite(id, !isFavorite);
-          }}
-        >
-          <Star
-            className={cn(
-              "w-4 h-4",
-              isFavorite ? "fill-black" : "fill-transparent"
-            )}
-          />
-        </button>
-      )}
     </Card>
   );
 
