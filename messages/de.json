@@ -339,7 +339,7 @@
     "noUnanswered": "Sie haben derzeit keine unbeantworteten Einladungen.",
     "viewFullHistory": "Vollständige Historie anzeigen",
     "statusPending": "Ausstehend",
-    "statusAnswered": "Beantwortet",
+    "statusAccepted": "Annehmen",
     "statusDeclined": "Abgelehnt",
     "accept": "Annehmen",
     "decline": "Ablehnen",

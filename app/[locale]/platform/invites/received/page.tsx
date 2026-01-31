@@ -3,9 +3,7 @@ import { getSessionHelper } from "@/lib/auth-utils";
 import { getContactRequestsReceived } from "@/lib/services/contact-request.service";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 import {
-  formatDate,
   getDisplayUser,
-  getStatusLabel,
 } from "@/lib/invitations-helpers";
 import { ProfileCard } from "@/components/profile-card";
 import { Pagination } from "@/components/ui/pagination";
@@ -38,7 +36,6 @@ export default async function InvitesReceivedPage({
     getContactRequestsReceived(userId, { view: "history", page }),
   ]);
 
-  const invitationsMsgs = invitationsMessages as Record<string, string>;
   const langMsgs = languageMessages as Record<string, string>;
 
   return (
@@ -72,19 +69,14 @@ export default async function InvitesReceivedPage({
                       <ProfileCard
                         id={user.id}
                         href={`/platform/profile/${user.id}`}
-                        type="invitationsSent"
+                        type="invitationsReceived"
                         imageUrl={user.imageUrl}
                         firstName={user.firstName}
                         lastNameInitial={user.lastNameInitial}
                         languages={user.languages}
-                        footerContent={
-                          <span>
-                            {formatDate(item.createdAt, locale)} –{" "}
-                            {getStatusLabel(item.status, invitationsMsgs)}
-                          </span>
-                        }
                         invitationRequestId={item.id}
                         invitationStatus={item.status}
+                        invitationCreatedAt={item.createdAt}
                       />
                     </li>
                   );

@@ -49,19 +49,3 @@ export function getDisplayUser(
     languages: [...new Set(languages)],
   };
 }
-
-export function getStatusLabel(
-  status: string,
-  invitationsMessages: Record<string, string>
-): string {
-  switch (status) {
-    case "PENDING":
-      return invitationsMessages.statusPending ?? "Pending";
-    case "ACCEPTED":
-      return invitationsMessages.statusAnswered ?? "Answered";
-    case "DECLINED":
-      return invitationsMessages.statusDeclined ?? "Declined";
-    default:
-      return status;
-  }
-}

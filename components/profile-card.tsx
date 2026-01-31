@@ -3,10 +3,15 @@
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Star} from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { Button } from "./ui/button";
+import CtaButton from "./cta-button";
+import RegularButton from "./regular-button";
+import { formatDate } from "@/lib/invitations-helpers";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export type ProfileCardType =
   | "search"
@@ -30,7 +35,8 @@ export interface ProfileCardProps {
   footerContent?: React.ReactNode;
   /** For type="invitationsReceived": request id and status. When PENDING, Accept/Decline buttons show. */
   invitationRequestId?: string;
-  invitationStatus?: InvitationStatus;
+  invitationStatus?: string;
+  invitationCreatedAt?: Date | null | undefined;
   className?: string;
 }
 
@@ -44,15 +50,25 @@ export function ProfileCard(props: ProfileCardProps) {
     languages,
     isFavorite = false,
     onToggleFavorite,
-    footerContent,
     className,
     type,
+    invitationCreatedAt,
+    invitationStatus,
   } = props;
+  const t = useTranslations("invitations");
 
   const router = useRouter();
-
+  const locale = useLocale();
   const displayName = `${firstName.toUpperCase()}${lastNameInitial ? ` ${lastNameInitial.toUpperCase()}.` : ""
     }`;
+  const statusLabel =
+    invitationStatus === "PENDING"
+      ? t("statusPending")
+      : invitationStatus === "ACCEPTED"
+        ? t("statusAccepted")
+        : invitationStatus === "DECLINED"
+          ? t("statusDeclined")
+          : invitationStatus;
 
   const showFavoriteToggle = type === "search" || type === "favorites";
   const isInvitation = type === "invitationsSent" || type === "invitationsReceived";
@@ -97,14 +113,36 @@ export function ProfileCard(props: ProfileCardProps) {
           </div>
           {languages.length > 0 && (
             <div className="mt-0.5 text-sm text-muted-foreground wrap-break-word">
-              {(languages.length > 0 && isInvitation && footerContent) ? footerContent: languages.join(" · ")}
+
+              {(languages.length > 0 && !isInvitation) && (
+                <span>
+                  {languages.join(" · ")}
+                </span>
+              )}
+
+              {isInvitation && (
+                <span>
+                  {invitationCreatedAt ? formatDate(invitationCreatedAt, locale): ""}
+                  {(type === "invitationsSent" && statusLabel) && ` - ${statusLabel}`}
+                </span>
+              )}
+
             </div>
           )}
         </CardContent>
-        <div className="absolute top-2 right-2">
-          
-              <Star className= {cn("w-6 h-6", isFavorite ? "fill-accent-gold text-accent-gold" : "fill-transparent text-accent-gold")} strokeWidth={2.5}/>
-        </div>
+
+        {showFavoriteToggle && (<div className="absolute top-2 right-2">
+
+          <Star className={cn("w-6 h-6", isFavorite ? "fill-accent-gold text-accent-gold" : "fill-transparent text-accent-gold")} strokeWidth={2.5} />
+        </div>)}
+        {type === "invitationsReceived" && (<div className="absolute bottom-2 right-2">
+          <Button variant="outline" size="sm" className="border-2 cursor-pointer">
+            <span className="inline-flex items-center gap-1 text-sm">
+              View message
+            </span>
+          </Button>
+        </div>)}
+
       </div>
     </Card>
   );

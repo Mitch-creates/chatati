@@ -6,9 +6,7 @@ import {
 } from "@/lib/services/contact-request.service";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 import {
-  formatDate,
   getDisplayUser,
-  getStatusLabel,
 } from "@/lib/invitations-helpers";
 import { ProfileCard } from "@/components/profile-card";
 import { Link } from "@/i18n/navigation";
@@ -71,14 +69,9 @@ export default async function InvitesPage({
                         firstName={user.firstName}
                         lastNameInitial={user.lastNameInitial}
                         languages={user.languages}
-                        footerContent={
-                          <span>
-                            {formatDate(item.createdAt, locale)} –{" "}
-                            {getStatusLabel(item.status, invitationsMsgs)}
-                          </span>
-                        }
                         invitationRequestId={item.id}
                         invitationStatus={item.status}
+                        invitationCreatedAt={item.createdAt}
                       />
                     </li>
                   );
@@ -120,12 +113,8 @@ export default async function InvitesPage({
                         firstName={user.firstName}
                         lastNameInitial={user.lastNameInitial}
                         languages={user.languages}
-                        footerContent={
-                          <span>
-                            {formatDate(item.createdAt, locale)} –{" "}
-                            {getStatusLabel(item.status, invitationsMsgs)}
-                          </span>
-                        }
+                        invitationStatus={item.status}
+                        invitationCreatedAt={item.createdAt}
                       />
                     </li>
                   );
