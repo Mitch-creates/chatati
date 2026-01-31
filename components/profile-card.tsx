@@ -101,11 +101,9 @@ export function ProfileCard(props: ProfileCardProps) {
             </div>
           )}
         </CardContent>
-        <div className="flex items-start justify-start">
+        <div className="absolute top-2 right-2">
           
-            <Button variant="outline" size="icon">
-              <Star className="w-4 h-4" />
-            </Button>
+              <Star className= {cn("w-6 h-6", isFavorite ? "fill-accent-gold text-accent-gold" : "fill-transparent text-accent-gold")} strokeWidth={2.5}/>
         </div>
       </div>
     </Card>
