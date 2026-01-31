@@ -1,42 +1,42 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { Button } from "./ui/button";
+import CtaButton from "./cta-button";
+import RegularButton from "./regular-button";
+import { formatDate } from "@/lib/invitations-helpers";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
+
+export type ProfileCardType =
+  | "search"
+  | "favorites"
+  | "invitationsSent"
+  | "invitationsReceived";
+
+export type InvitationStatus = "PENDING" | "ACCEPTED" | "DECLINED";
 
 export interface ProfileCardProps {
   id: string;
-  /**
-   * Optional href; when provided the whole card becomes a link.
-   * Example: `/platform/profile/${id}`
-   */
   href?: string;
   imageUrl?: string | null;
   firstName: string;
   lastNameInitial?: string | null;
-  /**
-   * Already translated language labels (e.g. "Duits - Frans").
-   */
   languages: string[];
-  /**
-   * Whether this profile is currently marked as favorite.
-   */
   isFavorite?: boolean;
-  /**
-   * Whether to show the favorite toggle star in the top-right corner.
-   * Only used in search / favorites views, not invitations.
-   */
+  type: ProfileCardType;
   showFavoriteToggle?: boolean;
-  /**
-   * Called when the favorite star is clicked. Optional so the card
-   * can be used in read-only contexts (e.g. invitations history).
-   */
   onToggleFavorite?: (id: string, next: boolean) => void;
-  /**
-   * Optional additional content rendered below the core profile info.
-   * Useful for invitations where we want to show date / status text.
-   */
   footerContent?: React.ReactNode;
+  /** For type="invitationsReceived": request id and status. When PENDING, Accept/Decline buttons show. */
+  invitationRequestId?: string;
+  invitationStatus?: string;
+  invitationCreatedAt?: Date | null | undefined;
   className?: string;
 }
 
@@ -49,98 +49,101 @@ export function ProfileCard(props: ProfileCardProps) {
     lastNameInitial,
     languages,
     isFavorite = false,
-    showFavoriteToggle = false,
     onToggleFavorite,
-    footerContent,
     className,
+    type,
+    invitationCreatedAt,
+    invitationStatus,
   } = props;
+  const t = useTranslations("invitations");
 
-  const displayName = `${firstName.toUpperCase()}${
-    lastNameInitial ? ` ${lastNameInitial.toUpperCase()}.` : ""
-  }`;
+  const router = useRouter();
+  const locale = useLocale();
+  const displayName = `${firstName.toUpperCase()}${lastNameInitial ? ` ${lastNameInitial.toUpperCase()}.` : ""
+    }`;
+  const statusLabel =
+    invitationStatus === "PENDING"
+      ? t("statusPending")
+      : invitationStatus === "ACCEPTED"
+        ? t("statusAccepted")
+        : invitationStatus === "DECLINED"
+          ? t("statusDeclined")
+          : invitationStatus;
+
+  const showFavoriteToggle = type === "search" || type === "favorites";
+  const isInvitation = type === "invitationsSent" || type === "invitationsReceived";
 
   const cardInner = (
     <Card
       className={cn(
-        "relative flex items-center gap-4 border-2 border-black bg-white",
-        "shadow-[4px_4px_0_0_black] rounded-lg px-4 py-3",
+        "relative flex flex-row items-center gap-4 border-2 border-black bg-white",
+        "shadow-[4px_4px_0_0_black] rounded-lg px-4 py-2",
         "cursor-pointer",
         className
       )}
       data-profile-id={id}
     >
-      {/* Avatar */}
-      <div className="shrink-0">
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-full border-2 border-black",
-            "w-14 h-14 bg-accent-color4 flex items-center justify-center"
-          )}
-        >
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={displayName}
-              fill
-              sizes="56px"
-              className="object-cover"
-            />
-          ) : (
-            <span className="text-xl font-bold">
-              {firstName.charAt(0).toUpperCase()}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Main content */}
-      <CardContent className="flex-1 p-0">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <div className="text-sm font-semibold tracking-wide uppercase">
-              {displayName}
-            </div>
-            {languages.length > 0 && (
-              <div className="mt-1 text-sm text-muted-foreground">
-                {languages.join(" · ")}
-              </div>
+      {/* Left: Avatar + name/languages */}
+      <div className="flex flex-row items-center gap-4 flex-1 min-w-0">
+        <div className="shrink-0">
+          <div
+            className={cn(
+              "relative overflow-hidden rounded-full border-2 border-black",
+              "w-20 h-20 bg-accent-color4 flex items-center justify-center"
+            )}
+          >
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={displayName}
+                fill
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <span className="text-xl font-bold">
+                {firstName.charAt(0).toUpperCase()}
+              </span>
             )}
           </div>
-
-          {/* Favorite toggle (only when explicitly enabled) */}
-          {showFavoriteToggle && (
-            <button
-              type="button"
-              aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-              className={cn(
-                "ml-2 inline-flex items-center justify-center rounded-full border-2 border-black",
-                "w-8 h-8 bg-accent-color2 text-black",
-                "shadow-[2px_2px_0_0_black]",
-                "hover:translate-y-0.5 hover:shadow-none",
-                "transition-transform"
-              )}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                if (onToggleFavorite) {
-                  onToggleFavorite(id, !isFavorite);
-                }
-              }}
-            >
-              <Star
-                className={cn(
-                  "w-4 h-4",
-                  isFavorite ? "fill-black" : "fill-transparent"
-                )}
-              />
-            </button>
-          )}
         </div>
 
-        {footerContent && (
-          <div className="mt-2 text-sm text-muted-foreground">{footerContent}</div>
-        )}
-      </CardContent>
+        <CardContent className="flex-1 min-w-0 p-0 gap-1">
+          <div className="text-sm font-semibold tracking-wide uppercase wrap-break-word">
+            {displayName}
+          </div>
+          {languages.length > 0 && (
+            <div className="mt-0.5 text-sm text-muted-foreground wrap-break-word">
+
+              {(languages.length > 0 && !isInvitation) && (
+                <span>
+                  {languages.join(" · ")}
+                </span>
+              )}
+
+              {isInvitation && (
+                <span>
+                  {invitationCreatedAt ? formatDate(invitationCreatedAt, locale): ""}
+                  {(type === "invitationsSent" && statusLabel) && ` - ${statusLabel}`}
+                </span>
+              )}
+
+            </div>
+          )}
+        </CardContent>
+
+        {showFavoriteToggle && (<div className="absolute top-2 right-2">
+
+          <Star className={cn("w-6 h-6", isFavorite ? "fill-accent-gold text-accent-gold" : "fill-transparent text-accent-gold")} strokeWidth={2.5} />
+        </div>)}
+        {type === "invitationsReceived" && (<div className="absolute bottom-2 right-2">
+          <Button variant="outline" size="sm" className="border-2 cursor-pointer">
+            <span className="inline-flex items-center gap-1 text-sm">
+              View message
+            </span>
+          </Button>
+        </div>)}
+
+      </div>
     </Card>
   );
 
@@ -154,4 +157,3 @@ export function ProfileCard(props: ProfileCardProps) {
 
   return cardInner;
 }
-

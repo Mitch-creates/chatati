@@ -338,7 +338,7 @@
     "noUnanswered": "You currently have no unanswered invitations.",
     "viewFullHistory": "View your full history",
     "statusPending": "Pending",
-    "statusAnswered": "Answered",
+    "statusAccepted": "Accepted",
     "statusDeclined": "Declined",
     "accept": "Accept",
     "decline": "Decline",

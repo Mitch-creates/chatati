@@ -3,9 +3,7 @@ import { getSessionHelper } from "@/lib/auth-utils";
 import { getContactRequestsSent } from "@/lib/services/contact-request.service";
 import { getCachedTranslations, getTranslation } from "@/lib/i18n-helpers";
 import {
-  formatDate,
   getDisplayUser,
-  getStatusLabel,
 } from "@/lib/invitations-helpers";
 import { ProfileCard } from "@/components/profile-card";
 import { Pagination } from "@/components/ui/pagination";
@@ -38,7 +36,6 @@ export default async function InvitesSentPage({
     getContactRequestsSent(userId, { view: "history", page }),
   ]);
 
-  const invitationsMsgs = invitationsMessages as Record<string, string>;
   const langMsgs = languageMessages as Record<string, string>;
 
   return (
@@ -63,30 +60,29 @@ export default async function InvitesSentPage({
           </p>
         ) : (
           <>
-            <ul className="space-y-3">
-              {sent.items.map((item) => {
+            <div className="w-full md:max-w-2xl">
+              <ul className="space-y-3">
+                {sent.items.map((item) => {
                 const user = getDisplayUser(item, "recipient", langMsgs);
-                const footer = (
-                  <span>
-                    {formatDate(item.createdAt, locale)} –{" "}
-                    {getStatusLabel(item.status, invitationsMsgs)}
-                  </span>
-                );
                 return (
                   <li key={item.id}>
                     <ProfileCard
                       id={user.id}
                       href={`/platform/profile/${user.id}`}
+                      type="invitationsSent"
                       imageUrl={user.imageUrl}
                       firstName={user.firstName}
                       lastNameInitial={user.lastNameInitial}
                       languages={user.languages}
-                      footerContent={footer}
+                      invitationRequestId={item.id}
+                      invitationStatus={item.status}
+                      invitationCreatedAt={item.createdAt}
                     />
                   </li>
                 );
               })}
-            </ul>
+              </ul>
+            </div>
             {sent.pageCount > 1 && (
               <Pagination
                 page={sent.page}

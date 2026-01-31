@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Notion GitHub Issues Automation
+      - name: Github Issues - Chatati
         uses: Sajantoor/Notion-GitHub-Issues-Automation@1.0.0
         with:
             # Your current repository.
