@@ -1,14 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Check, Star, X } from "lucide-react";
+import { Star} from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import RegularButton from "./regular-button";
 
 export type ProfileCardType =
   | "search"
@@ -47,41 +44,17 @@ export function ProfileCard(props: ProfileCardProps) {
     isFavorite = false,
     onToggleFavorite,
     footerContent,
-    invitationRequestId,
-    invitationStatus,
     className,
     type,
   } = props;
 
   const router = useRouter();
-  const invitationsMessages = useTranslations("invitations");
-  const [isPending, setIsPending] = useState(false);
 
-  const displayName = `${firstName.toUpperCase()}${
-    lastNameInitial ? ` ${lastNameInitial.toUpperCase()}.` : ""
-  }`;
+  const displayName = `${firstName.toUpperCase()}${lastNameInitial ? ` ${lastNameInitial.toUpperCase()}.` : ""
+    }`;
 
   const showFavoriteToggle = type === "search" || type === "favorites";
   const isInvitation = type === "invitationsSent" || type === "invitationsReceived";
-  const showInvitationButtons =
-    type === "invitationsReceived" &&
-    invitationStatus === "PENDING" &&
-    invitationRequestId;
-
-  const handleRespond = async (status: "ACCEPTED" | "DECLINED") => {
-    if (!invitationRequestId) return;
-    setIsPending(true);
-    try {
-      const res = await fetch(`/api/contact-requests/${invitationRequestId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      });
-      if (res.ok) router.refresh();
-    } finally {
-      setIsPending(false);
-    }
-  };
 
   const cardInner = (
     <Card
@@ -124,7 +97,7 @@ export function ProfileCard(props: ProfileCardProps) {
           </div>
           {languages.length > 0 && (
             <div className="mt-0.5 text-sm text-muted-foreground wrap-break-word">
-              {languages.join(" · ")}
+              {(languages.length > 0 && isInvitation && footerContent) ? footerContent: languages.join(" · ")}
             </div>
           )}
         </CardContent>
@@ -155,48 +128,6 @@ export function ProfileCard(props: ProfileCardProps) {
             )}
           />
         </button>
-      )}
-
-      {isInvitation && (footerContent || showInvitationButtons) && (
-        <div
-          className="flex flex-col items-end gap-1 shrink-0 text-right"
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-        >
-          {footerContent && (
-            <div className="text-sm text-muted-foreground">
-              {footerContent}
-            </div>
-          )}
-          {showInvitationButtons && (
-            <div className="flex gap-1.5">
-              <RegularButton
-                type="button"
-                variant="success"
-                size="sm"
-                disabled={isPending}
-                onClick={() => handleRespond("ACCEPTED")}
-              >
-                <span className="inline-flex items-center gap-1">
-                  <Check className="w-3 h-3" />
-                  {invitationsMessages("accept")}
-                </span>
-              </RegularButton>
-              <RegularButton
-                type="button"
-                variant="danger"
-                size="sm"
-                disabled={isPending}
-                onClick={() => handleRespond("DECLINED")}
-              >
-                <span className="inline-flex items-center gap-1">
-                  <X className="w-3 h-3" />
-                  {invitationsMessages("decline")}
-                </span>
-              </RegularButton>
-            </div>
-          )}
-        </div>
       )}
     </Card>
   );
